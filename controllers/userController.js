@@ -69,7 +69,15 @@ export const AllUsers = async (req, res) => {
     "no_whatsapp",
     "address",
   ];
-  return handlePagination(req, res, viewData, Users);
+
+  const searchFilterData = [
+    "full_name",
+    "email",
+    "company_name",
+    "no_whatsapp",
+    "address",
+  ];
+  return handlePagination(req, res, viewData, searchFilterData, Users);
 };
 
 //GET INFO USER

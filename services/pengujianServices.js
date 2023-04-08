@@ -6,6 +6,7 @@ export const createPengujianServices = async (
   code,
   category,
   description,
+  min_quantity,
   sampler,
   catatan_khusus,
   price
@@ -17,6 +18,7 @@ export const createPengujianServices = async (
       code,
       category,
       description,
+      min_quantity,
       sampler,
       catatan_khusus,
       price,
@@ -33,6 +35,7 @@ export const updatePengujianServices = async (
   code,
   category,
   description,
+  min_quantity,
   sampler,
   catatan_khusus,
   price
@@ -44,6 +47,7 @@ export const updatePengujianServices = async (
         code,
         category,
         description,
+        min_quantity,
         sampler,
         catatan_khusus,
         price,

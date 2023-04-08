@@ -57,7 +57,8 @@ export const deleteCategory = async (req, res) => {
 export const getAllCategory = (req, res) => {
   try {
     const viewData = ["id", "name_category"];
-    return handlePagination(req, res, viewData, Category);
+    const filterData = [ "name_category"];
+    return handlePagination(req, res, viewData, filterData, Category);
   } catch (error) {
     return handleResponseError(res);
   }

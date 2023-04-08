@@ -21,10 +21,10 @@ router.post(
 );
 
 //UPDATE
-router.put("/pengujian/:id", updatePengujian);
+router.put("/pengujian/:id",verifyTokenFrontliner, updatePengujian);
 //GET
 
 //DELETE
-router.delete("/pengujian/:id", deletePengujian);
+router.delete("/pengujian/:id", verifyTokenFrontliner, deletePengujian);
 
 export default router;

@@ -4,29 +4,43 @@ import {
   handleResponseNotFound,
 } from "./handleResponse.js";
 
-export const handlePagination = async (req, res, attribute, data) => {
-  const { page = 1, limit = 10, filter = {} } = req.body;
+export const handlePagination = async (
+  req,
+  res,
+  attribute,
+  allSearch,
+  data
+) => {
+  const { page = 1, limit = 10, search, filter = {} } = req.body;
 
   const offset = (page - 1) * limit;
-  const where = {};
 
-  const nameFilter = attribute;
+  let whereClause = {};
 
-  for (const key of nameFilter) {
-    if (filter[key]) {
-      if (!where[Op.or]) {
-        where[Op.or] = [];
-      }
-      where[Op.or].push({ [key]: { [Op.iLike]: `%${filter[key]}%` } });
+  const viewAttributeData = attribute;
+
+  if (search !== "") {
+    const searchCriteria = allSearch.map((key) => ({
+      [key]: { [Op.iLike]: `%${search}%` },
+    }));
+
+    whereClause = {
+      [Op.or]: searchCriteria,
+    };
+  }
+
+  for (let key in filter) {
+    if (filter.hasOwnProperty(key) !== "") {
+      whereClause[key] = { [Op.iLike]: `%${filter[key]}%` };
     }
   }
 
   try {
     const { count, rows } = await data.findAndCountAll({
-      where,
+      where: whereClause,
       offset,
       limit: parseInt(limit, 10),
-      attributes: attribute,
+      attributes: viewAttributeData,
     });
 
     if (rows.length === 0) {

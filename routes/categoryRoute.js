@@ -10,7 +10,7 @@ import {
 import { verifyTokenFrontliner } from "../middleware/verifyTokenFrontliner.js";
 
 //POST
-router.post("/category/client", getAllCategory);
+router.post("/categories/client", getAllCategory);
 router.post("/categories", verifyTokenFrontliner, getAllCategory);
 router.post("/category/create", createCategory);
 
@@ -20,6 +20,6 @@ router.put("/category/:id", updateCategory);
 //GET
 
 //DELETE
-router.delete("/category/:id", deleteCategory);
+router.delete("/category/:id", verifyTokenFrontliner, deleteCategory);
 
 export default router;

@@ -19,12 +19,12 @@ export const createPengujian = async (req, res) => {
     code,
     category,
     description,
+    min_quantity,
     sampler,
     catatan_khusus,
     price,
   } = req.body;
-  const image = req.file.path;
-  console.log(req.file)
+  const image = req.file ? req.file.filename : null;
 
   try {
     const pengujian = await createPengujianServices(
@@ -33,6 +33,7 @@ export const createPengujian = async (req, res) => {
       code,
       category,
       description,
+      min_quantity,
       sampler,
       catatan_khusus,
       price
@@ -50,6 +51,7 @@ export const updatePengujian = async (req, res) => {
     code,
     category,
     description,
+    min_quantity,
     sampler,
     catatan_khusus,
     price,
@@ -61,6 +63,7 @@ export const updatePengujian = async (req, res) => {
       code,
       category,
       description,
+      min_quantity,
       sampler,
       catatan_khusus,
       price
@@ -98,11 +101,24 @@ export const getAllPengujian = (req, res) => {
       "code",
       "category",
       "description",
+      "min_quantity",
       "sampler",
       "catatan_khusus",
       "price",
     ];
-    return handlePagination(req, res, viewData, Pengujian);
+
+    const searchFilterData = [
+      "jenis_pengujian",
+      "code",
+      "category",
+      "description",
+      "min_quantity",
+      "sampler",
+      "catatan_khusus",
+      "price",
+    ];
+
+    return handlePagination(req, res, viewData, searchFilterData, Pengujian);
   } catch (error) {
     return handleResponseError(res);
   }

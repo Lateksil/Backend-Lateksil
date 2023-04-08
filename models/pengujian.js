@@ -11,10 +11,15 @@ const Pengujian = db.define(
     },
     image: {
       type: DataTypes.STRING,
+      defaultValue: null,
     },
     jenis_pengujian: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    min_quantity: {
+      type: DataTypes.STRING,
+      defaultValue: "1",
     },
     code: {
       type: DataTypes.STRING,
@@ -37,7 +42,7 @@ const Pengujian = db.define(
       allowNull: false,
     },
     price: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.STRING,
       allowNull: false,
     },
   },
