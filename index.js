@@ -7,6 +7,7 @@ import authRoute from "./routes/authRoutes.js";
 import userRoute from "./routes/userRoutes.js";
 import category from "./routes/categoryRoute.js";
 import pengujian from "./routes/pengujianRoute.js";
+import cart from "./routes/cartRoute.js";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(authRoute);
 app.use(userRoute);
 app.use(category);
 app.use(pengujian);
+app.use(cart);
 
 (async () => {
   try {

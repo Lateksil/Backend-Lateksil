@@ -1,3 +1,4 @@
+import fs from "fs";
 import Pengujian from "../models/pengujian.js";
 
 export const createPengujianServices = async (
@@ -38,9 +39,16 @@ export const updatePengujianServices = async (
   min_quantity,
   sampler,
   catatan_khusus,
-  price
+  price,
+  image
 ) => {
   try {
+    const pengujian = await Pengujian.findByPk(id);
+
+    if (pengujian.image) {
+      fs.unlinkSync(`uploads/${pengujian.image}`);
+    }
+
     const updatedPengujian = await Pengujian.update(
       {
         jenis_pengujian,
@@ -51,12 +59,12 @@ export const updatePengujianServices = async (
         sampler,
         catatan_khusus,
         price,
+        image,
       },
       {
         where: { id: id },
       }
     );
-    console.log(updatedPengujian);
     return updatedPengujian[0] === 1;
   } catch (error) {
     return error;
@@ -65,6 +73,12 @@ export const updatePengujianServices = async (
 
 export const deletePengujianServices = async (id) => {
   try {
+    const pengujian = await Pengujian.findByPk(id);
+
+    if (pengujian.image) {
+      fs.unlinkSync(`uploads/${pengujian.image}`);
+    }
+
     const deletedPengujian = await Pengujian.destroy({
       where: { id: id },
     });

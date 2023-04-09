@@ -71,6 +71,7 @@ export const AllUsers = async (req, res) => {
   ];
 
   const searchFilterData = [
+    "id",
     "full_name",
     "email",
     "company_name",

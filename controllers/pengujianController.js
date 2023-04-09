@@ -56,6 +56,7 @@ export const updatePengujian = async (req, res) => {
     catatan_khusus,
     price,
   } = req.body;
+  const image = req.file ? req.file.filename : null;
   try {
     const pengujian = await updatePengujianServices(
       id,
@@ -66,7 +67,8 @@ export const updatePengujian = async (req, res) => {
       min_quantity,
       sampler,
       catatan_khusus,
-      price
+      price,
+      image
     );
     if (pengujian) {
       return handleResponseUpdateSuccess(res);

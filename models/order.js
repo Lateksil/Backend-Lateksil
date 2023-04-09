@@ -1,7 +1,5 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
-import Pengujian from "./pengujian.js";
-import Users from "./user.js";
 
 const Order = db.define("order", {
   id: {
@@ -18,12 +16,6 @@ const Order = db.define("order", {
     allowNull: false,
   },
 });
-
-Users.hasMany(Order);
-Order.belongsTo(Users);
-
-Pengujian.hasMany(Order);
-Order.belongsTo(Pengujian);
 
 export default Order;
 
