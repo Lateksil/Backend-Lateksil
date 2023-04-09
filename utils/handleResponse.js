@@ -1,8 +1,8 @@
-export const handleResponse = (res, statusCode, message, data) => {
+export const handleResponse = (res, statusCode, message, newdata) => {
   res.status(statusCode).json({
     status: statusCode,
     message,
-    data: data || null,
+    data: newdata || null,
   });
 };
 

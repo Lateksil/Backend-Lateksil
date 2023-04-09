@@ -1,11 +1,14 @@
 import Cart from "../models/cart.js";
 import Pengujian from "../models/pengujian.js";
 import Users from "../models/user.js";
-import { handleResponseError } from "../utils/handleResponse.js";
+import {
+  handleResponseError,
+  handleResponseSuccess,
+} from "../utils/handleResponse.js";
 
 export const createCart = async (req, res) => {
   const { user_id } = req.body;
-  const { pengujian_id } = req.body;
+  const { pengujian_id, quantity } = req.body;
 
   try {
     const user = await Users.findByPk(user_id);
@@ -23,7 +26,7 @@ export const createCart = async (req, res) => {
     const cart = await Cart.create({
       UserId: user_id,
       PengujianId: pengujian_id,
-      quantity: "1",
+      quantity,
     });
 
     return res.status(200).json({ message: "Ada coy", cart });
@@ -40,7 +43,7 @@ export const getCartByUserId = async (req, res) => {
       where: {
         UserId: user_id,
       },
-      attributes: ["id", "quantity", "createdAt"],
+      attributes: ["id", "quantity"],
       include: [
         {
           model: Pengujian,
@@ -49,7 +52,11 @@ export const getCartByUserId = async (req, res) => {
       ],
     });
 
-    return res.status(200).json({ message: "Ada coy", data: cart });
+    if (!cart) {
+      return handleResponseNotFound(res);
+    }
+
+    return handleResponseSuccess(res, cart);
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
