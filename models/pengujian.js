@@ -29,6 +29,10 @@ const Pengujian = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    tempat_pengujian: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     description: {
       type: DataTypes.STRING,
       allowNull: false,

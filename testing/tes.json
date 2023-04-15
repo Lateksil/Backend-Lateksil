@@ -1,14 +1,14 @@
 {
     "id_order": "",
-    "total_price": "",
     "userId": {
         "name": "",
         "email": "",
         "address": ""
     },
-    "productId": [
-        { "name_product": "", "description": "", "price": ""},
-        { "name_product": "", "description": "", "price": ""},
-        { "name_product": "", "description": "", "price": ""}
-    ]
+    "pengujianId": [
+        { "name_pengujian": "", "description": "", "price": "1"},
+        { "name_pengujian": "", "description": "", "price": "1"},
+        { "name_pengujian": "", "description": "", "price": "1"}
+    ],
+    "total_price": "3"
 }

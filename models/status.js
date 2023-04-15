@@ -12,7 +12,6 @@ const Status = db.define(
     status_persetujuan: {
       type: DataTypes.STRING,
       defaultValue: "1",
-      allowNull: false,
     },
   },
   {
