@@ -13,12 +13,6 @@ const Category = db.define("Category", {
   },
 });
 
-// Product.hasOne(Category, {
-//     foreignKey: { type: DataTypes.UUID, allowNull: false },
-//   }); 
-//   Category.belongsTo(Product);
-//   Category.belongsTo(Users);
-
 export default Category;
 
 (async () => {

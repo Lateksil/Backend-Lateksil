@@ -1,18 +1,25 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
+import Order from "./order.js";
+import Pengujian from "./pengujian.js";
 
 const OrderPengujian = db.define(
   "Order_Pengujian",
   {
-    quantity: {
-      type: DataTypes.STRING,
-      allowNull: true,
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
   },
   {
     freezeTableName: true,
+    timestamps: false,
   }
 );
+
+Pengujian.belongsToMany(Order, { through: OrderPengujian });
+Order.belongsToMany(Pengujian, { through: OrderPengujian });
 
 export default OrderPengujian;
 

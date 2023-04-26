@@ -57,6 +57,7 @@ const Pengujian = db.define(
 
 export default Pengujian;
 
+
 (async () => {
   await Pengujian.sync({ alter: true }).then(() => {
     console.log("Pengujian Database  & tables created!");

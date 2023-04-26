@@ -2,6 +2,7 @@ import { Op } from "sequelize";
 import {
   handleResponseError,
   handleResponseNotFound,
+  handleResponseSuccess,
 } from "./handleResponse.js";
 
 export const handlePagination = async (
@@ -44,7 +45,7 @@ export const handlePagination = async (
     });
 
     if (rows.length === 0) {
-      return handleResponseNotFound(res);
+      return handleResponseSuccess(res, null);
     }
 
     return res.status(200).json({
@@ -54,6 +55,7 @@ export const handlePagination = async (
       data: rows,
       limit,
       totalData: count,
+      page: page,
       totalPages: Math.ceil(count / limit),
     });
   } catch (error) {
