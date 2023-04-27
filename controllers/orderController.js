@@ -1,5 +1,6 @@
 import db from "../config/database.js";
 import Order from "../models/order.js";
+import OrderPengujian from "../models/orderPengujian.js";
 import Pengujian from "../models/pengujian.js";
 import Status from "../models/status.js";
 import Users from "../models/user.js";
@@ -10,67 +11,42 @@ export const CreateOrder = async (req, res) => {
   try {
     const user = await Users.findByPk("33ef6651-0075-4675-88e0-0d488111a5cd");
 
+    const order = await Order.create(
+      {
+        total_price: "15000000",
+        status: {
+          status_persetujuan: "0",
+        },
+      },
+      {
+        include: [{ model: Status, as: "status" }],
+      },
+      { transaction: t }
+    );
+
+    await order.setUser(user);
+
     const pengujianA = await Pengujian.findByPk(
-      "2d4e283a-5c99-4761-a4a4-e3c435f23772"
+      "1f2bc1e9-f9e1-4da6-8c49-15f15dda27cd"
     );
 
     const pengujianB = await Pengujian.findByPk(
-      "455e64dd-649b-454c-b6d4-8d04853791d2"
+      "8e96c1fe-8f1b-4d1b-a38b-f8a18ddd7f09"
     );
 
-    const order = await Order.create({
-      total_price: "15000000",
+    await OrderPengujian.create({
+      orderId: order.id,
+      PengujianId: pengujianA.id,
     });
 
-    console.log("USER", user.id);
-
-    await order.setUser(user);
-    await order.setPengujian(pengujianA);
-
-    const result = await Order.findOne({
-      where: { id: order.id },
-      include: [
-        {
-          model: Users,
-        },
-        {
-          model: Pengujian,
-        },
-      ],
+    await OrderPengujian.create({
+      orderId: order.id,
+      PengujianId: pengujianB.id,
     });
 
-    // const order = await Order.create(
-    //   {
-    //     UserId: "33ef6651-0075-4675-88e0-0d488111a5cd",
-    //     total_price: "15000000",
-    //     status: {
-    //       status_persetujuan: "2",
-    //     },
-    //   },
-    //   {
-    //     include: [{ model: Status, as: "status" }],
-    //   },
-    //   { transaction: t }
-    // );
+    await t.commit();
 
-    // const orderPengujuan = await OrderPengujian.create(
-    //   {
-    //     orderId: order.id,
-    //     PengujianId: "2d4e283a-5c99-4761-a4a4-e3c435f23772",
-    //   },
-    //   { transaction: t }
-    // );
-
-    // const result = await Order.findByPk(order.id, {
-    //   include: [
-    //     { model: Status, as: "status" },
-    //     { model: Pengujian, as: "pengujian", through: { attributes: [] } },
-    //   ],
-    // });
-
-    // await t.commit();
-
-    return handleResponseSuccess(res, result);
+    return handleResponseSuccess(res, "Done");
   } catch (error) {
     console.log(error);
   }
@@ -79,19 +55,35 @@ export const CreateOrder = async (req, res) => {
 export const getOrderById = async (req, res) => {
   try {
     const order = await Order.findAll({
-      where: { UserId: "33ef6651-0075-4675-88e0-0d488111a5cd" },
       include: [
         {
           model: Users,
+          attributes: [
+            "id",
+            "full_name",
+            "email",
+            "no_whatsapp",
+            "address",
+            "company_name",
+          ],
         },
-        { model: Status, as: "status" },
-        { model: Pengujian, as: "pengujian", through: { attributes: [] } },
+        {
+          model: Status,
+          as: "status",
+          attributes: ["id","status_persetujuan"],
+        },
+        {
+          model: Pengujian,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+          through: { attributes: [] },
+        },
       ],
+      attributes: { exclude: ['UserId','updatedAt']},
+      // Berdasarkan User Id
+      where: {
+        UserId: "33ef6651-0075-4675-88e0-0d488111a5cd"
+      }
     });
-
-    const resultOerdering = order.map((o, i) => o.dataValues.id);
-
-    console.log("TESS", resultOerdering);
 
     return handleResponseSuccess(res, order);
   } catch (error) {

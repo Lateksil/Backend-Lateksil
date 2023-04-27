@@ -9,6 +9,7 @@ import category from "./routes/categoryRoute.js";
 import pengujian from "./routes/pengujianRoute.js";
 import cart from "./routes/cartRoute.js";
 import Order from "./routes/orderRoute.js";
+import Movie from "./routes/movieRoute.js";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(category);
 app.use(pengujian);
 app.use(cart);
 app.use(Order);
+app.use(Movie);
 
 (async () => {
   try {

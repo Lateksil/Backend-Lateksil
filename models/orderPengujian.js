@@ -4,12 +4,26 @@ import Order from "./order.js";
 import Pengujian from "./pengujian.js";
 
 const OrderPengujian = db.define(
-  "Order_Pengujian",
+  "OrderPengujian",
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+    },
+    orderId: {
+      type: DataTypes.UUID,
+      references: {
+        model: Order,
+        key: 'id',
+      },
+    },
+    PengujianId: {
+        type: DataTypes.UUID,
+        references: {
+          model: Pengujian,
+          key: 'id',
+        },
     },
   },
   {
@@ -18,8 +32,8 @@ const OrderPengujian = db.define(
   }
 );
 
-Pengujian.belongsToMany(Order, { through: OrderPengujian });
-Order.belongsToMany(Pengujian, { through: OrderPengujian });
+Pengujian.belongsToMany(Order, { through: 'OrderPengujian' });
+Order.belongsToMany(Pengujian, { through: 'OrderPengujian' });
 
 export default OrderPengujian;
 
