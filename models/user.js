@@ -40,6 +40,14 @@ const Users = db.define("User", {
     type: DataTypes.STRING,
     defaultValue: "user",
   },
+  isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  },
+  verificationCode: {
+    type: DataTypes.STRING,
+    allowNull: true
+  }
 });
 
 export default Users;

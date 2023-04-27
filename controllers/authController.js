@@ -1,8 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import Users from "../models/user.js";
+import { SendVerificationEmail } from "../services/authServices.js";
 import {
   handleResponse,
+  handleResponseAuthorization,
   handleResponseError,
   handleResponseSuccess,
 } from "../utils/handleResponse.js";
@@ -31,14 +33,49 @@ export const Register = async (req, res) => {
       company_name,
       password: hashPassword,
     });
-    const result = {
-      full_name: user.dataValues.full_name,
-      email: user.dataValues.email,
-      no_whatsapp: user.dataValues.no_whatsapp,
-      address: user.dataValues.address,
-      company_name: user.dataValues.company_name,
-    };
-    return handleResponseSuccess(res, result);
+
+    await SendVerificationEmail(user);
+
+    return handleResponseSuccess(
+      res,
+      "Pendaftaran berhasil. Silakan periksa email Anda untuk verifikasi."
+    );
+  } catch (error) {
+    return handleResponseError(res);
+  }
+};
+
+export const VerifyCodeRegister = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+
+    const user = await Users.findOne({ where: { email, isVerified: false } });
+
+    if (user) {
+      if (user.verificationCode === code) {
+        user.isVerified = true;
+        user.verificationCode = null;
+        await user.save();
+
+        return handleResponseAuthorization(
+          res,
+          200,
+          "Verifikasi berhasil. Akun Anda telah diaktifkan"
+        );
+      } else {
+        return handleResponseAuthorization(
+          res,
+          400,
+          "Kode verifikasi tidak cocok. Silakan coba lagi."
+        );
+      }
+    } else {
+      return handleResponseAuthorization(
+        res,
+        404,
+        "Pengguna tidak ditemukan atau akun telah terverifikasi."
+      );
+    }
   } catch (error) {
     return handleResponseError(res);
   }
@@ -53,6 +90,7 @@ export const Login = async (req, res) => {
         email,
       },
     });
+
     if (!user) {
       return handleResponse(res, 404, "email atau password salah");
     }
