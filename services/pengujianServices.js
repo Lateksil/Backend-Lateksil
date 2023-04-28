@@ -43,14 +43,14 @@ export const updatePengujianServices = async (
   sampler,
   catatan_khusus,
   price,
-  image
+  // image
 ) => {
   try {
-    const pengujian = await Pengujian.findByPk(id);
+    // const pengujian = await Pengujian.findByPk(id);
 
-    if (pengujian.image) {
-      fs.unlinkSync(`uploads/${pengujian.image}`);
-    }
+    // // if (pengujian.image) {
+    // //   fs.unlinkSync(`uploads/${pengujian.image}`);
+    // // }
 
     const updatedPengujian = await Pengujian.update(
       {
@@ -63,7 +63,7 @@ export const updatePengujianServices = async (
         sampler,
         catatan_khusus,
         price,
-        image,
+        // image,
       },
       {
         where: { id: id },
@@ -79,7 +79,7 @@ export const deletePengujianServices = async (id) => {
   try {
     const pengujian = await Pengujian.findByPk(id);
 
-    if (pengujian.image) {
+    if (pengujian.image !== null) {
       fs.unlinkSync(`uploads/${pengujian.image}`);
     }
 

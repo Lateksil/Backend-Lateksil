@@ -21,7 +21,7 @@ router.post(
 );
 
 //UPDATE
-router.put("/pengujian/:id",verifyTokenFrontliner, updatePengujian);
+router.put("/pengujian/:id", verifyTokenFrontliner, updatePengujian);
 //GET
 
 //DELETE
