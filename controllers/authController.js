@@ -20,11 +20,32 @@ export const Register = async (req, res) => {
     const existingEmail = await Users.findOne({
       where: {
         email,
+        isVerified: true,
       },
     });
     if (existingEmail) {
       return handleResponse(res, 404, "Email Sudah Terdaftar");
     }
+
+    const verifiedEmail = await Users.findOne({
+      where: {
+        email,
+        isVerified: false,
+      },
+    });
+
+    if (verifiedEmail) {
+      verifiedEmail.full_name = full_name;
+      await verifiedEmail.save();
+
+      await SendVerificationEmail(verifiedEmail);
+
+      return handleResponseSuccess(
+        res,
+        "Pendaftaran berhasil. Silakan periksa email Anda untuk verifikasi."
+      );
+    }
+
     const user = await Users.create({
       full_name,
       email,
@@ -88,6 +109,7 @@ export const Login = async (req, res) => {
     const user = await Users.findOne({
       where: {
         email,
+        isVerified: true,
       },
     });
 
