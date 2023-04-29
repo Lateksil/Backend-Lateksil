@@ -7,6 +7,7 @@ import {
 import {
   handleResponseDeleteSuccess,
   handleResponseError,
+  handleResponseNotFound,
   handleResponseSuccess,
 } from "../utils/handleResponse.js";
 
@@ -53,7 +54,7 @@ export const getCartByUserId = async (req, res) => {
       ],
     });
 
-    if (!cart) {
+    if (!cart.length) {
       return handleResponseNotFound(res);
     }
 
