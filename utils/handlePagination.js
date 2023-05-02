@@ -1,7 +1,6 @@
 import { Op } from "sequelize";
 import {
   handleResponseError,
-  handleResponseNotFound,
   handleResponseSuccess,
 } from "./handleResponse.js";
 

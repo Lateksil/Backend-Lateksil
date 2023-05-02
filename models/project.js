@@ -1,22 +1,57 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
 
-const Project = db.define("Project", {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+const Project = db.define(
+  "proyek",
+  {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    nama_proyek: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    tujuan_proyek: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    no_whatsApp_proyek: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    no_refrensi: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    no_surat: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    keterangan: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    tanggal_mulai: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    tanggal_selesai: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
   },
-  name_project: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-});
+  {
+    freezeTableName: true,
+    timestamps: false,
+  }
+);
 
 export default Project;
 
 (async () => {
   await Project.sync({ alter: true }).then(() => {
-    console.log("Product Database  & tables created!");
+    console.log("Proyek Database  & tables created!");
   });
 })();

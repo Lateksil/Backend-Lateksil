@@ -45,7 +45,7 @@ export const getCartByUserId = async (req, res) => {
       where: {
         UserId: user_id,
       },
-      attributes: ["id", "quantity"],
+      attributes: ["id", "quantity", "PengujianId",],
       include: [
         {
           model: Pengujian,
@@ -53,10 +53,6 @@ export const getCartByUserId = async (req, res) => {
         },
       ],
     });
-
-    if (!cart.length) {
-      return handleResponseNotFound(res);
-    }
 
     return handleResponseSuccess(res, cart);
   } catch (error) {

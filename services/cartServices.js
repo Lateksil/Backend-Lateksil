@@ -22,7 +22,6 @@ export const createCartServices = async (
     }
 
     const cart = await Cart.create({
-      id: pengujian_id,
       UserId: user_id,
       PengujianId: pengujian_id,
       quantity,

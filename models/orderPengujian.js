@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
+import Item from "./itemOrder.js";
 import Order from "./order.js";
-import Pengujian from "./pengujian.js";
 
 const OrderPengujian = db.define(
   "OrderPengujian",
@@ -11,19 +11,23 @@ const OrderPengujian = db.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
+    quantity: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     orderId: {
       type: DataTypes.UUID,
       references: {
         model: Order,
-        key: 'id',
+        key: "id",
       },
     },
-    PengujianId: {
-        type: DataTypes.UUID,
-        references: {
-          model: Pengujian,
-          key: 'id',
-        },
+    itemOrderId: {
+      type: DataTypes.UUID,
+      references: {
+        model: Item,
+        key: "id",
+      },
     },
   },
   {
@@ -32,8 +36,8 @@ const OrderPengujian = db.define(
   }
 );
 
-Pengujian.belongsToMany(Order, { through: 'OrderPengujian' });
-Order.belongsToMany(Pengujian, { through: 'OrderPengujian' });
+Item.belongsToMany(Order, { through: "OrderPengujian" });
+Order.belongsToMany(Item, { through: "OrderPengujian" });
 
 export default OrderPengujian;
 
