@@ -29,43 +29,23 @@ export const CreateOrder = async (req, res) => {
         UserId: user_id,
       },
       attributes: ["id", "quantity", "PengujianId"],
-      include: [
-        {
-          model: Pengujian,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-        },
-      ],
-    });
-
-    for (const product of cart) {
-      await Item.create(
-        {
-          UserId: user_id,
-          PengujianId: product.PengujianId,
-          quantity: product.quantity,
-        },
-        { transaction: t }
-      );
-    }
-
-    const itemOrder = await Item.findAll({
-      where: {
-        UserId: user_id,
-      },
-      include: [
-        {
-          model: Pengujian,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
-        },
-      ],
     });
 
     if (!cart) {
       return handleResponseNotFound(res);
     }
 
+    for (const product of cart) {
+      await Item.create({
+        UserId: user_id,
+        PengujianId: product.PengujianId,
+        quantity: product.quantity,
+      });
+    }
+
     const order = await Order.create(
       {
+        UserId: user_id,
         total_price: "15000000",
         proyek: {
           nama_proyek: "Nama Proyek 1",
@@ -81,19 +61,27 @@ export const CreateOrder = async (req, res) => {
           { model: Status, as: "status" },
           { model: Project, as: "proyek" },
         ],
-      },
-      { transaction: t }
+      }
     );
 
-    await order.setUser(user);
+    const item = await Item.findAll({
+      where: {
+        UserId: user_id,
+      },
+      include: [
+        {
+          model: Pengujian,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        },
+      ],
+    });
 
-    for (const product of itemOrder) {
+    for (const product of item) {
       await OrderPengujian.create({
         orderId: order.id,
         quantity: product.quantity,
         itemOrderId: product.id,
       });
-      console.log("TES", order.id, product.id, product.quantity);
     }
 
     await Cart.destroy({ where: { UserId: user_id } });
