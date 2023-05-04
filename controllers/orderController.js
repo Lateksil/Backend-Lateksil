@@ -1,5 +1,6 @@
 import db from "../config/database.js";
 import Cart from "../models/cart.js";
+import GatewayOrder from "../models/gatewayOrder.js";
 import Item from "../models/itemOrder.js";
 import Order from "../models/order.js";
 import OrderPengujian from "../models/orderPengujian.js";
@@ -11,6 +12,7 @@ import {
   handleResponseError,
   handleResponseNotFound,
   handleResponseSuccess,
+  handleResponseAuthorization,
 } from "../utils/handleResponse.js";
 
 export const CreateOrder = async (req, res) => {
@@ -31,16 +33,8 @@ export const CreateOrder = async (req, res) => {
       attributes: ["id", "quantity", "PengujianId"],
     });
 
-    if (!cart) {
-      return handleResponseNotFound(res);
-    }
-
-    for (const product of cart) {
-      await Item.create({
-        UserId: user_id,
-        PengujianId: product.PengujianId,
-        quantity: product.quantity,
-      });
+    if (cart.length === 0) {
+      return handleResponseAuthorization(res, 404, "Cart not found");
     }
 
     const order = await Order.create(
@@ -64,24 +58,25 @@ export const CreateOrder = async (req, res) => {
       }
     );
 
-    const item = await Item.findAll({
-      where: {
-        UserId: user_id,
-      },
-      include: [
+    for (const product of cart) {
+      await Item.create(
         {
-          model: Pengujian,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
+          id: product.id,
+          UserId: user_id,
+          PengujianId: product.PengujianId,
+          quantity: product.quantity,
         },
-      ],
-    });
+        { transaction: t }
+      );
 
-    for (const product of item) {
-      await OrderPengujian.create({
-        orderId: order.id,
-        quantity: product.quantity,
-        itemOrderId: product.id,
-      });
+      await OrderPengujian.create(
+        {
+          orderId: order.id,
+          quantity: product.quantity,
+          itemOrderId: product.id,
+        },
+        { transaction: t }
+      );
     }
 
     await Cart.destroy({ where: { UserId: user_id } });
