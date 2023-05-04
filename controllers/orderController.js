@@ -1,6 +1,5 @@
 import db from "../config/database.js";
 import Cart from "../models/cart.js";
-import GatewayOrder from "../models/gatewayOrder.js";
 import Item from "../models/itemOrder.js";
 import Order from "../models/order.js";
 import OrderPengujian from "../models/orderPengujian.js";
@@ -91,9 +90,18 @@ export const CreateOrder = async (req, res) => {
 };
 
 export const getOrderById = async (req, res) => {
-  const { user_id } = req.body;
+  const { user_id, page = 1, limit = 10 } = req.body;
+
+  const offset = (page - 1) * limit;
+
   try {
-    const order = await Order.findAll({
+    const { count, rows } = await Order.findAndCountAll({
+      where: {
+        UserId: user_id,
+      },
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
       include: [
         {
           model: Users,
@@ -131,12 +139,18 @@ export const getOrderById = async (req, res) => {
         },
       ],
       attributes: { exclude: ["UserId", "updatedAt"] },
-      where: {
-        UserId: user_id,
-      },
     });
 
-    return handleResponseSuccess(res, order);
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
