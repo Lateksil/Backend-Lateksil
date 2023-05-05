@@ -15,7 +15,13 @@ import {
 } from "../utils/handleResponse.js";
 
 export const CreateOrder = async (req, res) => {
-  const { user_id } = req.body;
+  const {
+    user_id,
+    total_price,
+    nama_proyek,
+    tujuan_proyek,
+    no_whatsApp_proyek,
+  } = req.body;
 
   const t = await db.transaction();
   try {
@@ -39,14 +45,14 @@ export const CreateOrder = async (req, res) => {
     const order = await Order.create(
       {
         UserId: user_id,
-        total_price: "15000000",
+        total_price,
         proyek: {
-          nama_proyek: "Nama Proyek 1",
-          tujuan_proyek: "Tujuan ProyekNYA",
-          no_whatsApp_proyek: "08979111476",
+          nama_proyek,
+          tujuan_proyek,
+          no_whatsApp_proyek,
         },
         status: {
-          status_persetujuan: "0",
+          status_persetujuan: "1",
         },
       },
       {
