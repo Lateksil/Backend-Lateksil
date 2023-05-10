@@ -16,7 +16,7 @@ export const updateUser = async (req, res) => {
 
   try {
     const user = await Users.findByPk(id);
-    console.log(user);
+
     if (!user) {
       return handleResponseNotFound(res);
     }

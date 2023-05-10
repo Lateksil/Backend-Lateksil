@@ -95,7 +95,7 @@ export const CreateOrder = async (req, res) => {
   }
 };
 
-export const getOrderById = async (req, res) => {
+export const getOrderByUser = async (req, res) => {
   const { user_id, page = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;
@@ -157,6 +157,57 @@ export const getOrderById = async (req, res) => {
       page: page,
       totalPages: Math.ceil(count / limit),
     });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const getOrderById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const order = await Order.findByPk(id, {
+      include: [
+        {
+          model: Users,
+          attributes: [
+            "id",
+            "full_name",
+            "email",
+            "no_whatsapp",
+            "address",
+            "company_name",
+          ],
+        },
+        {
+          model: Status,
+          as: "status",
+          attributes: ["id", "status_persetujuan"],
+        },
+        {
+          model: Project,
+          as: "proyek",
+        },
+        {
+          model: Item,
+          attributes: ["id"],
+          include: [
+            {
+              model: Pengujian,
+              attributes: { exclude: ["createdAt", "updatedAt"] },
+            },
+          ],
+          through: { attributes: ["quantity"] },
+        },
+      ],
+    });
+
+    if (!order) {
+      return handleResponseAuthorization(res, 404, "Order not found");
+    }
+
+    return handleResponseSuccess(res, order);
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
