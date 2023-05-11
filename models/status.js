@@ -13,6 +13,14 @@ const Status = db.define(
       type: DataTypes.STRING,
       defaultValue: "1",
     },
+    is_send_manager: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    is_send_costumer: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    }
   },
   {
     freezeTableName: true,

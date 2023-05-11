@@ -1,4 +1,5 @@
 import db from "../config/database.js";
+import { Op } from "sequelize";
 import Cart from "../models/cart.js";
 import Item from "../models/itemOrder.js";
 import Order from "../models/order.js";
@@ -96,7 +97,7 @@ export const CreateOrder = async (req, res) => {
 };
 
 export const getOrderByUser = async (req, res) => {
-  const { user_id, page = 1, limit = 10 } = req.body;
+  const { user_id, page = 1, status_persetujuan = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;
 
@@ -106,6 +107,7 @@ export const getOrderByUser = async (req, res) => {
         UserId: user_id,
       },
       offset,
+      order: [['createdAt', 'DESC']],
       limit: parseInt(limit, 10),
       distinct: true,
       include: [
@@ -123,6 +125,9 @@ export const getOrderByUser = async (req, res) => {
         {
           model: Status,
           as: "status",
+          where: {
+            status_persetujuan: status_persetujuan.toString(),
+          },
           attributes: ["id", "status_persetujuan"],
         },
         {
@@ -146,6 +151,78 @@ export const getOrderByUser = async (req, res) => {
       ],
       attributes: { exclude: ["UserId", "updatedAt"] },
     });
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const getAllOrder = async (req, res) => {
+  const { page = 1, status_persetujuan = "", limit = 10 } = req.body;
+
+  const offset = (page - 1) * limit;
+
+  try {
+    const { count, rows } = await Order.findAndCountAll({
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
+      order: [['createdAt', 'DESC']],
+      include: [
+        {
+          model: Users,
+          attributes: [
+            "id",
+            "full_name",
+            "email",
+            "no_whatsapp",
+            "address",
+            "company_name",
+          ],
+        },
+        {
+          model: Status,
+          as: "status",
+          where: {
+            status_persetujuan: {
+              [Op.like]: `%${status_persetujuan}%`
+            }
+          },
+          attributes: ["id", "status_persetujuan"],
+        },
+        {
+          model: Project,
+          as: "proyek",
+        },
+        {
+          model: Item,
+          attributes: ["id"],
+          include: [
+            {
+              model: Pengujian,
+              attributes: { exclude: ["createdAt", "updatedAt"] },
+            },
+          ],
+          through: { attributes: ["quantity"] },
+        },
+      ],
+      attributes: { exclude: ["UserId", "updatedAt"] },
+    });
+
+    // if(rows.length === 0){
+    //   return handleResponseNotFound(res)
+    // }
 
     return res.status(200).json({
       status: 200,

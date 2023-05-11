@@ -1,6 +1,7 @@
 import express from "express";
 import {
   CreateOrder,
+  getAllOrder,
   getOrderById,
   getOrderByUser,
   updateStatusById,
@@ -10,6 +11,7 @@ const router = express.Router();
 
 //POST
 router.post("/order/create", CreateOrder);
+router.post("/orders", getAllOrder);
 router.post("/order", getOrderByUser);
 router.post("/order/update", updateStatusById);
 

@@ -25,6 +25,10 @@ const Project = db.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    no_identifikasi: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     no_surat: {
       type: DataTypes.STRING,
       allowNull: true,
@@ -38,6 +42,10 @@ const Project = db.define(
       allowNull: true,
     },
     tanggal_selesai: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    keterangan_to_client: {
       type: DataTypes.STRING,
       allowNull: true,
     },
