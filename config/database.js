@@ -13,6 +13,4 @@ const db = new Sequelize(
   }
 );
 
-
-//AKU UPDATE DISINI ADA AKUNYA ADA RUTH
 export default db;

@@ -7,11 +7,12 @@
       "dialect": "mysql"
     },
     "test": {
-      "username": "root",
-      "password": "password",
-      "database": "mydatabase_test",
-      "host": "localhost",
-      "dialect": "mysql"
+      "username": "avnadmin",
+      "password": "AVNS_fVl8wh5GAtU4zKX1HmW",
+      "database": "defaultdb",
+      "port": 11847,
+      "host": "pg-1a77a5a3-excercise-depdep.aivencloud.com",
+      "dialect": "postgres"
     },
     "production": {
       "username": "root",
