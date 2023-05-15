@@ -1,5 +1,4 @@
 import Users from "../models/user.js";
-import { updateUserByIdServices } from "../services/userServices.js";
 import { handlePagination } from "../utils/handlePagination.js";
 import {
   handleResponseDeleteSuccess,

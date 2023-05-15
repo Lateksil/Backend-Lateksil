@@ -199,7 +199,7 @@ export const getAllOrder = async (req, res) => {
               [Op.like]: `%${status_persetujuan}%`
             }
           },
-          attributes: ["id", "status_persetujuan"],
+          attributes: { exclude: ["createdAt", "updatedAt"] },
         },
         {
           model: Project,
