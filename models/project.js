@@ -33,10 +33,6 @@ const Project = db.define(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    keterangan: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
     tanggal_mulai: {
       type: DataTypes.STRING,
       allowNull: true,

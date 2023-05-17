@@ -40,6 +40,10 @@ const Users = db.define("User", {
     type: DataTypes.STRING,
     defaultValue: "user",
   },
+  isActive_payment: {
+    type: DataTypes.STRING,
+    defaultValue: 'passive'
+  },
   isVerified: {
     type: DataTypes.BOOLEAN,
     defaultValue: false

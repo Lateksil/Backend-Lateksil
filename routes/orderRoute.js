@@ -2,6 +2,7 @@ import express from "express";
 import {
   CreateOrder,
   getAllOrder,
+  getAllOrderManager,
   getOrderById,
   getOrderByUser,
   updateStatusById,
@@ -14,6 +15,8 @@ router.post("/order/create", CreateOrder);
 router.post("/orders", getAllOrder);
 router.post("/order", getOrderByUser);
 router.post("/order/update", updateStatusById);
+
+router.post("/m/orders", getAllOrderManager);
 
 //UPDATE
 

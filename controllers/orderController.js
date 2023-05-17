@@ -107,7 +107,7 @@ export const getOrderByUser = async (req, res) => {
         UserId: user_id,
       },
       offset,
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
       limit: parseInt(limit, 10),
       distinct: true,
       include: [
@@ -169,16 +169,41 @@ export const getOrderByUser = async (req, res) => {
 };
 
 export const getAllOrder = async (req, res) => {
-  const { page = 1, status_persetujuan = "", limit = 10 } = req.body;
+  const {
+    page = 1,
+    status_persetujuan = "",
+    search = "",
+    limit = 10,
+  } = req.body;
+
+  let whereClauseUsers = {};
 
   const offset = (page - 1) * limit;
+
+  const searchDataUsers = [
+    "full_name",
+    "email",
+    "no_whatsapp",
+    "address",
+    "company_name",
+  ];
+
+  if (search !== "") {
+    const searchUsers = searchDataUsers.map((user) => ({
+      [user]: { [Op.iLike]: `%${search}%` },
+    }));
+
+    whereClauseUsers = {
+      [Op.or]: searchUsers,
+    };
+  }
 
   try {
     const { count, rows } = await Order.findAndCountAll({
       offset,
       limit: parseInt(limit, 10),
       distinct: true,
-      order: [['createdAt', 'DESC']],
+      order: [["createdAt", "DESC"]],
       include: [
         {
           model: Users,
@@ -196,8 +221,9 @@ export const getAllOrder = async (req, res) => {
           as: "status",
           where: {
             status_persetujuan: {
-              [Op.like]: `%${status_persetujuan}%`
-            }
+              [Op.like]: `%${status_persetujuan}%`,
+            },
+            
           },
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },
@@ -219,10 +245,6 @@ export const getAllOrder = async (req, res) => {
       ],
       attributes: { exclude: ["UserId", "updatedAt"] },
     });
-
-    // if(rows.length === 0){
-    //   return handleResponseNotFound(res)
-    // }
 
     return res.status(200).json({
       status: 200,
@@ -313,6 +335,102 @@ export const updateStatusById = async (req, res) => {
     await status.reload();
 
     return handleResponseSuccess(res, status);
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+//MANAGERS
+
+export const getAllOrderManager = async (req, res) => {
+  const {
+    page = 1,
+    status_persetujuan = "1",
+    search = "",
+    limit = 10,
+  } = req.body;
+
+  let whereClauseUsers = {};
+
+  const offset = (page - 1) * limit;
+
+  const searchDataUsers = [
+    "full_name",
+    "email",
+    "no_whatsapp",
+    "address",
+    "company_name",
+  ];
+
+  if (search !== "") {
+    const searchUsers = searchDataUsers.map((user) => ({
+      [user]: { [Op.iLike]: `%${search}%` },
+    }));
+
+    whereClauseUsers = {
+      [Op.or]: searchUsers,
+    };
+  }
+
+  try {
+    const { count, rows } = await Order.findAndCountAll({
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: Users,
+          attributes: [
+            "id",
+            "full_name",
+            "email",
+            "no_whatsapp",
+            "address",
+            "company_name",
+          ],
+        },
+        {
+          model: Status,
+          as: "status",
+          where: {
+            status_persetujuan: {
+              [Op.like]: `%${status_persetujuan}%`,
+            },
+            is_send_manager: true
+          },
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        },
+        {
+          model: Project,
+          as: "proyek",
+        },
+        {
+          model: Item,
+          attributes: ["id"],
+          include: [
+            {
+              model: Pengujian,
+              attributes: { exclude: ["createdAt", "updatedAt"] },
+            },
+          ],
+          through: { attributes: ["quantity"] },
+        },
+      ],
+      attributes: { exclude: ["UserId", "updatedAt"] },
+    });
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
   } catch (error) {
     console.log(error);
     return handleResponseError(res);

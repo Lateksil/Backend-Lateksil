@@ -3,7 +3,7 @@ import { SendManagerOrder } from "../controllers/projectController.js";
 const router = express.Router();
 
 //POST
-router.post("/project", SendManagerOrder);
+router.put("/project", SendManagerOrder);
 
 //UPDATE
 

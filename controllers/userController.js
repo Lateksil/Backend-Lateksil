@@ -67,15 +67,16 @@ export const AllUsers = async (req, res) => {
     "company_name",
     "no_whatsapp",
     "address",
+    "isActive_payment",
   ];
 
   const searchFilterData = [
-    "id",
     "full_name",
     "email",
     "company_name",
     "no_whatsapp",
     "address",
+    "isActive_payment",
   ];
   return handlePagination(req, res, viewData, searchFilterData, Users);
 };
