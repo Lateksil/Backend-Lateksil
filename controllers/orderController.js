@@ -97,7 +97,7 @@ export const CreateOrder = async (req, res) => {
 };
 
 export const getOrderByUser = async (req, res) => {
-  const { user_id, page = 1, status_persetujuan = 1, limit = 10 } = req.body;
+  const { user_id, page = 1, status_transaction = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;
 
@@ -126,9 +126,9 @@ export const getOrderByUser = async (req, res) => {
           model: Status,
           as: "status",
           where: {
-            status_persetujuan: status_persetujuan.toString(),
+            status_transaction: status_transaction.toString(),
           },
-          attributes: ["id", "status_persetujuan"],
+          attributes: ["id", "status_transaction"],
         },
         {
           model: Project,
@@ -223,7 +223,6 @@ export const getAllOrder = async (req, res) => {
             status_persetujuan: {
               [Op.like]: `%${status_persetujuan}%`,
             },
-            
           },
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },
@@ -282,7 +281,7 @@ export const getOrderById = async (req, res) => {
         {
           model: Status,
           as: "status",
-          attributes: ["id", "status_persetujuan"],
+          attributes: ["id", "status_persetujuan", "status_transaction"],
         },
         {
           model: Project,
@@ -398,7 +397,7 @@ export const getAllOrderManager = async (req, res) => {
             status_persetujuan: {
               [Op.like]: `%${status_persetujuan}%`,
             },
-            is_send_manager: true
+            is_send_manager: "1",
           },
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },

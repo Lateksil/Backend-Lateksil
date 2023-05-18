@@ -39,7 +39,41 @@ export const SendManagerOrder = async (req, res) => {
       );
       await Status.update(
         {
-          is_send_manager: true,
+          is_send_manager: '1',
+        },
+        { where: { id } }
+      );
+      return handleResponseUpdateSuccess(res);
+    } else {
+      return handleResponseNotFound(res);
+    }
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const SendToFronlineOrder = async (req, res) => {
+  const { id, status_persetujuan, keterangan_to_client } = req.body;
+  try {
+    const project = await Project.findByPk(id);
+
+    if (!project) {
+      return handleResponseNotFound(res);
+    }
+
+    if (project.id === id) {
+      await Project.update(
+        {
+          keterangan_to_client,
+        },
+        {
+          where: { id },
+        }
+      );
+      await Status.update(
+        {
+          status_persetujuan,
         },
         { where: { id } }
       );

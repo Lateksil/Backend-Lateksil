@@ -13,14 +13,18 @@ const Status = db.define(
       type: DataTypes.STRING,
       defaultValue: "1",
     },
+    status_transaction: {
+      type: DataTypes.STRING,
+      defaultValue: "1",
+    },
     is_send_manager: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      type: DataTypes.STRING,
+      defaultValue: "0",
     },
     is_send_costumer: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    }
+      type: DataTypes.STRING,
+      defaultValue: "0",
+    },
   },
   {
     freezeTableName: true,
