@@ -15,6 +15,7 @@ export const SendManagerOrder = async (req, res) => {
     tanggal_mulai,
     tanggal_selesai,
     keterangan_to_client,
+    status_transaction
   } = req.body;
   try {
     const project = await Project.findByPk(id);
@@ -40,6 +41,7 @@ export const SendManagerOrder = async (req, res) => {
       await Status.update(
         {
           is_send_manager: '1',
+          status_transaction
         },
         { where: { id } }
       );

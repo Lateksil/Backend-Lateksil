@@ -10,6 +10,7 @@ import pengujian from "./routes/pengujianRoute.js";
 import cart from "./routes/cartRoute.js";
 import Order from "./routes/orderRoute.js";
 import Project from "./routes/projectRoute.js";
+import Status from "./routes/statusRoute.js";
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(pengujian);
 app.use(cart);
 app.use(Order);
 app.use(Project);
+app.use(Status);
 
 (async () => {
   try {
