@@ -17,10 +17,6 @@ const Project = db.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    no_whatsApp_proyek: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     no_refrensi: {
       type: DataTypes.STRING,
       allowNull: true,
