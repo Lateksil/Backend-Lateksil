@@ -312,34 +312,6 @@ export const getOrderById = async (req, res) => {
   }
 };
 
-export const updateStatusById = async (req, res) => {
-  try {
-    const status = await Status.findByPk(
-      "84896615-4cc5-4c80-9079-24b90b3a325d"
-    );
-
-    if (!status) {
-      return handleResponseNotFound(res);
-    }
-
-    await Status.update(
-      {
-        status_persetujuan: "2",
-      },
-      {
-        where: { id: "84896615-4cc5-4c80-9079-24b90b3a325d" },
-      }
-    );
-
-    await status.reload();
-
-    return handleResponseSuccess(res, status);
-  } catch (error) {
-    console.log(error);
-    return handleResponseError(res);
-  }
-};
-
 //MANAGERS
 
 export const getAllOrderManager = async (req, res) => {

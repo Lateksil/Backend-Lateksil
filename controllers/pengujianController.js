@@ -1,3 +1,5 @@
+import fs from "fs";
+import path from "path";
 import Pengujian from "../models/pengujian.js";
 import {
   createPengujianServices,
@@ -61,24 +63,39 @@ export const updatePengujian = async (req, res) => {
   } = req.body;
 
   try {
-    const pengujian = await updatePengujianServices(
-      id,
-      jenis_pengujian,
-      code,
-      category,
-      tempat_pengujian,
-      description,
-      min_quantity,
-      sampler,
-      catatan_khusus,
-      price,
-    );
-    if (pengujian) {
-      return handleResponseUpdateSuccess(res);
-    } else {
+    const pengujian = await Pengujian.findByPk(id);
+
+    if (!pengujian) {
       return handleResponseNotFound(res);
     }
+
+    // console.log('DATA PENGUJIAN ===========', pengujian.image)
+    if (req.file) {
+      if (pengujian.image !== null) {
+        fs.unlinkSync(`uploads/pengujian/${pengujian.image}`);
+      }
+    }
+
+    await Pengujian.update(
+      {
+        jenis_pengujian,
+        code,
+        category,
+        tempat_pengujian,
+        description,
+        min_quantity,
+        sampler,
+        catatan_khusus,
+        price,
+        image: req.file ? req.file.filename : pengujian.image,
+      },
+      {
+        where: { id: id },
+      }
+    );
+    return handleResponseUpdateSuccess(res);
   } catch (error) {
+    console.log(error);
     return handleResponseError(res);
   }
 };

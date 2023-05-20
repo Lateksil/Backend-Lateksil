@@ -5,7 +5,7 @@ import {
   getAllPengujian,
   updatePengujian,
 } from "../controllers/pengujianController.js";
-import upload from "../middleware/upload.js";
+import uploadPengujian from "../middleware/uploadPengujian.js";
 import { verifyTokenAllRole } from "../middleware/verifyTokenAllRole.js";
 import { verifyTokenFrontliner } from "../middleware/verifyTokenFrontliner.js";
 const router = express.Router();
@@ -15,13 +15,18 @@ router.post("/pengujian/client", getAllPengujian);
 router.post("/pengujian", verifyTokenAllRole, getAllPengujian);
 router.post(
   "/pengujian/create",
-  upload,
+  uploadPengujian,
   verifyTokenFrontliner,
   createPengujian
 );
 
 //UPDATE
-router.put("/pengujian/:id", verifyTokenFrontliner, updatePengujian);
+router.put(
+  "/pengujian/:id",
+  uploadPengujian,
+  verifyTokenFrontliner,
+  updatePengujian
+);
 //GET
 
 //DELETE

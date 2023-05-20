@@ -1,5 +1,7 @@
 import fs from "fs";
+import path from "path";
 import Pengujian from "../models/pengujian.js";
+import { handleResponseNotFound } from "../utils/handleResponse.js";
 
 export const createPengujianServices = async (
   image,
@@ -42,16 +44,16 @@ export const updatePengujianServices = async (
   min_quantity,
   sampler,
   catatan_khusus,
-  price,
-  // image
+  price
 ) => {
   try {
-    // const pengujian = await Pengujian.findByPk(id);
+    const pengujian = await Pengujian.findByPk(id);
 
-    // // if (pengujian.image) {
-    // //   fs.unlinkSync(`uploads/${pengujian.image}`);
-    // // }
-
+    if (pengujian.image) {
+      fs.unlinkSync(
+        path.join(__dirname, "uploads/pengujian/", pengujian.image)
+      );
+    }
     const updatedPengujian = await Pengujian.update(
       {
         jenis_pengujian,
@@ -79,8 +81,8 @@ export const deletePengujianServices = async (id) => {
   try {
     const pengujian = await Pengujian.findByPk(id);
 
-    if (pengujian.image !== null) {
-      fs.unlinkSync(`uploads/${pengujian.image}`);
+    if (pengujian.image) {
+      fs.unlinkSync(`uploads/pengujian/${pengujian.image}`);
     }
 
     const deletedPengujian = await Pengujian.destroy({

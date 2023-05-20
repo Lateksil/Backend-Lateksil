@@ -38,7 +38,9 @@ app.use(Status);
     console.error("Unable to connect to the database:", error);
   }
 })();
-app.use("/uploads", express.static("./uploads"));
+app.use("/uploads", express.static("./uploads/pengujian/"));
+app.use("/profile", express.static("./uploads/profile/"));
+app.use("/payment", express.static("./uploads/payment/"));
 
 app.listen(3030, () => {
   console.log("Server is listening on port 3030");

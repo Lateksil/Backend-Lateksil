@@ -5,7 +5,6 @@ import {
   getAllOrderManager,
   getOrderById,
   getOrderByUser,
-  updateStatusById,
 } from "../controllers/orderController.js";
 
 const router = express.Router();
@@ -14,7 +13,6 @@ const router = express.Router();
 router.post("/order/create", CreateOrder);
 router.post("/orders", getAllOrder);
 router.post("/order", getOrderByUser);
-router.post("/order/update", updateStatusById);
 
 router.post("/m/orders", getAllOrderManager);
 
