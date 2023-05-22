@@ -1,31 +1,31 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
 
-const Status = db.define(
-  "status",
+const MethodTransaction = db.define(
+  "MethodTransaction",
   {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    status_persetujuan: {
+    type_transaction: {
       type: DataTypes.STRING,
-      defaultValue: "1",
+      defaultValue: "Transfer",
     },
-    status_transaction: {
+    bank: {
       type: DataTypes.STRING,
-      defaultValue: "1",
+      allowNull: true,
     },
-    status_payment: {
+    name_bank: {
       type: DataTypes.STRING,
-      defaultValue: "0",
+      allowNull: true,
     },
-    is_send_manager: {
+    no_rek: {
       type: DataTypes.STRING,
-      defaultValue: "0",
+      allowNull: true,
     },
-    is_send_costumer: {
+    is_Active: {
       type: DataTypes.STRING,
       defaultValue: "0",
     },
@@ -35,10 +35,10 @@ const Status = db.define(
   }
 );
 
-export default Status;
+export default MethodTransaction;
 
 (async () => {
-  await Status.sync({ alter: true }).then(() => {
-    console.log("Status Database  & tables created!");
+  await MethodTransaction.sync({ alter: true }).then(() => {
+    console.log("Method Transaction Database  & tables created!");
   });
 })();

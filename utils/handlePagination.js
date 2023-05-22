@@ -40,6 +40,7 @@ export const handlePagination = async (
       where: whereClause,
       offset,
       limit: parseInt(limit, 10),
+      order: [["updatedAt", "DESC"]],
       attributes: viewAttributeData,
     });
 
