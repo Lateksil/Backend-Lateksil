@@ -16,10 +16,10 @@ import MethodTransaction from "./routes/methodTransactionRoute.js";
 const app = express();
 
 dotenv.config();
-app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use(authRoute);
 app.use(userRoute);
@@ -40,10 +40,11 @@ app.use(MethodTransaction);
     console.error("Unable to connect to the database:", error);
   }
 })();
+
 app.use("/uploads", express.static("./uploads/pengujian/"));
 app.use("/profile", express.static("./uploads/profile/"));
 app.use("/payment", express.static("./uploads/payment/"));
 
-app.listen(3030, () => {
-  console.log("Server is listening on port 3030");
+app.listen(8080, () => {
+  console.log("Server is listening on port 8080");
 });

@@ -2,6 +2,14 @@ import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 dotenv.config();
 
+//DATABASES MYSQL
+// const db = new Sequelize("lateksil", "root", "root", {
+//   host: "localhost",
+//   port: 8889,
+//   dialect: "mysql",
+// });
+
+// DATABASES POSGRESQL
 const db = new Sequelize(
   process.env.DATABASE_NAME,
   process.env.DATABASE_USERNAME,
