@@ -1,0 +1,159 @@
+import { Op } from "sequelize";
+import Item from "../models/itemOrder.js";
+import Order from "../models/order.js";
+import Payment from "../models/payment.js";
+import Pengujian from "../models/pengujian.js";
+import Project from "../models/project.js";
+import Status from "../models/status.js";
+import Users from "../models/user.js";
+import {
+  handleResponseAuthorization,
+  handleResponseError,
+  handleResponseSuccess,
+} from "../utils/handleResponse.js";
+
+export const CreateUploadPayment = async (req, res) => {
+  const { id_order, full_name, company_name, total_price } = req.body;
+  const { filename } = req.file;
+
+  try {
+    // const payment = await Payment.findByPk(id_order);
+
+    // if (payment) {
+    //   await Payment.update(
+    //     {
+    //       id: id_order,
+    //       full_name,
+    //       company_name,
+    //       image_payment: filename,
+    //       total_price,
+    //     },
+    //     {
+    //       where: { id: id_order },
+    //     }
+    //   );
+
+    //   return handleResponseAuthorization(
+    //     res,
+    //     200,
+    //     "Pembaharuan Pembayaran Berhasil"ß
+    //   );
+    // }
+
+    const createPayment = await Payment.create({
+      id: id_order,
+      full_name,
+      company_name,
+      image_payment: filename,
+      total_price,
+    });
+
+    const statusPayment = await Status.findByPk(id_order);
+
+    if (statusPayment.id === id_order) {
+      await Status.update(
+        {
+          status_payment: "1",
+        },
+        { where: { id: id_order } }
+      );
+    }
+
+    return handleResponseSuccess(res, createPayment);
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const getAllOrderPayment = async (req, res) => {
+  const { page = 1, limit = 10, search = "", status_payment = "1" } = req.body;
+
+  let whereClauseUsers = {};
+
+  const offset = (page - 1) * limit;
+
+  const searchDataUsers = [
+    "full_name",
+    "email",
+    "no_whatsapp",
+    "address",
+    "company_name",
+  ];
+
+  if (search !== "") {
+    const searchUsers = searchDataUsers.map((user) => ({
+      [user]: { [Op.iLike]: `%${search}%` },
+    }));
+
+    whereClauseUsers = {
+      [Op.or]: searchUsers,
+    };
+  }
+
+  try {
+    const { count, rows } = await Order.findAndCountAll({
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: Users,
+          attributes: [
+            "id",
+            "full_name",
+            "email",
+            "no_whatsapp",
+            "address",
+            "company_name",
+          ],
+        },
+        {
+          model: Status,
+          as: "status",
+          where: {
+            status_payment: {
+              [Op.like]: `%${status_payment}%`,
+            },
+          },
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+        },
+        {
+          model: Payment,
+          as: "payment",
+        },
+        {
+          model: Project,
+          as: "proyek",
+        },
+        {
+          model: Item,
+          attributes: ["id"],
+          include: [
+            {
+              model: Pengujian,
+              attributes: { exclude: ["createdAt", "updatedAt"] },
+            },
+          ],
+          through: { attributes: ["quantity"] },
+        },
+      ],
+      attributes: { exclude: ["UserId", "updatedAt"] },
+    });
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};

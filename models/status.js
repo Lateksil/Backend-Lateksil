@@ -21,6 +21,10 @@ const Status = db.define(
       type: DataTypes.STRING,
       defaultValue: "0",
     },
+    accept_payment: {
+      type: DataTypes.STRING,
+      defaultValue: "0",
+    },
     is_send_manager: {
       type: DataTypes.STRING,
       defaultValue: "0",

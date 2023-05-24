@@ -12,6 +12,7 @@ import Order from "./routes/orderRoute.js";
 import Project from "./routes/projectRoute.js";
 import Status from "./routes/statusRoute.js";
 import MethodTransaction from "./routes/methodTransactionRoute.js";
+import Payment from "./routes/paymentRoute.js";
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use(Order);
 app.use(Project);
 app.use(Status);
 app.use(MethodTransaction);
+app.use(Payment);
 
 (async () => {
   try {
@@ -43,8 +45,8 @@ app.use(MethodTransaction);
 
 app.use("/uploads", express.static("./uploads/pengujian/"));
 app.use("/profile", express.static("./uploads/profile/"));
-app.use("/payment", express.static("./uploads/payment/"));
+app.use("/bukti-pembayaran", express.static("./uploads/payment/bukti-pembayaran/"));
 
-app.listen(8080, () => {
-  console.log("Server is listening on port 8080");
+app.listen(3030, () => {
+  console.log("Server is listening on port 3030");
 });
