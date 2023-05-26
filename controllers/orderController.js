@@ -128,7 +128,7 @@ export const getOrderByUser = async (req, res) => {
           where: {
             status_transaction: status_transaction.toString(),
           },
-          attributes: ["id", "status_transaction"],
+          attributes: ["id", "status_transaction", "status_payment"],
         },
         {
           model: Project,
@@ -281,7 +281,12 @@ export const getOrderById = async (req, res) => {
         {
           model: Status,
           as: "status",
-          attributes: ["id", "status_persetujuan", "status_transaction"],
+          attributes: [
+            "id",
+            "status_persetujuan",
+            "status_transaction",
+            "status_payment",
+          ],
         },
         {
           model: Project,

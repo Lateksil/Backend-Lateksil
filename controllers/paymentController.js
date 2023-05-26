@@ -9,6 +9,7 @@ import Users from "../models/user.js";
 import {
   handleResponseAuthorization,
   handleResponseError,
+  handleResponseNotFound,
   handleResponseSuccess,
 } from "../utils/handleResponse.js";
 
@@ -66,6 +67,51 @@ export const CreateUploadPayment = async (req, res) => {
   }
 };
 
+export const uploadKwitansiToCostumer = async (req, res) => {
+  const { id } = req.body;
+  const { filename } = req.file;
+
+  try {
+    const payment = await Payment.findByPk(id);
+
+    if (!payment) {
+      return handleResponseNotFound(res);
+    }
+
+    if (payment.image_kwitansi !== null) {
+      return handleResponseAuthorization(res, 404, "Kwitansi Sudah Terkirim");
+    } else {
+      await Payment.update(
+        {
+          image_kwitansi: filename,
+        },
+        {
+          where: { id: id },
+        }
+      );
+
+      const statusPayment = await Status.findByPk(id);
+
+      if (!statusPayment) {
+        return handleResponseNotFound(res);
+      }
+
+      if (statusPayment.id === id) {
+        await Status.update(
+          {
+            accept_payment: "1",
+          },
+          { where: { id: id } }
+        );
+      }
+      return handleResponseAuthorization(res, 200, "Upload Kwitansi Berhasil");
+    }
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
 export const getAllOrderPayment = async (req, res) => {
   const { page = 1, limit = 10, search = "", status_payment = "1" } = req.body;
 
@@ -96,7 +142,6 @@ export const getAllOrderPayment = async (req, res) => {
       offset,
       limit: parseInt(limit, 10),
       distinct: true,
-      order: [["createdAt", "DESC"]],
       include: [
         {
           model: Users,
@@ -112,16 +157,14 @@ export const getAllOrderPayment = async (req, res) => {
         {
           model: Status,
           as: "status",
+          order: [["updatedAt", "DESC"]],
           where: {
+            status_persetujuan: "2",
             status_payment: {
               [Op.like]: `%${status_payment}%`,
             },
           },
           attributes: { exclude: ["createdAt", "updatedAt"] },
-        },
-        {
-          model: Payment,
-          as: "payment",
         },
         {
           model: Project,
@@ -139,7 +182,7 @@ export const getAllOrderPayment = async (req, res) => {
           through: { attributes: ["quantity"] },
         },
       ],
-      attributes: { exclude: ["UserId", "updatedAt"] },
+      attributes: { exclude: ["UserId"] },
     });
 
     return res.status(200).json({
@@ -152,6 +195,22 @@ export const getAllOrderPayment = async (req, res) => {
       page: page,
       totalPages: Math.ceil(count / limit),
     });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const getPaymentByIdOrder = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const orderPayment = await Payment.findByPk(id);
+
+    if (!orderPayment) {
+      return handleResponseNotFound(res);
+    }
+
+    return handleResponseSuccess(res, orderPayment);
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
