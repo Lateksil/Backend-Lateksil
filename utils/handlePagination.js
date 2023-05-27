@@ -9,7 +9,8 @@ export const handlePagination = async (
   res,
   attribute,
   allSearch,
-  data
+  data,
+  orderBy = 'DESC'
 ) => {
   const { page = 1, limit = 10, search, filter = {} } = req.body;
 
@@ -40,7 +41,7 @@ export const handlePagination = async (
       where: whereClause,
       offset,
       limit: parseInt(limit, 10),
-      order: [["updatedAt", "DESC"]],
+      order: [["updatedAt", orderBy]],
       attributes: viewAttributeData,
     });
 

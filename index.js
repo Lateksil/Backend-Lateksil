@@ -46,6 +46,7 @@ app.use(Payment);
 app.use("/uploads", express.static("./uploads/pengujian/"));
 app.use("/profile", express.static("./uploads/profile/"));
 app.use("/bukti-pembayaran", express.static("./uploads/payment/bukti-pembayaran/"));
+app.use("/bukti-kwitansi", express.static("./uploads/payment/kwitansi/"));
 
 app.listen(3030, () => {
   console.log("Server is listening on port 3030");

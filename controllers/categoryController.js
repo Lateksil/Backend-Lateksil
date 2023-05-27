@@ -58,7 +58,7 @@ export const getAllCategory = (req, res) => {
   try {
     const viewData = ["id", "name_category"];
     const filterData = [ "name_category"];
-    return handlePagination(req, res, viewData, filterData, Category);
+    return handlePagination(req, res, viewData, filterData, Category, 'ASC');
   } catch (error) {
     return handleResponseError(res);
   }
