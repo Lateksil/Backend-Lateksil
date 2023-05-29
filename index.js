@@ -13,6 +13,7 @@ import Project from "./routes/projectRoute.js";
 import Status from "./routes/statusRoute.js";
 import MethodTransaction from "./routes/methodTransactionRoute.js";
 import Payment from "./routes/paymentRoute.js";
+import Peralatan from "./routes/peralatanRoute.js";
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.use(Project);
 app.use(Status);
 app.use(MethodTransaction);
 app.use(Payment);
+app.use(Peralatan);
 
 (async () => {
   try {
