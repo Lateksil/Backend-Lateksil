@@ -31,8 +31,16 @@ export const createPeralatan = async (req, res) => {
 };
 
 export const getAllPeralatan = async (req, res) => {
+  const { page = 1, limit = 10 } = req.body;
+
+  const offset = (page - 1) * limit;
+
   try {
-    const peralatan = await Pengujian.findAll({
+    const { count, rows } = await Pengujian.findAndCountAll({
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
+      attributes: ["id", "jenis_pengujian", "category", "code"],
       include: [
         {
           model: Peralatan,
@@ -42,7 +50,16 @@ export const getAllPeralatan = async (req, res) => {
       ],
     });
 
-    return handleResponseSuccess(res, peralatan);
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
