@@ -5,7 +5,6 @@ import Peralatan from "../models/peralatan.js";
 import {
   handleResponseAuthorization,
   handleResponseError,
-  handleResponseNotFound,
   handleResponseSuccess,
 } from "../utils/handleResponse.js";
 

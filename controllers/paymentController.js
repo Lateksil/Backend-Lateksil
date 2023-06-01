@@ -148,6 +148,7 @@ export const getAllOrderPayment = async (req, res) => {
       offset,
       limit: parseInt(limit, 10),
       distinct: true,
+      order: [["createdAt", "DESC"]],
       include: [
         {
           model: Users,
@@ -173,7 +174,7 @@ export const getAllOrderPayment = async (req, res) => {
               [Op.like]: `%${status_payment}%`,
             },
           },
-          attributes: { exclude: ["createdAt", "updatedAt"] },
+          attributes: { exclude: ["createdAt"] },
         },
         {
           model: Project,
@@ -256,6 +257,7 @@ export const getAllAcceptPayment = async (req, res) => {
       offset,
       limit: parseInt(limit, 10),
       distinct: true,
+      order: [["createdAt", "DESC"]],
       include: [
         {
           model: Users,

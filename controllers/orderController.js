@@ -180,13 +180,7 @@ export const getAllOrder = async (req, res) => {
 
   const offset = (page - 1) * limit;
 
-  const searchDataUsers = [
-    "full_name",
-    "email",
-    "no_whatsapp",
-    "address",
-    "company_name",
-  ];
+  const searchDataUsers = ["full_name", "company_name"];
 
   if (search !== "") {
     const searchUsers = searchDataUsers.map((user) => ({
@@ -207,14 +201,7 @@ export const getAllOrder = async (req, res) => {
       include: [
         {
           model: Users,
-          attributes: [
-            "id",
-            "full_name",
-            "email",
-            "no_whatsapp",
-            "address",
-            "company_name",
-          ],
+          attributes: ["id", "full_name", "company_name"],
         },
         {
           model: Status,
@@ -229,17 +216,7 @@ export const getAllOrder = async (req, res) => {
         {
           model: Project,
           as: "proyek",
-        },
-        {
-          model: Item,
-          attributes: ["id"],
-          include: [
-            {
-              model: Pengujian,
-              attributes: { exclude: ["createdAt", "updatedAt"] },
-            },
-          ],
-          through: { attributes: ["quantity"] },
+          attributes: ["nama_proyek", "tujuan_proyek"],
         },
       ],
       attributes: { exclude: ["UserId", "updatedAt"] },
@@ -361,9 +338,6 @@ export const getAllOrderManager = async (req, res) => {
           attributes: [
             "id",
             "full_name",
-            "email",
-            "no_whatsapp",
-            "address",
             "company_name",
           ],
         },
@@ -381,17 +355,7 @@ export const getAllOrderManager = async (req, res) => {
         {
           model: Project,
           as: "proyek",
-        },
-        {
-          model: Item,
-          attributes: ["id"],
-          include: [
-            {
-              model: Pengujian,
-              attributes: { exclude: ["createdAt", "updatedAt"] },
-            },
-          ],
-          through: { attributes: ["quantity"] },
+          attributes: ["nama_proyek", "tujuan_proyek"],
         },
       ],
       attributes: { exclude: ["UserId", "updatedAt"] },
