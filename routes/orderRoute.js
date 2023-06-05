@@ -3,6 +3,7 @@ import {
   CreateOrder,
   getAllOrder,
   getAllOrderManager,
+  getAllTahapPengujian,
   getOrderById,
   getOrderByUser,
 } from "../controllers/orderController.js";
@@ -15,6 +16,8 @@ router.post("/orders", getAllOrder);
 router.post("/order", getOrderByUser);
 
 router.post("/m/orders", getAllOrderManager);
+
+router.post("/tahap-pengujian", getAllTahapPengujian);
 
 //UPDATE
 
