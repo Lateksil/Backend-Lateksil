@@ -14,6 +14,7 @@ import Status from "./routes/statusRoute.js";
 import MethodTransaction from "./routes/methodTransactionRoute.js";
 import Payment from "./routes/paymentRoute.js";
 import Peralatan from "./routes/peralatanRoute.js";
+import Teknisi from "./routes/teknisiRoute.js";
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use(Status);
 app.use(MethodTransaction);
 app.use(Payment);
 app.use(Peralatan);
+app.use(Teknisi);
 
 (async () => {
   try {
@@ -47,7 +49,10 @@ app.use(Peralatan);
 
 app.use("/uploads", express.static("./uploads/pengujian/"));
 app.use("/profile", express.static("./uploads/profile/"));
-app.use("/bukti-pembayaran", express.static("./uploads/payment/bukti-pembayaran/"));
+app.use(
+  "/bukti-pembayaran",
+  express.static("./uploads/payment/bukti-pembayaran/")
+);
 app.use("/bukti-kwitansi", express.static("./uploads/payment/kwitansi/"));
 
 app.listen(3030, () => {
