@@ -419,6 +419,7 @@ export const getAllTahapPengujian = async (req, res) => {
           order: [["updatedAt", "DESC"]],
           where: {
             status_persetujuan: "3", //STATUS DALAM PEMBAYARAN
+            status_transaction: "3", //STATUS CLIENT IN PROGRESS
             status_payment: "1", // SUDAH BAYAR
             accept_payment: "1", //SUDAH UPLOAD KWITANSI
           },
