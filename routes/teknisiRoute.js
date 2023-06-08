@@ -4,11 +4,13 @@ import {
   GetAllTeknisi,
   GetAllTeknisiPengujian,
   GetTeknisiByOrder,
+  GetTeknisiByUserId,
 } from "../controllers/teknisiController.js";
 const router = express.Router();
 
 //POST
-router.post("/teknisi", GetAllTeknisi);
+router.post("/teknisi", GetTeknisiByUserId);
+router.post("/teknisi/all", GetAllTeknisi);
 
 router.post("/pengujian_teknisi/create", CreateTeknisiPengujian);
 router.post("/pengujian_teknisi", GetAllTeknisiPengujian);

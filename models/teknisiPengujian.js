@@ -25,6 +25,14 @@ const TeknisiPengujian = db.define(
         key: "id",
       },
     },
+    status_pengerjaan: {
+      type: DataTypes.STRING,
+      defaultValue: "0", // if 0 = Belum Dikerjakan, if 1 = Sedang Dikerjakan, if 2 = Selesai Dikerjakan
+    },
+    status_peralatan: {
+      type: DataTypes.STRING,
+      defaultValue: "0", // if 0 = Belum diambil Alatnya, if 1 = Sedang diambil, if 2 = Selesai diambil
+    },
   },
   {
     freezeTableName: true,

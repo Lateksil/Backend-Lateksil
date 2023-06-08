@@ -146,3 +146,75 @@ export const GetTeknisiByOrder = async (req, res) => {
     return handleResponseError(res);
   }
 };
+
+export const GetTeknisiByUserId = async (req, res) => {
+  const { teknisi_id, page = 1, limit = 10 } = req.body;
+
+  const offset = (page - 1) * limit;
+
+  try {
+    const { count, rows } = await TeknisiPengujian.findAndCountAll({
+      where: { UserId: teknisi_id },
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
+      include: [
+        {
+          model: Order,
+          include: [
+            {
+              model: Users,
+              attributes: [
+                "id",
+                "full_name",
+                "email",
+                "no_whatsapp",
+                "address",
+                "company_name",
+              ],
+            },
+            {
+              model: Status,
+              as: "status",
+              attributes: [
+                "id",
+                "status_persetujuan",
+                "status_transaction",
+                "status_payment",
+              ],
+            },
+            {
+              model: Project,
+              as: "proyek",
+            },
+            {
+              model: Item,
+              attributes: ["id"],
+              include: [
+                {
+                  model: Pengujian,
+                  attributes: { exclude: ["createdAt", "updatedAt"] },
+                },
+              ],
+              through: { attributes: ["quantity"] },
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
