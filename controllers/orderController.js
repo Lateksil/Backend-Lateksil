@@ -260,9 +260,10 @@ export const getOrderById = async (req, res) => {
           as: "status",
           attributes: [
             "id",
-            "status_persetujuan",
-            "status_transaction",
-            "status_payment",
+            "status_persetujuan", // PERSETUJUAN
+            "status_transaction", // STATUS TRANSACTION
+            "status_payment", // PAY OR NOT PAY
+            "accept_payment", // LUNAS
           ],
         },
         {
@@ -433,6 +434,7 @@ export const getAllTahapPengujian = async (req, res) => {
             "nama_proyek",
             "tujuan_proyek",
             "tanggal_mulai",
+            "no_identifikasi",
             "tanggal_selesai",
           ],
         },
