@@ -27,7 +27,7 @@ const TeknisiPengujian = db.define(
     },
     status_pengerjaan: {
       type: DataTypes.STRING,
-      defaultValue: "0", // if 0 = Belum Dikerjakan, if 1 = Sedang Dikerjakan, if 2 = Selesai Dikerjakan
+      defaultValue: "0", // if 0 = Belum Dikerjakan TEKNISI, if 1 = Sedang Dikerjakan, if 2 = Selesai Dikerjakan
     },
     status_peralatan: {
       type: DataTypes.STRING,
