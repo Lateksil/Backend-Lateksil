@@ -40,7 +40,8 @@ export const SendManagerOrder = async (req, res) => {
       );
       await Status.update(
         {
-          is_send_manager: '1',
+          is_send_manager: '1', //TERIKIRIM MANAGER
+          status_pengujian: '1', // MENJADI STATUS PERSETUJUAN
           status_transaction
         },
         { where: { id } }

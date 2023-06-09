@@ -42,6 +42,7 @@ export const AddTeknisiAndPeralatanToTahapPengerjaan = async (req, res) => {
     await Status.update(
       {
         status_transaction: "3",
+        status_pengujian: "3",
       },
       {
         where: { id: order_id },

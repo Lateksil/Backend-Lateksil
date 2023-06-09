@@ -296,8 +296,7 @@ export const getOrderById = async (req, res) => {
 };
 
 //MANAGERS
-
-export const getAllOrderManager = async (req, res) => {
+export const getAllPersetujuanPesanan = async (req, res) => {
   const {
     page = 1,
     status_persetujuan = "1",
@@ -336,11 +335,7 @@ export const getAllOrderManager = async (req, res) => {
       include: [
         {
           model: Users,
-          attributes: [
-            "id",
-            "full_name",
-            "company_name",
-          ],
+          attributes: ["id", "full_name", "company_name"],
         },
         {
           model: Status,
@@ -349,14 +344,19 @@ export const getAllOrderManager = async (req, res) => {
             status_persetujuan: {
               [Op.like]: `%${status_persetujuan}%`,
             },
-            is_send_manager: "1",
+            is_send_manager: "1", //TERIKIRIM MANAGER
           },
           attributes: { exclude: ["createdAt", "updatedAt"] },
         },
         {
           model: Project,
           as: "proyek",
-          attributes: ["nama_proyek", "tujuan_proyek"],
+          attributes: [
+            "nama_proyek",
+            "tujuan_proyek",
+            "tanggal_mulai",
+            "tanggal_selesai",
+          ],
         },
       ],
       attributes: { exclude: ["UserId", "updatedAt"] },
@@ -378,7 +378,7 @@ export const getAllOrderManager = async (req, res) => {
   }
 };
 
-export const getAllTahapPengujian = async (req, res) => {
+export const getAllTahapPengerjaan = async (req, res) => {
   const { page = 1, limit = 10, search = "" } = req.body;
 
   let whereClauseUsers = {};
@@ -420,6 +420,7 @@ export const getAllTahapPengujian = async (req, res) => {
           order: [["updatedAt", "DESC"]],
           where: {
             status_transaction: "3", //STATUS CLIENT IN PROGRESS
+            status_pengujian: "3", //STATUS TAHAP PENGERJAAN IN PROGRESS
             status_payment: "1", // SUDAH BAYAR
             accept_payment: "1", //SUDAH UPLOAD KWITANSI
           },

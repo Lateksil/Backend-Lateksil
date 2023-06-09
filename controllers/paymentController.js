@@ -18,29 +18,6 @@ export const CreateUploadPayment = async (req, res) => {
   const { filename } = req.file;
 
   try {
-    // const payment = await Payment.findByPk(id_order);
-
-    // if (payment) {
-    //   await Payment.update(
-    //     {
-    //       id: id_order,
-    //       full_name,
-    //       company_name,
-    //       image_payment: filename,
-    //       total_price,
-    //     },
-    //     {
-    //       where: { id: id_order },
-    //     }
-    //   );
-
-    //   return handleResponseAuthorization(
-    //     res,
-    //     200,
-    //     "Pembaharuan Pembayaran Berhasil"ß
-    //   );
-    // }
-
     const createPayment = await Payment.create({
       id: id_order,
       full_name,
@@ -100,6 +77,7 @@ export const uploadKwitansiToCostumer = async (req, res) => {
         await Status.update(
           {
             accept_payment: "1",
+            status_pengujian: "2",
           },
           { where: { id: id } }
         );
@@ -269,6 +247,7 @@ export const getAllAcceptPayment = async (req, res) => {
           order: [["updatedAt", "DESC"]],
           where: {
             status_persetujuan: "2", //STATUS DALAM PEMBAYARAN
+            status_pengujian: "2", //PROSES PENGUJIAN
             status_payment: "1", // SUDAH BAYAR
             accept_payment: "1", //SUDAH UPLOAD KWITANSI
           },
