@@ -164,39 +164,20 @@ export const GetTeknisiByUserId = async (req, res) => {
           include: [
             {
               model: Users,
-              attributes: [
-                "id",
-                "full_name",
-                "email",
-                "no_whatsapp",
-                "address",
-                "company_name",
-              ],
-            },
-            {
-              model: Status,
-              as: "status",
-              attributes: [
-                "id",
-                "status_persetujuan",
-                "status_transaction",
-                "status_payment",
-              ],
+              attributes: ["id", "full_name", "company_name"],
             },
             {
               model: Project,
               as: "proyek",
-            },
-            {
-              model: Item,
-              attributes: ["id"],
-              include: [
-                {
-                  model: Pengujian,
-                  attributes: { exclude: ["createdAt", "updatedAt"] },
-                },
+              attributes: [
+                "id",
+                "nama_proyek",
+                "tujuan_proyek",
+                "no_surat",
+                "no_identifikasi",
+                "tanggal_mulai",
+                "tanggal_selesai",
               ],
-              through: { attributes: ["quantity"] },
             },
           ],
         },
