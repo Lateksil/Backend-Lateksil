@@ -115,40 +115,33 @@ export const getAlatPengujianByOrderId = async (req, res) => {
 };
 
 export const GetOrderPeralatan = async (req, res) => {
+  const { page = 1, limit = 10 } = req.body;
+
+  const offset = (page - 1) * limit;
   try {
-    const getAllTeknisiPengujian = await TeknisiPengujian.findAll({
+    const { count, rows } = await TeknisiPengujian.findAndCountAll({
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
+      attributes: ["status_peralatan"],
       include: [
         {
           model: Order,
+          attributes: ["id"],
           include: [
             {
               model: Users,
-              attributes: [
-                "id",
-                "full_name",
-                "email",
-                "no_whatsapp",
-                "address",
-                "company_name",
-              ],
+              attributes: ["id", "full_name", "company_name"],
             },
             {
               model: Status,
               as: "status",
-              where: {
-                status_persetujuan: "3",
-                status_transaction: "3",
-              },
-              attributes: [
-                "id",
-                "status_persetujuan",
-                "status_transaction",
-                "status_payment",
-              ],
+              attributes: ["status_payment"],
             },
             {
               model: Project,
               as: "proyek",
+              attributes: ["nama_proyek"],
             },
             {
               model: Item,
@@ -156,17 +149,57 @@ export const GetOrderPeralatan = async (req, res) => {
               include: [
                 {
                   model: Pengujian,
-                  attributes: { exclude: ["createdAt", "updatedAt"] },
+                  attributes: ["jenis_pengujian"],
+                  include: [
+                    {
+                      model: Peralatan,
+                      as: "peralatan",
+                      attributes: ["id", "nama_alat"],
+                    },
+                  ],
                 },
               ],
-              through: { attributes: ["quantity"] },
+              through: { attributes: [] },
             },
           ],
         },
       ],
     });
 
-    return handleResponseSuccess(res, getAllTeknisiPengujian);
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const StatusPeralatan = async (req, res) => {
+  const { id, status_peralatan } = req.body;
+  try {
+    const statusPeralatan = await TeknisiPengujian.findByPk(id);
+
+    if (!statusPeralatan) {
+      return handleResponseNotFound(res);
+    }
+
+    if (statusPeralatan.id === id) {
+      await TeknisiPengujian.update(
+        {
+          status_peralatan: status_peralatan,
+        },
+        { where: { id: id } }
+      );
+    }
+    return handleResponseAuthorization(res, 200, "Pengambilan alat selesai");
   } catch (error) {
     console.log(error);
     return handleResponseError(res);

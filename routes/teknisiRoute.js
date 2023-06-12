@@ -5,12 +5,15 @@ import {
   GetAllTeknisiPengujian,
   GetTeknisiByOrder,
   GetTeknisiByUserId,
+  StatusPengerjaanTeknisi,
 } from "../controllers/teknisiController.js";
 const router = express.Router();
 
 //POST
 router.post("/teknisi", GetTeknisiByUserId);
 router.post("/teknisi/all", GetAllTeknisi);
+
+router.post("/teknisi/progress_task", StatusPengerjaanTeknisi);
 
 router.post("/pengujian_teknisi/create", CreateTeknisiPengujian);
 router.post("/pengujian_teknisi", GetAllTeknisiPengujian);

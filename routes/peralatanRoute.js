@@ -1,5 +1,10 @@
 import express from "express";
-import { createPeralatan, getAlatPengujianByOrderId, getAllPeralatan, GetOrderPeralatan } from "../controllers/peralatanController.js";
+import {
+  createPeralatan,
+  getAlatPengujianByOrderId,
+  getAllPeralatan,
+  GetOrderPeralatan,
+} from "../controllers/peralatanController.js";
 
 const router = express.Router();
 
@@ -7,10 +12,11 @@ const router = express.Router();
 router.post("/peralatan/create", createPeralatan);
 router.post("/peralatan", getAllPeralatan);
 
+router.post("/pengajuan_peralatan", GetOrderPeralatan);
+
 //UPDATE
 
 //GET
-router.get("/peralatan", GetOrderPeralatan);
 router.get("/peralatan/order/:id", getAlatPengujianByOrderId);
 
 //DELETE
