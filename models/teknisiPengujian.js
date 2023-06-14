@@ -27,12 +27,16 @@ const TeknisiPengujian = db.define(
     },
     status_pengerjaan: {
       type: DataTypes.STRING,
-      defaultValue: "0", // if 0 = Belum Dikerjakan TEKNISI, if 1 = Sedang Dikerjakan, if 2 = Selesai Dikerjakan
+      defaultValue: "0", // if 0 = Belum Dikerjakan TEKNISI, if 1 = Sedang Dikerjakan, if 2 = Uploaded file PDF, if = 3 = Selesai Kirim ke Manager 
     },
-    status_peralatan: {
+    file_task_pengujian: {
       type: DataTypes.STRING,
-      defaultValue: "0", // if 0 = Belum diambil Alatnya, if 1 = Sedang diambil, if 2 = Selesai diambil
+      defaultValue: null,
     },
+    // status_peralatan: {
+    //   type: DataTypes.STRING,
+    //   defaultValue: "0", // if 0 = Belum diambil Alatnya, if 1 = Sedang diambil, if 2 = Selesai diambil
+    // },
   },
   {
     freezeTableName: true,

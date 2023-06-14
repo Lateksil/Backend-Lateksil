@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+
 import Users from "../models/user.js";
 import Order from "../models/order.js";
 import TeknisiPengujian from "../models/teknisiPengujian.js";
@@ -209,6 +212,7 @@ export const GetTeknisiByUserId = async (req, res) => {
 
 export const StatusPengerjaanTeknisi = async (req, res) => {
   const { id, status_pengerjaan } = req.body;
+  // const { filename } = req.file;
   try {
     const statusPengerjaan = await TeknisiPengujian.findByPk(id);
 
@@ -220,6 +224,7 @@ export const StatusPengerjaanTeknisi = async (req, res) => {
       await TeknisiPengujian.update(
         {
           status_pengerjaan: status_pengerjaan,
+          file_task_pengujian: req.file ? req.file.filename : null,
         },
         { where: { id: id } }
       );
@@ -232,5 +237,52 @@ export const StatusPengerjaanTeknisi = async (req, res) => {
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
+  }
+};
+
+export const viewTaskPengujianPDF = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    // Mencari informasi file dari database berdasarkan nama file
+    const pdf = await TeknisiPengujian.findOne({
+      where: { file_task_pengujian: name },
+    });
+    if (!pdf) {
+      res.status(404).send("File tidak ditemukan");
+    } else {
+      // Membaca file PDF menggunakan pdfjs-dist
+      const filePath = `uploads/filePdf/task-pengujian/${pdf.file_task_pengujian}`; // Ganti dengan direktori file PDF yang sesuai
+      const fileStream = fs.createReadStream(filePath);
+      res.setHeader("Content-Type", "application/pdf");
+      fileStream.pipe(res);
+    }
+  } catch (error) {
+    res.status(500).send("Terjadi kesalahan saat membaca file");
+  }
+};
+export const downloadTaskPengujianPDF = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    // Mencari informasi file dari database berdasarkan nama file
+    const pdf = await TeknisiPengujian.findOne({
+      where: { file_task_pengujian: name },
+    });
+    if (!pdf) {
+      res.status(404).send("File tidak ditemukan");
+    } else {
+      // Membaca file PDF menggunakan pdfjs-dist
+      const filePath = `uploads/filePdf/task-pengujian/${pdf.file_task_pengujian}`;
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=${pdf.file_task_pengujian}`
+      );
+      res.setHeader("Content-Type", "application/pdf");
+      const fileStream = fs.createReadStream(filePath);
+      fileStream.pipe(res);
+    }
+  } catch (error) {
+    res.status(500).send("Terjadi kesalahan saat membaca file");
   }
 };
