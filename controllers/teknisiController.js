@@ -153,7 +153,7 @@ export const GetTeknisiByOrder = async (req, res) => {
 };
 
 export const GetTeknisiByUserId = async (req, res) => {
-  const { teknisi_id, status_pengerjaan = "", page = 1, limit = 10 } = req.body;
+  const { teknisi_id, status_task = "", page = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;
 
@@ -161,8 +161,8 @@ export const GetTeknisiByUserId = async (req, res) => {
     const { count, rows } = await TeknisiPengujian.findAndCountAll({
       where: {
         UserId: teknisi_id,
-        status_pengerjaan: {
-          [Op.like]: `%${status_pengerjaan}%`,
+        status_task: {
+          [Op.like]: `%${status_task}%`,
         },
       },
       offset,
@@ -211,8 +211,8 @@ export const GetTeknisiByUserId = async (req, res) => {
 };
 
 export const StatusPengerjaanTeknisi = async (req, res) => {
-  const { id, status_pengerjaan } = req.body;
-  // const { filename } = req.file;
+  const { id, status_task, status_pengerjaan } = req.body;
+
   try {
     const statusPengerjaan = await TeknisiPengujian.findByPk(id);
 
@@ -223,8 +223,11 @@ export const StatusPengerjaanTeknisi = async (req, res) => {
     if (statusPengerjaan.id === id) {
       await TeknisiPengujian.update(
         {
+          status_task: status_task,
           status_pengerjaan: status_pengerjaan,
-          file_task_pengujian: req.file ? req.file.filename : null,
+          file_task_pengujian: req.file
+            ? req.file.filename
+            : statusPengerjaan.file_task_pengujian,
         },
         { where: { id: id } }
       );
@@ -232,7 +235,7 @@ export const StatusPengerjaanTeknisi = async (req, res) => {
     return handleResponseAuthorization(
       res,
       200,
-      "Berhasil ke Tahap Pengerjaan Task"
+      "Berhasil Perubahaan Task Selanjutnya"
     );
   } catch (error) {
     console.log(error);
@@ -251,7 +254,7 @@ export const viewTaskPengujianPDF = async (req, res) => {
     if (!pdf) {
       res.status(404).send("File tidak ditemukan");
     } else {
-      // Membaca file PDF menggunakan pdfjs-dist
+      // Membaca file PDF
       const filePath = `uploads/filePdf/task-pengujian/${pdf.file_task_pengujian}`; // Ganti dengan direktori file PDF yang sesuai
       const fileStream = fs.createReadStream(filePath);
       res.setHeader("Content-Type", "application/pdf");
@@ -261,6 +264,7 @@ export const viewTaskPengujianPDF = async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat membaca file");
   }
 };
+
 export const downloadTaskPengujianPDF = async (req, res) => {
   const { name } = req.params;
 

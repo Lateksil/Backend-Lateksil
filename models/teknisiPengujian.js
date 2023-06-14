@@ -25,9 +25,13 @@ const TeknisiPengujian = db.define(
         key: "id",
       },
     },
+    status_task: {
+      type: DataTypes.STRING,
+      defaultValue: "0", // if 0 = Belum Dikerjakan, if 1 = Sedang Dikerjakan, if 2 = Selesai Dikerjakan
+    },
     status_pengerjaan: {
       type: DataTypes.STRING,
-      defaultValue: "0", // if 0 = Belum Dikerjakan TEKNISI, if 1 = Sedang Dikerjakan, if 2 = Uploaded file PDF, if = 3 = Selesai Kirim ke Manager 
+      defaultValue: "0", // if 0 = Belum Dikerjakan TEKNISI, if 1 = Sedang Dikerjakan, if 2 = Uploaded file PDF, if = 3 = Selesai Kirim ke Manager
     },
     file_task_pengujian: {
       type: DataTypes.STRING,
