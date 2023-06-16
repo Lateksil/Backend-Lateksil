@@ -1,3 +1,4 @@
+import PeralatanPengujian from "../models/peralatanPengujian.js";
 import Status from "../models/status.js";
 import {
   handleResponseAuthorization,
@@ -35,9 +36,14 @@ export const updateStatusToCostumer = async (req, res) => {
 
 export const AddTeknisiAndPeralatanToTahapPengerjaan = async (req, res) => {
   try {
-    const { order_id } = req.body;
+    const { order_id, catatan_khusus } = req.body;
 
     const TahapPengujian = await Status.findByPk(order_id);
+
+    await PeralatanPengujian.create({
+      id: order_id,
+      catatan_khusus,
+    });
 
     await Status.update(
       {

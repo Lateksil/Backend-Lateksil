@@ -1,6 +1,7 @@
 import { DataTypes } from "sequelize";
 import db from "../config/database.js";
 import Payment from "./payment.js";
+import PeralatanPengujian from "./peralatanPengujian.js";
 import Project from "./project.js";
 import Status from "./status.js";
 import Users from "./user.js";
@@ -27,6 +28,9 @@ Project.belongsTo(Order, { as: "orders", foreignKey: "id" });
 
 Order.hasOne(Payment, { as: "payment", foreignKey: "id" });
 Payment.belongsTo(Order, { as: "orders", foreignKey: "id" });
+
+Order.hasOne(PeralatanPengujian, { as: "status_alat", foreignKey: "id" });
+PeralatanPengujian.belongsTo(Order, { as: "orders", foreignKey: "id" });
 
 export default Order;
 

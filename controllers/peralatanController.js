@@ -2,6 +2,7 @@ import Item from "../models/itemOrder.js";
 import Order from "../models/order.js";
 import Pengujian from "../models/pengujian.js";
 import Peralatan from "../models/peralatan.js";
+import PeralatanPengujian from "../models/peralatanPengujian.js";
 import Project from "../models/project.js";
 import Status from "../models/status.js";
 import TeknisiPengujian from "../models/teknisiPengujian.js";
@@ -200,6 +201,31 @@ export const StatusPeralatan = async (req, res) => {
       );
     }
     return handleResponseAuthorization(res, 200, "Pengambilan alat selesai");
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const createPengajuanAlatInOrder = async (req, res) => {
+  const { id_order, status_peralatan, catatan_khusus } = req.body;
+  try {
+    const order = await Order.findByPk(id_order);
+
+    if (!order) {
+      return handleResponseNotFound(res);
+    }
+
+    await PeralatanPengujian.create({
+      id: id_order,
+      status_peralatan,
+      catatan_khusus,
+    });
+    return handleResponseAuthorization(
+      res,
+      200,
+      "Pengajuan Ke Peralatan Terkirim"
+    );
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
