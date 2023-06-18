@@ -12,7 +12,7 @@ const router = express.Router();
 router.post("/peralatan/create", createPeralatan);
 router.post("/peralatan", getAllPeralatan);
 
-router.post("/pengajuan_peralatan", GetOrderPeralatan);
+router.post("/peralatan/pengajuan", GetOrderPeralatan);
 
 //UPDATE
 

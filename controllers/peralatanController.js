@@ -120,53 +120,53 @@ export const GetOrderPeralatan = async (req, res) => {
 
   const offset = (page - 1) * limit;
   try {
-    const { count, rows } = await TeknisiPengujian.findAndCountAll({
+    const { count, rows } = await Order.findAndCountAll({
       offset,
       limit: parseInt(limit, 10),
       distinct: true,
-      attributes: ["status_peralatan"],
       include: [
         {
-          model: Order,
+          model: Users,
+          attributes: ["id", "full_name", "company_name"],
+        },
+        {
+          model: Status,
+          as: "status",
+          where: {
+            status_transaction: "3",
+          },
+          attributes: ["status_transaction"],
+        },
+        {
+          model: Project,
+          as: "proyek",
+          attributes: ["nama_proyek"]
+        },
+        {
+          model: PeralatanPengujian,
+          as: "status_alat",
+          attributes: { exclude: ["id"] },
+        },
+        {
+          model: Item,
           attributes: ["id"],
           include: [
             {
-              model: Users,
-              attributes: ["id", "full_name", "company_name"],
-            },
-            {
-              model: Status,
-              as: "status",
-              attributes: ["status_payment"],
-            },
-            {
-              model: Project,
-              as: "proyek",
-              attributes: ["nama_proyek"],
-            },
-            {
-              model: Item,
-              attributes: ["id"],
+              model: Pengujian,
+              attributes: ["id", "jenis_pengujian"],
               include: [
                 {
-                  model: Pengujian,
-                  attributes: ["jenis_pengujian"],
-                  include: [
-                    {
-                      model: Peralatan,
-                      as: "peralatan",
-                      attributes: ["id", "nama_alat"],
-                    },
-                  ],
+                  model: Peralatan,
+                  as: "peralatan",
+                  attributes: ["id", "nama_alat"],
                 },
               ],
-              through: { attributes: [] },
             },
           ],
+          through: { attributes: [] },
         },
       ],
     });
-
     return res.status(200).json({
       status: 200,
       error: false,
