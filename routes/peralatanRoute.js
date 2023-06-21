@@ -4,7 +4,10 @@ import {
   getAlatPengujianByOrderId,
   getAllPeralatan,
   GetOrderPeralatan,
+  getStatusPerlatan,
+  updateStatusPengajuanPeralatan,
 } from "../controllers/peralatanController.js";
+import uploadBuktiPengajuanAlat from "../middleware/uploadBuktiPengajuanAlat.js";
 
 const router = express.Router();
 
@@ -15,8 +18,14 @@ router.post("/peralatan", getAllPeralatan);
 router.post("/peralatan/pengajuan", GetOrderPeralatan);
 
 //UPDATE
+router.put(
+  "/peralatan/pengajuan/:id_order",
+  uploadBuktiPengajuanAlat,
+  updateStatusPengajuanPeralatan
+);
 
 //GET
+router.get("/peralatan/status/:id", getStatusPerlatan);
 router.get("/peralatan/order/:id", getAlatPengujianByOrderId);
 
 //DELETE

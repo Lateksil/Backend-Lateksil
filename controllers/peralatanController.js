@@ -11,6 +11,7 @@ import {
   handleResponseAuthorization,
   handleResponseError,
   handleResponseSuccess,
+  handleResponseUpdateSuccess,
 } from "../utils/handleResponse.js";
 
 export const createPeralatan = async (req, res) => {
@@ -140,7 +141,7 @@ export const GetOrderPeralatan = async (req, res) => {
         {
           model: Project,
           as: "proyek",
-          attributes: ["nama_proyek"]
+          attributes: ["nama_proyek"],
         },
         {
           model: PeralatanPengujian,
@@ -226,6 +227,51 @@ export const createPengajuanAlatInOrder = async (req, res) => {
       200,
       "Pengajuan Ke Peralatan Terkirim"
     );
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const updateStatusPengajuanPeralatan = async (req, res) => {
+  const { id_order } = req.params;
+  const { status_peralatan } = req.body;
+  try {
+    const statusPengajuan = await PeralatanPengujian.findByPk(id_order);
+
+    if (!statusPengajuan) {
+      return handleResponseNotFound(res);
+    }
+
+    await PeralatanPengujian.update(
+      {
+        status_peralatan,
+        image_pengajuan_alat: req.file
+          ? req.file.filename
+          : statusPengajuan.image_pengajuan_alat,
+      },
+      {
+        where: { id: id_order },
+      }
+    );
+    return handleResponseUpdateSuccess(res);
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const getStatusPerlatan = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const statusPeralatan = await PeralatanPengujian.findByPk(id);
+
+    if (!statusPeralatan) {
+      return handleResponseNotFound(res);
+    }
+
+    return handleResponseSuccess(res, statusPeralatan);
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
