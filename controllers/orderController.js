@@ -14,6 +14,7 @@ import {
   handleResponseSuccess,
   handleResponseAuthorization,
 } from "../utils/handleResponse.js";
+import Payment from "../models/payment.js";
 
 export const CreateOrder = async (req, res) => {
   const {
@@ -113,14 +114,7 @@ export const getOrderByUser = async (req, res) => {
       include: [
         {
           model: Users,
-          attributes: [
-            "id",
-            "full_name",
-            "email",
-            "no_whatsapp",
-            "address",
-            "company_name",
-          ],
+          attributes: ["id", "full_name", "company_name"],
         },
         {
           model: Status,
@@ -135,17 +129,16 @@ export const getOrderByUser = async (req, res) => {
           as: "proyek",
         },
         {
+          model: Payment,
+          as: "payment",
+          attributes: ["image_kwitansi"],
+        },
+        {
           model: Item,
           where: {
             UserId: user_id,
           },
           attributes: ["id"],
-          include: [
-            {
-              model: Pengujian,
-              attributes: { exclude: ["createdAt", "updatedAt"] },
-            },
-          ],
           through: { attributes: ["quantity"] },
         },
       ],
