@@ -4,6 +4,7 @@ import Payment from "./payment.js";
 import PeralatanPengujian from "./peralatanPengujian.js";
 import Project from "./project.js";
 import Status from "./status.js";
+import Teknisi from "./teknisi.js";
 import Users from "./user.js";
 
 const Order = db.define("order", {

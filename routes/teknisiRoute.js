@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  addTeknisi,
   CreateTeknisiPengujian,
   downloadTaskPengujianPDF,
   GetAllTeknisi,
@@ -31,6 +32,10 @@ router.post("/pengujian_teknisi", GetAllTeknisiPengujian);
 router.get("/teknisi_in_order/:id", GetTeknisiByOrder);
 router.get("/view-task/:name", viewTaskPengujianPDF);
 router.get("/view-task/download/:name", downloadTaskPengujianPDF);
+
+
+//TESS
+router.get("/add-Teknisi", addTeknisi);
 
 //DELETE
 

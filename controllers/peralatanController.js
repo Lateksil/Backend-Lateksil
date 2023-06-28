@@ -9,6 +9,7 @@ import TeknisiPengujian from "../models/teknisiPengujian.js";
 import Users from "../models/user.js";
 import {
   handleResponseAuthorization,
+  handleResponseDeleteSuccess,
   handleResponseError,
   handleResponseSuccess,
   handleResponseUpdateSuccess,
@@ -34,6 +35,29 @@ export const createPeralatan = async (req, res) => {
     return handleResponseError(res);
   }
 };
+
+export const deletePeralatan = async (req, res) => {
+  const { id } = req.params;
+  try {
+
+    const peralatan = await Peralatan.findByPk(id)
+
+    if (!peralatan) {
+      return handleResponseNotFound(res);
+    }
+
+    if (peralatan.id === id) {
+      await peralatan.destroy();
+      return handleResponseDeleteSuccess(res);
+    } else {
+      return handleResponseNotFound(res);
+    }
+    
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+}
 
 export const getAllPeralatan = async (req, res) => {
   const { page = 1, limit = 10 } = req.body;
