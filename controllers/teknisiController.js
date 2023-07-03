@@ -31,6 +31,11 @@ export const GetAllTeknisi = async (req, res) => {
         "address",
         "company_name",
       ],
+      include: [
+        {
+          model: TeknisiPengujian,
+        },
+      ],
     });
 
     return handleResponseSuccess(res, teknisi);

@@ -1,15 +1,42 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+// import { caFile } from "./ca/caFileMysql.js";
 dotenv.config();
 
+
+
 //DATABASES MYSQL
-// const db = new Sequelize("lateksil", "root", "root", {
-//   host: "localhost",
-//   port: 8889,
+// const db = new Sequelize("defaultdb", "avnadmin", "AVNS_Omj_1rvTFnEZZC01Jkw", {
+//   host: "mysql-3b9780f3-excercise-depdep.aivencloud.com",
+//   port: 11847,
 //   dialect: "mysql",
+//   dialectOptions: {
+//     ssl: {
+//       require: true,
+//       ca: caFile, // Menyertakan CA Certificate
+//     },
+//   },
 // });
 
-// DATABASES POSGRESQL
+// const db = new Sequelize("defaultdb", "avnadmin", "AVNS_fVl8wh5GAtU4zKX1HmW", {
+//   host: "pg-1a77a5a3-excercise-depdep.aivencloud.com",
+//   port: 11847,
+//   dialect: "postgres",
+//   dialectOptions: {
+//     ssl: {
+//       require: true,
+//       ca: caFilePosgreSql, // Menyertakan CA Certificate
+//     },
+//   },
+//   pool: {
+//     max: 20, // Batas koneksi maksimum
+//     min: 0,  // Jumlah minimum koneksi yang tetap terbuka
+//     acquire: 30000, // Waktu maksimum yang diperbolehkan untuk memperoleh koneksi (dalam milidetik)
+//     idle: 10000 // Waktu maksimum yang diperbolehkan untuk koneksi yang tidak digunakan (dalam milidetik)
+//   }
+// });
+
+// DATABASES LOCAL POSGRESQL
 const db = new Sequelize(
   process.env.DATABASE_NAME,
   process.env.DATABASE_USERNAME,
