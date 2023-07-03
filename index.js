@@ -1,4 +1,5 @@
 import express from "express";
+import bodyParser from 'body-parser';
 import cors from "cors";
 import dotenv from "dotenv";
 import db from "./config/database.js";
@@ -9,8 +10,8 @@ const app = express();
 
 dotenv.config();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use(cors());
 app.use((_req, res, next) => {

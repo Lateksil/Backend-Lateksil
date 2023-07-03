@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+// import { caFilePosgreSql } from "./ca/caFilePosgreSql.js";
 // import { caFile } from "./ca/caFileMysql.js";
 dotenv.config();
 
@@ -31,8 +32,8 @@ dotenv.config();
 //   pool: {
 //     max: 20, // Batas koneksi maksimum
 //     min: 0,  // Jumlah minimum koneksi yang tetap terbuka
-//     acquire: 30000, // Waktu maksimum yang diperbolehkan untuk memperoleh koneksi (dalam milidetik)
-//     idle: 10000 // Waktu maksimum yang diperbolehkan untuk koneksi yang tidak digunakan (dalam milidetik)
+//     acquire: 300000, // Waktu maksimum yang diperbolehkan untuk memperoleh koneksi (dalam milidetik)
+//     idle: 100000 // Waktu maksimum yang diperbolehkan untuk koneksi yang tidak digunakan (dalam milidetik)
 //   }
 // });
 
