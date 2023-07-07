@@ -10,10 +10,8 @@ import MethodTransaction from "./methodTransactionRoute.js";
 import Payment from "./paymentRoute.js";
 import Peralatan from "./peralatanRoute.js";
 import Teknisi from "./teknisiRoute.js";
-import welcomeRouter from "./welcomeRoute.js";
 
 const TerminalRoutes = (app) => {
-  app.use(welcomeRouter);
   app.use(authRoute);
   app.use(userRoute);
   app.use(category);

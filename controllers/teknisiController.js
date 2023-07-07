@@ -18,11 +18,18 @@ import { Op } from "sequelize";
 import Teknisi from "../models/teknisi.js";
 
 export const GetAllTeknisi = async (req, res) => {
+  const { page = 1, limit = 10 } = req.body;
+
+  const offset = (page - 1) * limit;
+
   try {
-    const teknisi = await Users.findAll({
+    const { count, rows } = await Users.findAndCountAll({
       where: {
         role: "teknisi",
       },
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
       attributes: [
         "id",
         "full_name",
@@ -34,11 +41,26 @@ export const GetAllTeknisi = async (req, res) => {
       include: [
         {
           model: TeknisiPengujian,
+
+          where: {
+            status_task: "2",
+          },
+          attributes: ["id", "UserId", "orderId", "status_task"],
+          required: false,
         },
       ],
     });
 
-    return handleResponseSuccess(res, teknisi);
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
   } catch (error) {
     console.log(error);
     return handleResponseError(res);

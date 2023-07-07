@@ -15,7 +15,7 @@ export const SendManagerOrder = async (req, res) => {
     tanggal_mulai,
     tanggal_selesai,
     keterangan_to_client,
-    status_transaction
+    status_transaction,
   } = req.body;
   try {
     const project = await Project.findByPk(id);
@@ -40,9 +40,9 @@ export const SendManagerOrder = async (req, res) => {
       );
       await Status.update(
         {
-          is_send_manager: '1', //TERIKIRIM MANAGER
-          status_pengujian: '1', // MENJADI STATUS PERSETUJUAN
-          status_transaction
+          is_send_manager: "1", //TERIKIRIM MANAGER
+          status_pengujian: "1", // MENJADI STATUS PERSETUJUAN
+          status_transaction,
         },
         { where: { id } }
       );
@@ -57,7 +57,13 @@ export const SendManagerOrder = async (req, res) => {
 };
 
 export const SendToFronlineOrder = async (req, res) => {
-  const { id, status_persetujuan, keterangan_to_client } = req.body;
+  const {
+    id,
+    status_persetujuan,
+    keterangan_to_client,
+    tanggal_mulai,
+    tanggal_selesai,
+  } = req.body;
   try {
     const project = await Project.findByPk(id);
 
@@ -69,6 +75,8 @@ export const SendToFronlineOrder = async (req, res) => {
       await Project.update(
         {
           keterangan_to_client,
+          tanggal_mulai,
+          tanggal_selesai,
         },
         {
           where: { id },
