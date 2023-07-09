@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 // import { caFilePosgreSql } from "./ca/caFilePosgreSql.js";
-import { caFile } from "./ca/caFileMysql.js";
+// import { caFile } from "./ca/caFileMysql.js";
 dotenv.config();
 
 
