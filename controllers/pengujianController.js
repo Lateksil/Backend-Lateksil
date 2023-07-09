@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { Op } from "sequelize";
 import Pengujian from "../models/pengujian.js";
 import {
   createPengujianServices,
@@ -114,35 +115,78 @@ export const deletePengujian = async (req, res) => {
   }
 };
 
-export const getAllPengujian = (req, res) => {
+export const getAllPengujian = async (req, res) => {
+  const { page = 1, limit = 10, search = "", filter = {} } = req.body;
+
+  const offset = (page - 1) * limit;
+
+  const viewData = [
+    "id",
+    "image",
+    "jenis_pengujian",
+    "code",
+    "category",
+    "description",
+    "tempat_pengujian",
+    "min_quantity",
+    "sampler",
+    "catatan_khusus",
+    "price",
+  ];
+
+  const searchFilterData = [
+    "jenis_pengujian",
+    "code",
+    "category",
+    "description",
+    "tempat_pengujian",
+    "min_quantity",
+    "sampler",
+    "catatan_khusus",
+    "price",
+  ];
+
+  let whereClause = {};
+
+  if (search !== "") {
+    const searchCriteria = searchFilterData.map((key) => ({
+      [key]: { [Op.iLike]: `%${search}%` },
+    }));
+
+    whereClause = {
+      [Op.or]: searchCriteria,
+    };
+  }
+
+  for (let key in filter) {
+    if (filter.hasOwnProperty(key) !== "") {
+      whereClause[key] = { [Op.iLike]: `%${filter[key]}%` };
+    }
+  }
+
   try {
-    const viewData = [
-      "id",
-      "image",
-      "jenis_pengujian",
-      "code",
-      "category",
-      "description",
-      "tempat_pengujian",
-      "min_quantity",
-      "sampler",
-      "catatan_khusus",
-      "price",
-    ];
+    const { count, rows } = await Pengujian.findAndCountAll({
+      // where: whereClause,
+      offset,
+      limit: parseInt(limit, 10),
+      order: [["updatedAt", "DESC"]],
+      attributes: viewData,
+    });
 
-    const searchFilterData = [
-      "jenis_pengujian",
-      "code",
-      "category",
-      "description",
-      "tempat_pengujian",
-      "min_quantity",
-      "sampler",
-      "catatan_khusus",
-      "price",
-    ];
+    if (rows.length === 0) {
+      return handleResponseSuccess(res, null);
+    }
 
-    return handlePagination(req, res, viewData, searchFilterData, Pengujian);
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
   } catch (error) {
     return handleResponseError(res);
   }

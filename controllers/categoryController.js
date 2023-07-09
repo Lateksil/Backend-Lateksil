@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import Category from "../models/category.js";
 import {
   createCategoryServices,
@@ -54,11 +55,32 @@ export const deleteCategory = async (req, res) => {
   }
 };
 
-export const getAllCategory = (req, res) => {
+export const getAllCategory = async (req, res) => {
+  const { page = 1, limit = 10 } = req.body;
+
+  const offset = (page - 1) * limit;
+
   try {
-    const viewData = ["id", "name_category"];
-    const filterData = [ "name_category"];
-    return handlePagination(req, res, viewData, filterData, Category, 'ASC');
+    const { count, rows } = await Category.findAndCountAll({
+      offset,
+      limit: parseInt(limit, 10),
+      order: [["updatedAt", "ASC"]],
+    });
+
+    if (rows.length === 0) {
+      return handleResponseSuccess(res, null);
+    }
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
   } catch (error) {
     return handleResponseError(res);
   }

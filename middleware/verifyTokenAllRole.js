@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-import Users from "../models/user.js";
 import { handleResponseAuthorization } from "../utils/handleResponse.js";
 
 export const verifyTokenAllRole = (req, res, next) => {
@@ -22,8 +21,7 @@ export const verifyTokenAllRole = (req, res, next) => {
         "Token Expired Please login again"
       );
     }
-    const user = await Users.findByPk(decoded.id);
-    const isEmail = (req.email = user.email);
+    const isEmail = (req.email = decoded.email);
     if (isEmail) {
       next();
     } else {

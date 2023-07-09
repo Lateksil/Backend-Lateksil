@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 // import { caFilePosgreSql } from "./ca/caFilePosgreSql.js";
-// import { caFile } from "./ca/caFileMysql.js";
+import { caFile } from "./ca/caFileMysql.js";
 dotenv.config();
 
 
@@ -17,6 +17,7 @@ dotenv.config();
 //       ca: caFile, // Menyertakan CA Certificate
 //     },
 //   },
+//   isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED
 // });
 
 // const db = new Sequelize("defaultdb", "avnadmin", "AVNS_fVl8wh5GAtU4zKX1HmW", {
