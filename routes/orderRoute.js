@@ -8,6 +8,7 @@ import {
   getOrderByUser,
   uploadResultFileByIdOrder,
 } from "../controllers/orderController.js";
+import uploadResultPengujian from "../middleware/uploadResultPengujian.js";
 
 const router = express.Router();
 
@@ -19,7 +20,11 @@ router.post("/order", getOrderByUser);
 router.post("/manager/persetujuan_pesanan", getAllPersetujuanPesanan);
 
 router.post("/tahap-pengerjaan", getAllTahapPengerjaan);
-router.post("/order/upload-result", uploadResultFileByIdOrder);
+router.post(
+  "/order/upload-result",
+  uploadResultPengujian,
+  uploadResultFileByIdOrder
+);
 
 //UPDATE
 

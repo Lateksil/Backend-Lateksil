@@ -453,22 +453,28 @@ export const getAllTahapPengerjaan = async (req, res) => {
 };
 
 export const uploadResultFileByIdOrder = async (req, res) => {
-  const { id_order, file_result_pengujian } = req.body;
+  const { id } = req.body;
   try {
-    const order = await Order.findById(id_order);
+    const order = await Order.findByPk(id);
 
     if (!order) {
       return handleResponseNotFound(res);
     }
 
-    await Order.update(
-      {
-        file_result_pengujian,
-      },
-      {
-        where: { id: id_order },
-      }
-    );
+    if (order.file_result_pengujian !== null) {
+      return handleResponseAuthorization(res, 404, "Result Sudah Terkirim");
+    } else {
+      await Order.update(
+        {
+          file_result_pengujian: req.file
+            ? req.file.filename
+            : order.file_result_pengujian,
+        },
+        {
+          where: { id: id },
+        }
+      );
+    }
 
     return handleResponseUpdateSuccess(res);
   } catch (error) {
