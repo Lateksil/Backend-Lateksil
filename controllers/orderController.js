@@ -1,4 +1,5 @@
 import db from "../config/database.js";
+import fs from "fs";
 import { Op } from "sequelize";
 import Cart from "../models/cart.js";
 import Item from "../models/itemOrder.js";
@@ -480,5 +481,31 @@ export const uploadResultFileByIdOrder = async (req, res) => {
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
+  }
+};
+
+export const downloadResultFilePDF = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    // Mencari informasi file dari database berdasarkan nama file
+    const pdf = await Order.findOne({
+      where: { file_result_pengujian: name },
+    });
+    if (!pdf) {
+      res.status(404).send("File tidak ditemukan");
+    } else {
+      // Membaca file PDF menggunakan pdfjs-dist
+      const filePath = `uploads/filePdf/result-pengujian/${pdf.file_result_pengujian}`;
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename=${pdf.file_result_pengujian}`
+      );
+      res.setHeader("Content-Type", "application/pdf");
+      const fileStream = fs.createReadStream(filePath);
+      fileStream.pipe(res);
+    }
+  } catch (error) {
+    res.status(500).send("Terjadi kesalahan saat membaca file");
   }
 };

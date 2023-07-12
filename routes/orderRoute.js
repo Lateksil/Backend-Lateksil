@@ -1,6 +1,7 @@
 import express from "express";
 import {
   CreateOrder,
+  downloadResultFilePDF,
   getAllOrder,
   getAllPersetujuanPesanan,
   getAllTahapPengerjaan,
@@ -30,6 +31,7 @@ router.post(
 
 //GET
 router.get("/order/:id", getOrderById);
+router.get("/view-result/download/:name", downloadResultFilePDF);
 //DELETE
 
 export default router;
