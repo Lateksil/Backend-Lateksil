@@ -13,6 +13,7 @@ import {
   handleResponseNotFound,
   handleResponseSuccess,
   handleResponseAuthorization,
+  handleResponseUpdateSuccess,
 } from "../utils/handleResponse.js";
 import Payment from "../models/payment.js";
 
@@ -445,6 +446,31 @@ export const getAllTahapPengerjaan = async (req, res) => {
       page: page,
       totalPages: Math.ceil(count / limit),
     });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const uploadResultFileByIdOrder = async (req, res) => {
+  const { id_order, file_result_pengujian } = req.body;
+  try {
+    const order = await Order.findById(id_order);
+
+    if (!order) {
+      return handleResponseNotFound(res);
+    }
+
+    await Order.update(
+      {
+        file_result_pengujian,
+      },
+      {
+        where: { id: id_order },
+      }
+    );
+
+    return handleResponseUpdateSuccess(res);
   } catch (error) {
     console.log(error);
     return handleResponseError(res);

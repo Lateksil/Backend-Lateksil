@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from "path";
 
 import Users from "../models/user.js";
 import Order from "../models/order.js";
@@ -15,7 +14,6 @@ import Project from "../models/project.js";
 import Item from "../models/itemOrder.js";
 import Pengujian from "../models/pengujian.js";
 import { Op } from "sequelize";
-import Teknisi from "../models/teknisi.js";
 
 export const GetAllTeknisi = async (req, res) => {
   const { page = 1, limit = 10 } = req.body;
@@ -316,20 +314,5 @@ export const downloadTaskPengujianPDF = async (req, res) => {
     }
   } catch (error) {
     res.status(500).send("Terjadi kesalahan saat membaca file");
-  }
-};
-
-///TESSTINGGG
-
-export const addTeknisi = async (req, res) => {
-  try {
-    const teknisiAdd = await Teknisi.create({
-      UserId: "131b0e64-c236-47d7-99b0-99de52fe1973",
-    });
-
-    return handleResponseSuccess(res, teknisiAdd);
-  } catch (error) {
-    console.log(error);
-    return handleResponseError(res);
   }
 };

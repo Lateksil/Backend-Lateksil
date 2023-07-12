@@ -16,6 +16,11 @@ const Order = db.define("order", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  file_result_pengujian: {
+    type: DataTypes.STRING,
+    defaultValue: null,
+  },
+
 });
 Users.hasMany(Order);
 Order.belongsTo(Users);

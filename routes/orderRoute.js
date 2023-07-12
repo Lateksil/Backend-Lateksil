@@ -6,8 +6,8 @@ import {
   getAllTahapPengerjaan,
   getOrderById,
   getOrderByUser,
+  uploadResultFileByIdOrder,
 } from "../controllers/orderController.js";
-import { verifyTokenUser } from "../middleware/verifyTokenUser.js";
 
 const router = express.Router();
 
@@ -19,6 +19,7 @@ router.post("/order", getOrderByUser);
 router.post("/manager/persetujuan_pesanan", getAllPersetujuanPesanan);
 
 router.post("/tahap-pengerjaan", getAllTahapPengerjaan);
+router.post("/order/upload-result", uploadResultFileByIdOrder);
 
 //UPDATE
 
