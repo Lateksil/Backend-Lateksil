@@ -453,6 +453,87 @@ export const getAllTahapPengerjaan = async (req, res) => {
   }
 };
 
+
+export const getAllSelesaiPengerjaan = async (req, res) => {
+  const { page = 1, limit = 10, search = "" } = req.body;
+
+  let whereClauseUsers = {};
+
+  const offset = (page - 1) * limit;
+
+  const searchDataUsers = [
+    "full_name",
+    "email",
+    "no_whatsapp",
+    "address",
+    "company_name",
+  ];
+
+  if (search !== "") {
+    const searchUsers = searchDataUsers.map((user) => ({
+      [user]: { [Op.iLike]: `%${search}%` },
+    }));
+
+    whereClauseUsers = {
+      [Op.or]: searchUsers,
+    };
+  }
+
+  try {
+    const { count, rows } = await Order.findAndCountAll({
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: Users,
+          attributes: ["id", "full_name", "company_name"],
+        },
+        {
+          model: Status,
+          as: "status",
+          order: [["updatedAt", "DESC"]],
+          where: {
+            status_transaction: "4", //STATUS CLIENT IN PROGRESS
+            status_pengujian: "3", //STATUS TAHAP PENGERJAAN IN PROGRESS
+            status_payment: "1", // SUDAH BAYAR
+            accept_payment: "1", //SUDAH UPLOAD KWITANSI
+          },
+          attributes: ["status_payment"],
+        },
+        {
+          model: Project,
+          as: "proyek",
+          attributes: [
+            "id",
+            "nama_proyek",
+            "tujuan_proyek",
+            "tanggal_mulai",
+            "no_identifikasi",
+            "tanggal_selesai",
+          ],
+        },
+      ],
+      attributes: { exclude: ["UserId"] },
+    });
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
 export const uploadResultFileByIdOrder = async (req, res) => {
   const { id } = req.body;
   try {

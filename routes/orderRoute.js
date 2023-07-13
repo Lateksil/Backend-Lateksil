@@ -4,6 +4,7 @@ import {
   downloadResultFilePDF,
   getAllOrder,
   getAllPersetujuanPesanan,
+  getAllSelesaiPengerjaan,
   getAllTahapPengerjaan,
   getOrderById,
   getOrderByUser,
@@ -21,6 +22,7 @@ router.post("/order", getOrderByUser);
 router.post("/manager/persetujuan_pesanan", getAllPersetujuanPesanan);
 
 router.post("/tahap-pengerjaan", getAllTahapPengerjaan);
+router.post("/order/selesai-pemesanan", getAllSelesaiPengerjaan);
 router.post(
   "/order/upload-result",
   uploadResultPengujian,
