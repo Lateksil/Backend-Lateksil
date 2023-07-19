@@ -1,7 +1,6 @@
 import express from "express";
 import {
   CreateUploadPayment,
-  getAllAcceptPayment,
   getAllOrderPayment,
   getPaymentByIdOrder,
   uploadKwitansiToCostumer,
@@ -23,8 +22,6 @@ router.post(
   uploadKwitansiToCostumer
 );
 router.post("/payment", getAllOrderPayment);
-
-router.post("/proses-pengujian", getAllAcceptPayment);
 
 //UPDATE=
 

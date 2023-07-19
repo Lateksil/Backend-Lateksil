@@ -1,13 +1,13 @@
 import express from "express";
 import {
   SendManagerOrder,
-  SendToFronlineOrder,
+  SendToFronlinerOrder,
 } from "../controllers/projectController.js";
 const router = express.Router();
 
 //POST
 router.put("/project", SendManagerOrder);
-router.put("/m/project", SendToFronlineOrder);
+router.put("/m/project", SendToFronlinerOrder);
 
 //UPDATE
 

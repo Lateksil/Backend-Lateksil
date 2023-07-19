@@ -56,7 +56,7 @@ export const SendManagerOrder = async (req, res) => {
   }
 };
 
-export const SendToFronlineOrder = async (req, res) => {
+export const SendToFronlinerOrder = async (req, res) => {
   const {
     id,
     status_persetujuan,

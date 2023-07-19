@@ -50,4 +50,12 @@ const db = new Sequelize(
   }
 );
 
+//DATABASES LOCAL MYSQL
+// const db = new Sequelize("lateksil_db", "root", "", {
+//   host: "localhost",
+//   port: 3306,
+//   dialect: "mysql",
+//   isolationLevel: Sequelize.Transaction.ISOLATION_LEVELS.READ_COMMITTED
+// });
+
 export default db;

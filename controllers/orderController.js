@@ -17,6 +17,7 @@ import {
   handleResponseUpdateSuccess,
 } from "../utils/handleResponse.js";
 import Payment from "../models/payment.js";
+import Peralatan from "../models/peralatan.js";
 
 export const CreateOrder = async (req, res) => {
   const {
@@ -24,7 +25,6 @@ export const CreateOrder = async (req, res) => {
     total_price,
     nama_proyek,
     tujuan_proyek,
-    no_whatsApp_proyek,
   } = req.body;
 
   const t = await db.transaction();
@@ -53,7 +53,6 @@ export const CreateOrder = async (req, res) => {
         proyek: {
           nama_proyek,
           tujuan_proyek,
-          no_whatsApp_proyek,
         },
         status: {
           status_persetujuan: "1",
@@ -590,3 +589,128 @@ export const downloadResultFilePDF = async (req, res) => {
     res.status(500).send("Terjadi kesalahan saat membaca file");
   }
 };
+
+export const getAllProsesPengujian = async (req, res) => {
+  const { page = 1, limit = 10, search = "" } = req.body;
+
+  let whereClauseUsers = {};
+
+  const offset = (page - 1) * limit;
+
+  const searchDataUsers = [
+    "full_name",
+    "email",
+    "no_whatsapp",
+    "address",
+    "company_name",
+  ];
+
+  if (search !== "") {
+    const searchUsers = searchDataUsers.map((user) => ({
+      [user]: { [Op.iLike]: `%${search}%` },
+    }));
+
+    whereClauseUsers = {
+      [Op.or]: searchUsers,
+    };
+  }
+
+  try {
+    const { count, rows } = await Order.findAndCountAll({
+      offset,
+      limit: parseInt(limit, 10),
+      distinct: true,
+      order: [["createdAt", "DESC"]],
+      include: [
+        {
+          model: Users,
+          attributes: ["id", "full_name", "company_name"],
+        },
+        {
+          model: Status,
+          as: "status",
+          order: [["updatedAt", "DESC"]],
+          where: {
+            status_persetujuan: "2", //STATUS DALAM PEMBAYARAN
+            status_pengujian: "2", //PROSES PENGUJIAN
+            status_payment: "1", // SUDAH BAYAR
+            accept_payment: "1", //SUDAH UPLOAD KWITANSI
+          },
+          attributes: ["status_payment"],
+        },
+        {
+          model: Project,
+          as: "proyek",
+          attributes: [
+            "id",
+            "nama_proyek",
+            "tujuan_proyek",
+            "tanggal_mulai",
+            "tanggal_selesai",
+          ],
+        },
+      ],
+      attributes: { exclude: ["UserId"] },
+    });
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const getAlatPengujianByOrderId = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const order = await Order.findByPk(id, {
+      attributes: ["id"],
+      include: [
+        {
+          model: Item,
+          attributes: ["id"],
+          include: [
+            {
+              model: Pengujian,
+              attributes: [
+                "id",
+                "jenis_pengujian",
+                "code",
+                "min_quantity",
+                "sampler",
+              ],
+              include: [
+                {
+                  model: Peralatan,
+                  as: "peralatan",
+                  attributes: ["id", "nama_alat"],
+                },
+              ],
+            },
+          ],
+          through: { attributes: [] },
+        },
+      ],
+    });
+
+    if (!order) {
+      return handleResponseAuthorization(res, 404, "Order not found");
+    }
+
+    return handleResponseSuccess(res, order);
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+

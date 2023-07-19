@@ -2,7 +2,6 @@ import express from "express";
 import {
   createPeralatan,
   deletePeralatan,
-  getAlatPengujianByOrderId,
   getAllPeralatan,
   GetOrderPeralatan,
   getStatusPerlatan,
@@ -27,7 +26,7 @@ router.put(
 
 //GET
 router.get("/peralatan/status/:id", getStatusPerlatan);
-router.get("/peralatan/order/:id", getAlatPengujianByOrderId);
+
 
 //DELETE
 router.delete("/peralatan/:id", deletePeralatan);

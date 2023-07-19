@@ -95,50 +95,6 @@ export const getAllPeralatan = async (req, res) => {
   }
 };
 
-export const getAlatPengujianByOrderId = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const order = await Order.findByPk(id, {
-      attributes: ["id"],
-      include: [
-        {
-          model: Item,
-          attributes: ["id"],
-          include: [
-            {
-              model: Pengujian,
-              attributes: [
-                "id",
-                "jenis_pengujian",
-                "code",
-                "min_quantity",
-                "sampler",
-              ],
-              include: [
-                {
-                  model: Peralatan,
-                  as: "peralatan",
-                  attributes: ["id", "nama_alat"],
-                },
-              ],
-            },
-          ],
-          through: { attributes: [] },
-        },
-      ],
-    });
-
-    if (!order) {
-      return handleResponseAuthorization(res, 404, "Order not found");
-    }
-
-    return handleResponseSuccess(res, order);
-  } catch (error) {
-    console.log(error);
-    return handleResponseError(res);
-  }
-};
 
 export const GetOrderPeralatan = async (req, res) => {
   const { page = 1, limit = 10 } = req.body;
@@ -296,6 +252,36 @@ export const getStatusPerlatan = async (req, res) => {
     }
 
     return handleResponseSuccess(res, statusPeralatan);
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const createCatatanToPeralatan = async (req, res) => {
+  try {
+    const { order_id, catatan_khusus } = req.body;
+
+    const TahapPengujian = await Status.findByPk(order_id);
+
+    await PeralatanPengujian.create({
+      id: order_id,
+      catatan_khusus,
+    });
+
+    await Status.update(
+      {
+        status_transaction: "3",
+        status_pengujian: "3",
+      },
+      {
+        where: { id: order_id },
+      }
+    );
+
+    await TahapPengujian.reload();
+
+    return handleResponseSuccess(res, TahapPengujian);
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
