@@ -494,8 +494,8 @@ export const getAllSelesaiPengerjaan = async (req, res) => {
           as: "status",
           order: [["updatedAt", "DESC"]],
           where: {
-            status_transaction: "4", //STATUS CLIENT IN PROGRESS
-            status_pengujian: "3", //STATUS TAHAP PENGERJAAN IN PROGRESS
+            status_transaction: "4", //STATUS CLIENT DONE
+            status_pengujian: "3", //STATUS TAHAP PENGERJAAN DONE
             status_payment: "1", // SUDAH BAYAR
             accept_payment: "1", //SUDAH UPLOAD KWITANSI
           },

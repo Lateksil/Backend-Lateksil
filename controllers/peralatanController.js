@@ -213,7 +213,7 @@ export const createPengajuanAlatInOrder = async (req, res) => {
   }
 };
 
-export const updateStatusPengajuanPeralatan = async (req, res) => {
+export const uploadBuktiAlat = async (req, res) => {
   const { id_order } = req.params;
   const { status_peralatan } = req.body;
   try {

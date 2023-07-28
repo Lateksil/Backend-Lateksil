@@ -236,7 +236,7 @@ export const GetTeknisiByUserId = async (req, res) => {
   }
 };
 
-export const StatusPengerjaanTeknisi = async (req, res) => {
+export const uploadLaporanTeknisi = async (req, res) => {
   const { id, status_task, status_pengerjaan } = req.body;
 
   try {

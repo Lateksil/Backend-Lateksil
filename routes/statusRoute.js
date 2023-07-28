@@ -11,7 +11,7 @@ const router = express.Router();
 router.put("/send_costumer", updateStatusToCostumer);
 
 //GET
-router.get("/status/to_done_pemesanan/:order_id", updateDonePengujianPemesanan);
+router.put("/status/to_done_pemesanan", updateDonePengujianPemesanan);
 
 //DELETE
 

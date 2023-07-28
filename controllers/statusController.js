@@ -36,9 +36,13 @@ export const updateStatusToCostumer = async (req, res) => {
 
 export const updateDonePengujianPemesanan = async (req, res) => {
   try {
-    const { order_id } = req.params;
+    const { order_id } = req.body;
 
     const TahapPengujian = await Status.findByPk(order_id);
+
+    if (!TahapPengujian) {
+      return handleResponseNotFound(res);
+    }
 
     await Status.update(
       {

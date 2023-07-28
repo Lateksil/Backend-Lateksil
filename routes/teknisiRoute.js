@@ -6,7 +6,7 @@ import {
   GetAllTeknisiPengujian,
   GetTeknisiByOrder,
   GetTeknisiByUserId,
-  StatusPengerjaanTeknisi,
+  uploadLaporanTeknisi,
   viewTaskPengujianPDF,
 } from "../controllers/teknisiController.js";
 import uploadTaskPengujianTeknisi from "../middleware/UploadTaskPengujianTeknisi.js";
@@ -19,7 +19,7 @@ router.post("/teknisi/all", GetAllTeknisi);
 router.post(
   "/teknisi/progress_task",
   uploadTaskPengujianTeknisi,
-  StatusPengerjaanTeknisi
+  uploadLaporanTeknisi
 );
 
 router.post("/pengujian_teknisi/create", CreateTeknisiPengujian);

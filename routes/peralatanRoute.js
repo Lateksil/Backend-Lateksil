@@ -5,7 +5,7 @@ import {
   getAllPeralatan,
   GetOrderPeralatan,
   getStatusPerlatan,
-  updateStatusPengajuanPeralatan,
+  uploadBuktiAlat,
 } from "../controllers/peralatanController.js";
 import uploadBuktiPengajuanAlat from "../middleware/uploadBuktiPengajuanAlat.js";
 
@@ -21,7 +21,7 @@ router.post("/peralatan/pengajuan", GetOrderPeralatan);
 router.put(
   "/peralatan/pengajuan/:id_order",
   uploadBuktiPengajuanAlat,
-  updateStatusPengajuanPeralatan
+  uploadBuktiAlat
 );
 
 //GET
