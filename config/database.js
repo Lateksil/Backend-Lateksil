@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
 // import { caFilePosgreSql } from "./ca/caFilePosgreSql.js";
-import { caFile } from "./ca/caFileMysql.js";
+// import { caFile } from "./ca/caFileMysql.js";
 dotenv.config();
 
 
@@ -50,7 +50,7 @@ const db = new Sequelize(
   }
 );
 
-//DATABASES LOCAL MYSQL
+// DATABASES LOCAL MYSQL
 // const db = new Sequelize("lateksil_db", "root", "", {
 //   host: "localhost",
 //   port: 3306,

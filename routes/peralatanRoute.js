@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  createCatatanToPeralatan,
   createPeralatan,
   deletePeralatan,
   getAllPeralatan,
@@ -18,11 +19,15 @@ router.post("/peralatan", getAllPeralatan);
 router.post("/peralatan/pengajuan", GetOrderPeralatan);
 
 //UPDATE
+
+router.put("/to_tahap_pengujian", createCatatanToPeralatan);
+
 router.put(
   "/peralatan/pengajuan/:id_order",
   uploadBuktiPengajuanAlat,
   uploadBuktiAlat
 );
+
 
 //GET
 router.get("/peralatan/status/:id", getStatusPerlatan);

@@ -12,7 +12,6 @@ import {
   getOrderByUser,
   uploadResultFileByIdOrder,
 } from "../controllers/orderController.js";
-import { createCatatanToPeralatan } from "../controllers/peralatanController.js";
 import uploadResultPengujian from "../middleware/uploadResultPengujian.js";
 
 const router = express.Router();
@@ -35,7 +34,6 @@ router.post(
 );
 
 //UPDATE
-router.put("/to_tahap_pengujian", createCatatanToPeralatan);
 
 //GET
 router.get("/order/:id", getOrderById);

@@ -20,7 +20,10 @@ const Order = db.define("order", {
     type: DataTypes.STRING,
     defaultValue: null,
   },
-
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
 });
 Users.hasMany(Order);
 Order.belongsTo(Users);

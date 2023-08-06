@@ -20,12 +20,7 @@ import Payment from "../models/payment.js";
 import Peralatan from "../models/peralatan.js";
 
 export const CreateOrder = async (req, res) => {
-  const {
-    user_id,
-    total_price,
-    nama_proyek,
-    tujuan_proyek,
-  } = req.body;
+  const { user_id, total_price, nama_proyek, tujuan_proyek } = req.body;
 
   const t = await db.transaction();
   try {
@@ -188,6 +183,15 @@ export const getAllOrder = async (req, res) => {
 
   try {
     const { count, rows } = await Order.findAndCountAll({
+      where: {
+        [Op.or]: [
+          {
+            total_price: {
+              [Op.like]: `%${search}%`,
+            },
+          },
+        ],
+      },
       offset,
       limit: parseInt(limit, 10),
       distinct: true,
@@ -196,6 +200,15 @@ export const getAllOrder = async (req, res) => {
         {
           model: Users,
           attributes: ["id", "full_name", "company_name"],
+          where: {
+            [Op.or]: [
+              {
+                full_name: {
+                  [Op.like]: `%${search}%`,
+                },
+              },
+            ],
+          },
         },
         {
           model: Status,
@@ -451,7 +464,6 @@ export const getAllTahapPengerjaan = async (req, res) => {
     return handleResponseError(res);
   }
 };
-
 
 export const getAllSelesaiPengerjaan = async (req, res) => {
   const { page = 1, limit = 10, search = "" } = req.body;
@@ -713,4 +725,3 @@ export const getAlatPengujianByOrderId = async (req, res) => {
     return handleResponseError(res);
   }
 };
-
