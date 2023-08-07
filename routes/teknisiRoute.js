@@ -1,6 +1,7 @@
 import express from "express";
 import {
   CreateTeknisiPengujian,
+  deleteTeknisiPengujian,
   downloadTaskPengujianPDF,
   GetAllTeknisi,
   GetAllTeknisiPengujian,
@@ -33,5 +34,6 @@ router.get("/view-task/:name", viewTaskPengujianPDF);
 router.get("/view-task/download/:name", downloadTaskPengujianPDF);
 
 //DELETE
+router.delete("/teknisi/:id", deleteTeknisiPengujian);
 
 export default router;

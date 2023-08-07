@@ -5,6 +5,7 @@ import Order from "../models/order.js";
 import TeknisiPengujian from "../models/teknisiPengujian.js";
 import {
   handleResponseAuthorization,
+  handleResponseDeleteSuccess,
   handleResponseError,
   handleResponseNotFound,
   handleResponseSuccess,
@@ -172,6 +173,25 @@ export const GetTeknisiByOrder = async (req, res) => {
     });
 
     return handleResponseSuccess(res, getAllTeknisiPengujian);
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+export const deleteTeknisiPengujian = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const teknisiPengujian = await TeknisiPengujian.findByPk(id);
+
+    if (!teknisiPengujian) {
+      return handleResponseNotFound(res);
+    }
+    await TeknisiPengujian.destroy({
+      where: { id: id },
+    });
+
+    return handleResponseDeleteSuccess(res);
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
