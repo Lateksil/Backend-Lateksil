@@ -1,24 +1,25 @@
-import express, { Router } from "express";
+const express = require("express");
 const router = express.Router();
 
-import {
+const {
   AllUsers,
   deleteUser,
   infoUser,
   updateUser,
-} from "../controllers/userController.js";
-import { verifyTokenAllRole } from "../middleware/verifyTokenAllRole.js";
+} = require("../controllers/userController.js");
+const verifyTokenAllRole = require("../middleware/verifyTokenAllRole.js");
+const uploadProfleUser = require("../middleware/uploadProfileUser.js");
 
-//POST
+// POST
 router.post("/users", AllUsers);
 
-//UPDATE
-router.put("/users/:id", updateUser);
+// UPDATE
+router.put("/users/:id", uploadProfleUser, updateUser);
 
-//GET
+// GET
 router.get("/me/:email", verifyTokenAllRole, infoUser);
 
-//DELETE
+// DELETE
 router.delete("/users/:id", deleteUser);
 
-export default router;
+module.exports = router;

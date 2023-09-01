@@ -1,19 +1,19 @@
-import { Op } from "sequelize";
-import Item from "../models/itemOrder.js";
-import Order from "../models/order.js";
-import Payment from "../models/payment.js";
-import Pengujian from "../models/pengujian.js";
-import Project from "../models/project.js";
-import Status from "../models/status.js";
-import Users from "../models/user.js";
-import {
+const { Op } = require("sequelize");
+const Item = require("../models/itemOrder.js");
+const Order = require("../models/order.js");
+const Payment = require("../models/payment.js");
+const Pengujian = require("../models/pengujian.js");
+const Project = require("../models/project.js");
+const Status = require("../models/status.js");
+const Users = require("../models/user.js");
+const {
   handleResponseAuthorization,
   handleResponseError,
   handleResponseNotFound,
   handleResponseSuccess,
-} from "../utils/handleResponse.js";
+} = require("../utils/handleResponse.js");
 
-export const CreateUploadPayment = async (req, res) => {
+exports.CreateUploadPayment = async (req, res) => {
   const { id_order, full_name, company_name, total_price } = req.body;
   const { filename } = req.file;
 
@@ -44,7 +44,7 @@ export const CreateUploadPayment = async (req, res) => {
   }
 };
 
-export const uploadKwitansiToCostumer = async (req, res) => {
+exports.uploadKwitansiToCostumer = async (req, res) => {
   const { id } = req.body;
   const { filename } = req.file;
 
@@ -90,7 +90,7 @@ export const uploadKwitansiToCostumer = async (req, res) => {
   }
 };
 
-export const getAllOrderPayment = async (req, res) => {
+exports.getAllOrderPayment = async (req, res) => {
   const {
     page = 1,
     limit = 10,
@@ -189,7 +189,7 @@ export const getAllOrderPayment = async (req, res) => {
   }
 };
 
-export const getPaymentByIdOrder = async (req, res) => {
+exports.getPaymentByIdOrder = async (req, res) => {
   const { id } = req.params;
   try {
     const orderPayment = await Payment.findByPk(id);

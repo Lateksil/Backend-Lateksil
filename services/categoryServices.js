@@ -1,6 +1,6 @@
-import Category from "../models/category.js";
+const Category = require("../models/category.js");
 
-export const createCategoryServices = async (name_category) => {
+exports.createCategoryServices = async (name_category) => {
   try {
     const category = await Category.create({
       name_category,
@@ -11,10 +11,7 @@ export const createCategoryServices = async (name_category) => {
   }
 };
 
-export const updateCategoryServices = async (
-  id,
-  nama_category,
-) => {
+exports.updateCategoryServices = async (id, nama_category) => {
   try {
     const updatedCategory = await Category.update(
       {
@@ -31,7 +28,7 @@ export const updateCategoryServices = async (
   }
 };
 
-export const deleteCategoryServices = async (id) => {
+exports.deleteCategoryServices = async (id) => {
   try {
     const deletedCategory = await Category.destroy({
       where: { id: id },

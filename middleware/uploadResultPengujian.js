@@ -1,6 +1,6 @@
-import multer from "multer";
-import path from "path";
-import { v4 } from "uuid";
+const multer = require("multer");
+const path = require("path");
+const { v4 } = require("uuid");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -22,4 +22,4 @@ const uploadResultPengujian = multer({ storage: storage }).single(
   "file_result_pengujian"
 );
 
-export default uploadResultPengujian;
+module.exports = uploadResultPengujian;

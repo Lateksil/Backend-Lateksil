@@ -1,21 +1,21 @@
-import Item from "../models/itemOrder.js";
-import Order from "../models/order.js";
-import Pengujian from "../models/pengujian.js";
-import Peralatan from "../models/peralatan.js";
-import PeralatanPengujian from "../models/peralatanPengujian.js";
-import Project from "../models/project.js";
-import Status from "../models/status.js";
-import TeknisiPengujian from "../models/teknisiPengujian.js";
-import Users from "../models/user.js";
-import {
+const Item = require("../models/itemOrder.js");
+const Order = require("../models/order.js");
+const Pengujian = require("../models/pengujian.js");
+const Peralatan = require("../models/peralatan.js");
+const PeralatanPengujian = require("../models/peralatanPengujian.js");
+const Project = require("../models/project.js");
+const Status = require("../models/status.js");
+const TeknisiPengujian = require("../models/teknisiPengujian.js");
+const Users = require("../models/user.js");
+const {
   handleResponseAuthorization,
   handleResponseDeleteSuccess,
   handleResponseError,
   handleResponseSuccess,
   handleResponseUpdateSuccess,
-} from "../utils/handleResponse.js";
+} = require("../utils/handleResponse.js");
 
-export const createPeralatan = async (req, res) => {
+exports.createPeralatan = async (req, res) => {
   const { pengujian_id, nama_alat } = req.body;
   try {
     const pengujian = await Pengujian.findByPk(pengujian_id);
@@ -36,7 +36,7 @@ export const createPeralatan = async (req, res) => {
   }
 };
 
-export const deletePeralatan = async (req, res) => {
+exports.deletePeralatan = async (req, res) => {
   const { id } = req.params;
   try {
 
@@ -59,7 +59,7 @@ export const deletePeralatan = async (req, res) => {
   }
 }
 
-export const getAllPeralatan = async (req, res) => {
+exports.getAllPeralatan = async (req, res) => {
   const { page = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;
@@ -96,7 +96,7 @@ export const getAllPeralatan = async (req, res) => {
 };
 
 
-export const GetOrderPeralatan = async (req, res) => {
+exports.GetOrderPeralatan = async (req, res) => {
   const { page = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;
@@ -164,7 +164,7 @@ export const GetOrderPeralatan = async (req, res) => {
   }
 };
 
-export const StatusPeralatan = async (req, res) => {
+exports.StatusPeralatan = async (req, res) => {
   const { id, status_peralatan } = req.body;
   try {
     const statusPeralatan = await TeknisiPengujian.findByPk(id);
@@ -188,7 +188,7 @@ export const StatusPeralatan = async (req, res) => {
   }
 };
 
-export const createPengajuanAlatInOrder = async (req, res) => {
+exports.createPengajuanAlatInOrder = async (req, res) => {
   const { id_order, status_peralatan, catatan_khusus } = req.body;
   try {
     const order = await Order.findByPk(id_order);
@@ -213,7 +213,7 @@ export const createPengajuanAlatInOrder = async (req, res) => {
   }
 };
 
-export const uploadBuktiAlat = async (req, res) => {
+exports.uploadBuktiAlat = async (req, res) => {
   const { id_order } = req.params;
   const { status_peralatan } = req.body;
   try {
@@ -241,7 +241,7 @@ export const uploadBuktiAlat = async (req, res) => {
   }
 };
 
-export const getStatusPerlatan = async (req, res) => {
+exports.getStatusPerlatan = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -258,7 +258,7 @@ export const getStatusPerlatan = async (req, res) => {
   }
 };
 
-export const createCatatanToPeralatan = async (req, res) => {
+exports.createCatatanToPeralatan = async (req, res) => {
   try {
     const { order_id, catatan_khusus } = req.body;
 

@@ -1,9 +1,9 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
-import Pengujian from "./pengujian.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
+const Pengujian = require('./pengujian.js');
 
 const Peralatan = db.define(
-  "peralatan",
+  'peralatan',
   {
     id: {
       type: DataTypes.UUID,
@@ -11,7 +11,7 @@ const Peralatan = db.define(
       primaryKey: true,
     },
     nama_alat: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(115),
       allowNull: false,
     },
   },
@@ -20,13 +20,13 @@ const Peralatan = db.define(
   }
 );
 
-Pengujian.hasMany(Peralatan, { as: "peralatan" });
+Pengujian.hasMany(Peralatan, { as: 'peralatan' });
 Peralatan.belongsTo(Pengujian);
 
-export default Peralatan;
+module.exports = Peralatan;
 
 (async () => {
   await Peralatan.sync({ alter: true }).then(() => {
-    console.log("Peralatan Database & tables created!");
+    console.log('Peralatan Database & tables created!');
   });
 })();

@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
-import { handleResponseAuthorization } from "../utils/handleResponse.js";
+const jwt = require("jsonwebtoken");
+const { handleResponseAuthorization } = require("../utils/handleResponse.js");
 
-export const verifyTokenFrontliner = (req, res, next) => {
+const verifyTokenFrontliner = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
@@ -33,3 +33,5 @@ export const verifyTokenFrontliner = (req, res, next) => {
     }
   });
 };
+
+module.exports = verifyTokenFrontliner;

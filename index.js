@@ -1,10 +1,10 @@
-import express from "express";
-import bodyParser from 'body-parser';
-import cors from "cors";
-import dotenv from "dotenv";
-import db from "./config/database.js";
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const db = require("./config/database");
 
-import TerminalRoutes from "./routes/indexRoutes.js";
+const TerminalRoutes = require("./routes/indexRoutes.js");
 
 const app = express();
 
@@ -12,6 +12,10 @@ dotenv.config();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+app.get("/", (req, res) => {
+  res.send("Welcome API Lateksil");
+});
 
 app.use(cors());
 app.use((_req, res, next) => {
@@ -23,15 +27,13 @@ app.use((_req, res, next) => {
 
 TerminalRoutes(app);
 
-(async () => {
-  try {
-    await db.authenticate().then(() => {
-      console.log("Connection DB has been established successfully.");
-    });
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
-  }
-})();
+db.authenticate()
+  .then(() => {
+    console.log("Koneksi ke database berhasil.");
+  })
+  .catch((err) => {
+    console.error("Gagal terhubung ke database:", err);
+  });
 
 app.use("/uploads", express.static("./uploads/pengujian/"));
 app.use("/profile", express.static("./uploads/profile/"));

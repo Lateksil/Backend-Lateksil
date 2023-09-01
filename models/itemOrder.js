@@ -1,10 +1,10 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
-import Pengujian from "./pengujian.js";
-import Users from "./user.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
+const Pengujian = require('./pengujian.js');
+const Users = require('./user.js');
 
 const Item = db.define(
-  "itemOrder",
+  'itemOrder',
   {
     id: {
       type: DataTypes.UUID,
@@ -12,7 +12,7 @@ const Item = db.define(
       primaryKey: true,
     },
     quantity: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       allowNull: false,
     },
   },
@@ -27,10 +27,10 @@ Item.belongsTo(Users);
 Pengujian.hasMany(Item);
 Item.belongsTo(Pengujian);
 
-export default Item;
+module.exports = Item;
 
 (async () => {
   await Item.sync({ alter: true }).then(() => {
-    console.log("Item Order Database  & tables created!");
+    console.log('Item Order Database  & tables created!');
   });
 })();

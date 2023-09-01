@@ -1,5 +1,5 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   CreateOrder,
   downloadResultFilePDF,
   getAlatPengujianByOrderId,
@@ -11,8 +11,8 @@ import {
   getOrderById,
   getOrderByUser,
   uploadResultFileByIdOrder,
-} from "../controllers/orderController.js";
-import uploadResultPengujian from "../middleware/uploadResultPengujian.js";
+} = require("../controllers/orderController.js");
+const uploadResultPengujian = require("../middleware/uploadResultPengujian.js");
 
 const router = express.Router();
 
@@ -42,4 +42,4 @@ router.get("/view-result/download/:name", downloadResultFilePDF);
 router.get("/order/peralatan/:id", getAlatPengujianByOrderId);
 //DELETE
 
-export default router;
+module.exports = router;

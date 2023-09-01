@@ -1,4 +1,4 @@
-export const handleResponse = (res, statusCode, message, newdata) => {
+exports.handleResponse = (res, statusCode, message, newdata) => {
   res.status(statusCode).json({
     status: statusCode,
     message,
@@ -6,45 +6,46 @@ export const handleResponse = (res, statusCode, message, newdata) => {
   });
 };
 
-export const handleResponseAuthorization = (res, statusCode, message) => {
+exports.handleResponseAuthorization = (res, statusCode, message) => {
   res.status(statusCode).json({
     status: statusCode,
     message,
   });
 };
 
-export const handleResponseSuccess = (res, data) => {
+exports.handleResponseSuccess = (res, data) => {
   res.status(200).json({
     status: 200,
-    message: "Success",
+    message: 'Success',
     data: data,
   });
 };
 
-export const handleResponseUpdateSuccess = (res, data) => {
+exports.handleResponseUpdateSuccess = (res, data) => {
   res.status(200).json({
     status: 200,
-    message: "Update successfully",
+    message: 'Update successfully',
     data: data,
   });
 };
 
-export const handleResponseDeleteSuccess = (res) => {
+exports.handleResponseDeleteSuccess = (res) => {
   res.status(204).json({
     status: 204,
-    message: "Deleted successfully",
+    message: 'Deleted successfully',
   });
 };
 
-export const handleResponseError = (res) => {
+exports.handleResponseError = (res) => {
   res.status(500).json({
     status: 500,
-    message: "Terjadi Kesalahan Pada Server",
+    message: 'Terjadi Kesalahan Pada Server',
   });
 };
-export const handleResponseNotFound = (res) => {
+
+exports.handleResponseNotFound = (res) => {
   res.status(404).json({
     status: 404,
-    message: "Data Not Found!",
+    message: 'Data Not Found!',
   });
 };

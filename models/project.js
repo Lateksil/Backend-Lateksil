@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
 
 const Project = db.define(
-  "proyek",
+  'proyek',
   {
     id: {
       type: DataTypes.UUID,
@@ -10,7 +10,7 @@ const Project = db.define(
       primaryKey: true,
     },
     nama_proyek: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(115),
       allowNull: false,
     },
     tujuan_proyek: {
@@ -18,15 +18,15 @@ const Project = db.define(
       allowNull: false,
     },
     no_refrensi: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       allowNull: true,
     },
     no_identifikasi: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       allowNull: true,
     },
     no_surat: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       allowNull: true,
     },
     tanggal_mulai: {
@@ -48,10 +48,10 @@ const Project = db.define(
   }
 );
 
-export default Project;
+module.exports = Project;
 
 (async () => {
   await Project.sync({ alter: true }).then(() => {
-    console.log("Proyek Database  & tables created!");
+    console.log('Proyek Database  & tables created!');
   });
 })();

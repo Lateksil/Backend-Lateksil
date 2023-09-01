@@ -1,5 +1,5 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+const { DataTypes } = require("sequelize");
+const db = require("../config/database.js");
 
 const Status = db.define(
   "status",
@@ -43,7 +43,7 @@ const Status = db.define(
   }
 );
 
-export default Status;
+module.exports = Status;
 
 (async () => {
   await Status.sync({ alter: true }).then(() => {

@@ -1,12 +1,12 @@
-import PeralatanPengujian from "../models/peralatanPengujian.js";
-import Status from "../models/status.js";
-import {
+const Status = require("../models/status.js");
+const {
   handleResponseAuthorization,
   handleResponseError,
+  handleResponseNotFound,
   handleResponseSuccess,
-} from "../utils/handleResponse.js";
+} = require("../utils/handleResponse.js");
 
-export const updateStatusToCostumer = async (req, res) => {
+exports.updateStatusToCostumer = async (req, res) => {
   const { id, status_transaction } = req.body;
   try {
     const status = await Status.findByPk(id);
@@ -34,7 +34,7 @@ export const updateStatusToCostumer = async (req, res) => {
   }
 };
 
-export const updateDonePengujianPemesanan = async (req, res) => {
+exports.updateDonePengujianPemesanan = async (req, res) => {
   try {
     const { order_id } = req.body;
 

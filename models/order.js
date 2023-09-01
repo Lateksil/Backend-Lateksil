@@ -1,19 +1,19 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
-import Payment from "./payment.js";
-import PeralatanPengujian from "./peralatanPengujian.js";
-import Project from "./project.js";
-import Status from "./status.js";
-import Users from "./user.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
+const Payment = require('./payment.js');
+const PeralatanPengujian = require('./peralatanPengujian.js');
+const Project = require('./project.js');
+const Status = require('./status.js');
+const Users = require('./user.js');
 
-const Order = db.define("order", {
+const Order = db.define('order', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   total_price: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(45),
     allowNull: false,
   },
   file_result_pengujian: {
@@ -25,25 +25,26 @@ const Order = db.define("order", {
     allowNull: false,
   },
 });
+
 Users.hasMany(Order);
 Order.belongsTo(Users);
 
-Order.hasOne(Status, { as: "status", foreignKey: "id" });
-Status.belongsTo(Order, { as: "orders", foreignKey: "id" });
+Order.hasOne(Status, { as: 'status', foreignKey: 'id' });
+Status.belongsTo(Order, { as: 'orders', foreignKey: 'id' });
 
-Order.hasOne(Project, { as: "proyek", foreignKey: "id" });
-Project.belongsTo(Order, { as: "orders", foreignKey: "id" });
+Order.hasOne(Project, { as: 'proyek', foreignKey: 'id' });
+Project.belongsTo(Order, { as: 'orders', foreignKey: 'id' });
 
-Order.hasOne(Payment, { as: "payment", foreignKey: "id" });
-Payment.belongsTo(Order, { as: "orders", foreignKey: "id" });
+Order.hasOne(Payment, { as: 'payment', foreignKey: 'id' });
+Payment.belongsTo(Order, { as: 'orders', foreignKey: 'id' });
 
-Order.hasOne(PeralatanPengujian, { as: "status_alat", foreignKey: "id" });
-PeralatanPengujian.belongsTo(Order, { as: "orders", foreignKey: "id" });
+Order.hasOne(PeralatanPengujian, { as: 'status_alat', foreignKey: 'id' });
+PeralatanPengujian.belongsTo(Order, { as: 'orders', foreignKey: 'id' });
 
-export default Order;
+module.exports = Order;
 
 (async () => {
   await Order.sync({ alter: true }).then(() => {
-    console.log("Order Database  & tables created!");
+    console.log('Order Database  & tables created!');
   });
 })();

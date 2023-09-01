@@ -1,7 +1,7 @@
-import Users from "../models/user.js";
-import { handleResponseNotFound } from "../utils/handleResponse.js";
+const Users = require("../models/user.js");
+const { handleResponseNotFound, handleResponseUpdateSuccess } = require("../utils/handleResponse.js");
 
-export const updateUserByIdServices = async (res, userId, full_name) => {
+exports.updateUserByIdServices = async (res, userId, full_name) => {
   const parseId = parseInt(userId);
   const user = await Users.findByPk(parseId);
 

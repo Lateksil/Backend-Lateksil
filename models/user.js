@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
 
-const Users = db.define("User", {
+const Users = db.define('User', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -9,59 +9,51 @@ const Users = db.define("User", {
     primaryKey: true,
   },
   full_name: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(45),
     allowNull: false,
   },
   image_profile: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(115),
     defaultValue: null,
   },
   email: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(45),
     allowNull: false,
-    unique: true,
+    // unique: true,
     validate: {
       isEmail: true,
     },
   },
   no_whatsapp: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(15),
     allowNull: false,
   },
   address: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(115),
     allowNull: false,
   },
   company_name: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(45),
     allowNull: false,
   },
   password: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(115),
     allowNull: false,
   },
   role: {
-    type: DataTypes.STRING,
-    defaultValue: "user",
+    type: DataTypes.STRING(15),
+    defaultValue: 'user',
   },
   isActive_payment: {
     type: DataTypes.STRING,
-    defaultValue: 'passive'
+    defaultValue: 'passive',
   },
-  isVerified: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
-  },
-  verificationCode: {
-    type: DataTypes.STRING,
-    allowNull: true
-  }
 });
 
-export default Users;
+module.exports = Users;
 
 (async () => {
   await Users.sync({ alter: true }).then(() => {
-    console.log("User Database & tables created!");
+    console.log('User Database & tables created!');
   });
 })();

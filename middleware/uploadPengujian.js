@@ -1,5 +1,5 @@
-import multer from "multer";
-import path from "path";
+const multer = require("multer");
+const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -12,4 +12,4 @@ const storage = multer.diskStorage({
 
 const uploadPengujian = multer({ storage: storage }).single("image");
 
-export default uploadPengujian;
+module.exports = uploadPengujian;

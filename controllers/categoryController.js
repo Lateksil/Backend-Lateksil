@@ -1,20 +1,18 @@
-import { Op } from "sequelize";
-import Category from "../models/category.js";
-import {
+const Category = require("../models/category.js");
+const {
   createCategoryServices,
   deleteCategoryServices,
   updateCategoryServices,
-} from "../services/categoryServices.js";
-import { handlePagination } from "../utils/handlePagination.js";
-import {
+} = require("../services/categoryServices.js");
+const {
   handleResponseDeleteSuccess,
   handleResponseError,
   handleResponseNotFound,
   handleResponseSuccess,
   handleResponseUpdateSuccess,
-} from "../utils/handleResponse.js";
+} = require("../utils/handleResponse.js");
 
-export const createCategory = async (req, res) => {
+exports.createCategory = async (req, res) => {
   const { name_category } = req.body;
 
   try {
@@ -26,7 +24,7 @@ export const createCategory = async (req, res) => {
   }
 };
 
-export const updateCategory = async (req, res) => {
+exports.updateCategory = async (req, res) => {
   const { id } = req.params;
   const { name_category } = req.body;
   try {
@@ -41,7 +39,7 @@ export const updateCategory = async (req, res) => {
   }
 };
 
-export const deleteCategory = async (req, res) => {
+exports.deleteCategory = async (req, res) => {
   const { id } = req.params;
   try {
     const deleted = await deleteCategoryServices(id);
@@ -55,7 +53,7 @@ export const deleteCategory = async (req, res) => {
   }
 };
 
-export const getAllCategory = async (req, res) => {
+exports.getAllCategory = async (req, res) => {
   const { page = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;

@@ -1,16 +1,16 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   CreateUploadPayment,
   getAllOrderPayment,
   getPaymentByIdOrder,
   uploadKwitansiToCostumer,
-} from "../controllers/paymentController.js";
-import uploadBuktiPembayaran from "../middleware/UploadBuktiPembayaran.js";
-import uploadKwitansiPembayaran from "../middleware/uploadKwitansiPembayaran.js";
+} = require("../controllers/paymentController.js");
+const uploadBuktiPembayaran = require("../middleware/UploadBuktiPembayaran.js");
+const uploadKwitansiPembayaran = require("../middleware/uploadKwitansiPembayaran.js");
 
 const router = express.Router();
 
-//POST=
+//POST
 router.post(
   "/upload-payment/create",
   uploadBuktiPembayaran,
@@ -23,10 +23,10 @@ router.post(
 );
 router.post("/payment", getAllOrderPayment);
 
-//UPDATE=
+//UPDATE
 
 //GET
 router.get("/payment/:id", getPaymentByIdOrder);
 //DELETE
 
-export default router;
+module.exports = router;

@@ -1,13 +1,13 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   createPengujian,
   deletePengujian,
   getAllPengujian,
   updatePengujian,
-} from "../controllers/pengujianController.js";
-import uploadPengujian from "../middleware/uploadPengujian.js";
-import { verifyTokenAllRole } from "../middleware/verifyTokenAllRole.js";
-import { verifyTokenFrontliner } from "../middleware/verifyTokenFrontliner.js";
+} = require("../controllers/pengujianController.js");
+const uploadPengujian = require("../middleware/uploadPengujian.js");
+const verifyTokenAllRole = require("../middleware/verifyTokenAllRole.js");
+const verifyTokenFrontliner = require("../middleware/verifyTokenFrontliner.js");
 const router = express.Router();
 
 //POST
@@ -32,4 +32,4 @@ router.put(
 //DELETE
 router.delete("/pengujian/:id", verifyTokenFrontliner, deletePengujian);
 
-export default router;
+module.exports = router;

@@ -1,8 +1,8 @@
-import Cart from "../models/cart.js";
-import Pengujian from "../models/pengujian.js";
-import Users from "../models/user.js";
+const Cart = require('../models/cart.js');
+const Pengujian = require('../models/pengujian.js');
+const Users = require('../models/user.js');
 
-export const createCartServices = async (
+exports.createCartServices = async (
   res,
   user_id,
   pengujian_id,
@@ -12,13 +12,13 @@ export const createCartServices = async (
     const user = await Users.findByPk(user_id);
 
     if (!user) {
-      return res.status(404).json({ message: "User Not Found!" });
+      return res.status(404).json({ message: 'User Not Found!' });
     }
 
     const pengujian = await Pengujian.findByPk(pengujian_id);
 
     if (!pengujian) {
-      return res.status(404).json({ message: "Pengujian Not Found!" });
+      return res.status(404).json({ message: 'Pengujian Not Found!' });
     }
 
     const cart = await Cart.create({
@@ -32,14 +32,14 @@ export const createCartServices = async (
   }
 };
 
-export const deleteCartServices = async (res, id) => {
+exports.deleteCartServices = async (res, id) => {
   try {
     const cart = await Cart.findByPk(id);
 
     if (!cart) {
       res.status(404).json({
         status: 404,
-        message: "Data Not Found!",
+        message: 'Data Not Found!',
       });
     }
 

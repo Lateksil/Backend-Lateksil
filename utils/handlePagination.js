@@ -1,10 +1,10 @@
-import { Op } from "sequelize";
-import {
+const { Op } = require('sequelize');
+const {
   handleResponseError,
   handleResponseSuccess,
-} from "./handleResponse.js";
+} = require('./handleResponse.js');
 
-export const handlePagination = async (
+exports.handlePagination = async (
   req,
   res,
   attribute,
@@ -20,9 +20,9 @@ export const handlePagination = async (
 
   const viewAttributeData = attribute;
 
-  if (search !== "") {
+  if (search !== '') {
     const searchCriteria = allSearch.map((key) => ({
-      [key]: { [Op.iLike]: `%${search}%` },
+      [key]: { [Op.like]: `%${search}%` },
     }));
 
     whereClause = {
@@ -31,8 +31,8 @@ export const handlePagination = async (
   }
 
   for (let key in filter) {
-    if (filter.hasOwnProperty(key) !== "") {
-      whereClause[key] = { [Op.iLike]: `%${filter[key]}%` };
+    if (filter.hasOwnProperty(key) && filter[key] !== '') {
+      whereClause[key] = { [Op.like]: `%${filter[key]}%` };
     }
   }
 
@@ -41,7 +41,7 @@ export const handlePagination = async (
       where: whereClause,
       offset,
       limit: parseInt(limit, 10),
-      order: [["updatedAt", orderBy]],
+      order: [['updatedAt', orderBy]],
       attributes: viewAttributeData,
     });
 
@@ -52,7 +52,7 @@ export const handlePagination = async (
     return res.status(200).json({
       status: 200,
       error: false,
-      message: "success",
+      message: 'success',
       data: rows,
       limit,
       totalData: count,

@@ -1,17 +1,18 @@
-import Users from "../models/user.js";
-import { handlePagination } from "../utils/handlePagination.js";
-import {
+const fs = require("fs");
+const Users = require("../models/user.js");
+const { handlePagination } = require("../utils/handlePagination.js");
+const {
   handleResponseDeleteSuccess,
   handleResponseError,
   handleResponseNotFound,
   handleResponseSuccess,
   handleResponseUpdateSuccess,
-} from "../utils/handleResponse.js";
+} = require("../utils/handleResponse.js");
 
-//UPDATE USER PER ID
-export const updateUser = async (req, res) => {
+// UPDATE USER PER ID
+exports.updateUser = async (req, res) => {
   const { id } = req.params;
-  const { full_name } = req.body;
+  const { full_name, no_whatsapp, email, address } = req.body;
 
   try {
     const user = await Users.findByPk(id);
@@ -20,24 +21,32 @@ export const updateUser = async (req, res) => {
       return handleResponseNotFound(res);
     }
 
-    if (user.id === id) {
-      await Users.update(
-        {
-          full_name,
-        },
-        { where: { id } }
-      );
-      return handleResponseUpdateSuccess(res);
-    } else {
-      return handleResponseNotFound(res);
+    console.log(user);
+
+    if (req.file) {
+      if (user.image_profile !== null) {
+        fs.unlinkSync(`uploads/profile/${user.image_profile}`);
+      }
     }
+
+    await Users.update(
+      {
+        full_name,
+        no_whatsapp,
+        email,
+        address,
+        image_profile: req.file ? req.file.filename : user.image_profile,
+      },
+      { where: { id: id } }
+    );
+    return handleResponseUpdateSuccess(res);
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
   }
 };
 
-export const deleteUser = async (req, res) => {
+exports.deleteUser = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -58,8 +67,8 @@ export const deleteUser = async (req, res) => {
   }
 };
 
-//GET ALL USER AND PAGINATION
-export const AllUsers = async (req, res) => {
+// GET ALL USER AND PAGINATION
+exports.AllUsers = async (req, res) => {
   const viewData = [
     "id",
     "full_name",
@@ -68,6 +77,7 @@ export const AllUsers = async (req, res) => {
     "no_whatsapp",
     "address",
     "isActive_payment",
+    "image_profile",
   ];
 
   const searchFilterData = [
@@ -81,8 +91,8 @@ export const AllUsers = async (req, res) => {
   return handlePagination(req, res, viewData, searchFilterData, Users);
 };
 
-//GET INFO USER
-export const infoUser = async (req, res) => {
+// GET INFO USER
+exports.infoUser = async (req, res) => {
   const userEmail = req.params.email;
 
   try {

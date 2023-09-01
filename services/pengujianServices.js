@@ -1,9 +1,8 @@
-import fs from "fs";
-import path from "path";
-import Pengujian from "../models/pengujian.js";
-import { handleResponseNotFound } from "../utils/handleResponse.js";
+const fs = require("fs");
+const path = require("path");
+const Pengujian = require("../models/pengujian.js");
 
-export const createPengujianServices = async (
+exports.createPengujianServices = async (
   image,
   jenis_pengujian,
   code,
@@ -34,7 +33,7 @@ export const createPengujianServices = async (
   }
 };
 
-export const updatePengujianServices = async (
+exports.updatePengujianServices = async (
   id,
   jenis_pengujian,
   code,
@@ -77,7 +76,7 @@ export const updatePengujianServices = async (
   }
 };
 
-export const deletePengujianServices = async (id) => {
+exports.deletePengujianServices = async (id) => {
   try {
     const pengujian = await Pengujian.findByPk(id);
 

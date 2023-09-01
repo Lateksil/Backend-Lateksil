@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
 
 const Pengujian = db.define(
-  "Pengujian",
+  'Pengujian',
   {
     id: {
       type: DataTypes.UUID,
@@ -10,7 +10,7 @@ const Pengujian = db.define(
       primaryKey: true,
     },
     image: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(115),
       defaultValue: null,
     },
     jenis_pengujian: {
@@ -18,27 +18,27 @@ const Pengujian = db.define(
       allowNull: false,
     },
     min_quantity: {
-      type: DataTypes.STRING,
-      defaultValue: "1",
+      type: DataTypes.STRING(15),
+      defaultValue: '1',
     },
     code: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(115),
       allowNull: false,
     },
     category: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(115),
       allowNull: false,
     },
     tempat_pengujian: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(15),
       allowNull: true,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     sampler: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(15),
       allowNull: false,
     },
     catatan_khusus: {
@@ -46,7 +46,7 @@ const Pengujian = db.define(
       allowNull: false,
     },
     price: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       allowNull: false,
     },
   },
@@ -55,11 +55,10 @@ const Pengujian = db.define(
   }
 );
 
-export default Pengujian;
-
+module.exports = Pengujian;
 
 (async () => {
   await Pengujian.sync({ alter: true }).then(() => {
-    console.log("Pengujian Database  & tables created!");
+    console.log('Pengujian Database  & tables created!');
   });
 })();

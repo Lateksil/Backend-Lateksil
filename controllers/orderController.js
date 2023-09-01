@@ -1,25 +1,25 @@
-import db from "../config/database.js";
-import fs from "fs";
-import { Op } from "sequelize";
-import Cart from "../models/cart.js";
-import Item from "../models/itemOrder.js";
-import Order from "../models/order.js";
-import OrderPengujian from "../models/orderPengujian.js";
-import Pengujian from "../models/pengujian.js";
-import Project from "../models/project.js";
-import Status from "../models/status.js";
-import Users from "../models/user.js";
-import {
+const db = require("../config/database.js");
+const fs = require("fs");
+const { Op } = require("sequelize");
+const Cart = require("../models/cart.js");
+const Item = require("../models/itemOrder.js");
+const Order = require("../models/order.js");
+const OrderPengujian = require("../models/orderPengujian.js");
+const Pengujian = require("../models/pengujian.js");
+const Project = require("../models/project.js");
+const Status = require("../models/status.js");
+const Users = require("../models/user.js");
+const {
   handleResponseError,
   handleResponseNotFound,
   handleResponseSuccess,
   handleResponseAuthorization,
   handleResponseUpdateSuccess,
-} from "../utils/handleResponse.js";
-import Payment from "../models/payment.js";
-import Peralatan from "../models/peralatan.js";
+} = require("../utils/handleResponse.js");
+const Payment = require("../models/payment.js");
+const Peralatan = require("../models/peralatan.js");
 
-export const CreateOrder = async (req, res) => {
+exports.CreateOrder = async (req, res) => {
   const { user_id, total_price, nama_proyek, tujuan_proyek } = req.body;
 
   const t = await db.transaction();
@@ -93,7 +93,7 @@ export const CreateOrder = async (req, res) => {
   }
 };
 
-export const getOrderByUser = async (req, res) => {
+exports.getOrderByUser = async (req, res) => {
   const { user_id, page = 1, status_transaction = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;
@@ -157,7 +157,7 @@ export const getOrderByUser = async (req, res) => {
   }
 };
 
-export const getAllOrder = async (req, res) => {
+exports.getAllOrder = async (req, res) => {
   const {
     page = 1,
     status_persetujuan = "",
@@ -165,33 +165,10 @@ export const getAllOrder = async (req, res) => {
     limit = 10,
   } = req.body;
 
-  let whereClauseUsers = {};
-
   const offset = (page - 1) * limit;
-
-  const searchDataUsers = ["full_name", "company_name"];
-
-  if (search !== "") {
-    const searchUsers = searchDataUsers.map((user) => ({
-      [user]: { [Op.iLike]: `%${search}%` },
-    }));
-
-    whereClauseUsers = {
-      [Op.or]: searchUsers,
-    };
-  }
 
   try {
     const { count, rows } = await Order.findAndCountAll({
-      where: {
-        [Op.or]: [
-          {
-            total_price: {
-              [Op.like]: `%${search}%`,
-            },
-          },
-        ],
-      },
       offset,
       limit: parseInt(limit, 10),
       distinct: true,
@@ -199,16 +176,19 @@ export const getAllOrder = async (req, res) => {
       include: [
         {
           model: Users,
-          attributes: ["id", "full_name", "company_name"],
           where: {
             [Op.or]: [
               {
                 full_name: {
                   [Op.like]: `%${search}%`,
                 },
+                company_name: {
+                  [Op.like]: `%${search}%`,
+                },
               },
             ],
           },
+          attributes: ["id", "full_name", "company_name"],
         },
         {
           model: Status,
@@ -222,6 +202,15 @@ export const getAllOrder = async (req, res) => {
         },
         {
           model: Project,
+          where: {
+            [Op.or]: [
+              {
+                nama_proyek: {
+                  [Op.like]: `%${search}%`,
+                },
+              },
+            ],
+          },
           as: "proyek",
           attributes: ["nama_proyek", "tujuan_proyek"],
         },
@@ -245,7 +234,7 @@ export const getAllOrder = async (req, res) => {
   }
 };
 
-export const getOrderById = async (req, res) => {
+exports.getOrderById = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -303,7 +292,7 @@ export const getOrderById = async (req, res) => {
 };
 
 //MANAGERS
-export const getAllPersetujuanPesanan = async (req, res) => {
+exports.getAllPersetujuanPesanan = async (req, res) => {
   const {
     page = 1,
     status_persetujuan = "1",
@@ -385,7 +374,7 @@ export const getAllPersetujuanPesanan = async (req, res) => {
   }
 };
 
-export const getAllTahapPengerjaan = async (req, res) => {
+exports.getAllTahapPengerjaan = async (req, res) => {
   const { page = 1, limit = 10, search = "" } = req.body;
 
   let whereClauseUsers = {};
@@ -465,7 +454,7 @@ export const getAllTahapPengerjaan = async (req, res) => {
   }
 };
 
-export const getAllSelesaiPengerjaan = async (req, res) => {
+exports.getAllSelesaiPengerjaan = async (req, res) => {
   const { page = 1, limit = 10, search = "" } = req.body;
 
   let whereClauseUsers = {};
@@ -545,7 +534,7 @@ export const getAllSelesaiPengerjaan = async (req, res) => {
   }
 };
 
-export const uploadResultFileByIdOrder = async (req, res) => {
+exports.uploadResultFileByIdOrder = async (req, res) => {
   const { id } = req.body;
   try {
     const order = await Order.findByPk(id);
@@ -576,7 +565,7 @@ export const uploadResultFileByIdOrder = async (req, res) => {
   }
 };
 
-export const downloadResultFilePDF = async (req, res) => {
+exports.downloadResultFilePDF = async (req, res) => {
   const { name } = req.params;
 
   try {
@@ -602,7 +591,7 @@ export const downloadResultFilePDF = async (req, res) => {
   }
 };
 
-export const getAllProsesPengujian = async (req, res) => {
+exports.getAllProsesPengujian = async (req, res) => {
   const { page = 1, limit = 10, search = "" } = req.body;
 
   let whereClauseUsers = {};
@@ -681,7 +670,7 @@ export const getAllProsesPengujian = async (req, res) => {
   }
 };
 
-export const getAlatPengujianByOrderId = async (req, res) => {
+exports.getAlatPengujianByOrderId = async (req, res) => {
   const { id } = req.params;
 
   try {

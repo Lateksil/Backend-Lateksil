@@ -1,8 +1,8 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   SendManagerOrder,
   SendToFronlinerOrder,
-} from "../controllers/projectController.js";
+} = require("../controllers/projectController.js");
 const router = express.Router();
 
 //POST
@@ -15,4 +15,4 @@ router.put("/m/project", SendToFronlinerOrder);
 
 //DELETE
 
-export default router;
+module.exports = router;

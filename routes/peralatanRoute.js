@@ -1,5 +1,5 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   createCatatanToPeralatan,
   createPeralatan,
   deletePeralatan,
@@ -7,8 +7,8 @@ import {
   GetOrderPeralatan,
   getStatusPerlatan,
   uploadBuktiAlat,
-} from "../controllers/peralatanController.js";
-import uploadBuktiPengajuanAlat from "../middleware/uploadBuktiPengajuanAlat.js";
+} = require("../controllers/peralatanController.js");
+const uploadBuktiPengajuanAlat = require("../middleware/uploadBuktiPengajuanAlat.js");
 
 const router = express.Router();
 
@@ -19,7 +19,6 @@ router.post("/peralatan", getAllPeralatan);
 router.post("/peralatan/pengajuan", GetOrderPeralatan);
 
 //UPDATE
-
 router.put("/to_tahap_pengujian", createCatatanToPeralatan);
 
 router.put(
@@ -28,12 +27,10 @@ router.put(
   uploadBuktiAlat
 );
 
-
 //GET
 router.get("/peralatan/status/:id", getStatusPerlatan);
-
 
 //DELETE
 router.delete("/peralatan/:id", deletePeralatan);
 
-export default router;
+module.exports = router;

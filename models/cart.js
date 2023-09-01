@@ -1,16 +1,16 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
-import Pengujian from "./pengujian.js";
-import Users from "./user.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
+const Pengujian = require('./pengujian.js');
+const Users = require('./user.js');
 
-const Cart = db.define("cart", {
+const Cart = db.define('cart', {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   quantity: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(15),
     allowNull: false,
   },
 });
@@ -21,10 +21,10 @@ Cart.belongsTo(Users);
 Pengujian.hasMany(Cart);
 Cart.belongsTo(Pengujian);
 
-export default Cart;
+module.exports = Cart;
 
 (async () => {
   await Cart.sync({ alter: true }).then(() => {
-    console.log("Cart Database  & tables created!");
+    console.log('Cart Database  & tables created!');
   });
 })();

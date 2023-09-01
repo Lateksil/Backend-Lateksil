@@ -1,12 +1,12 @@
-import MethodTransaction from "../models/methodTransaction.js";
-import { handlePagination } from "../utils/handlePagination.js";
-import {
+const MethodTransaction = require("../models/methodTransaction.js");
+const { handlePagination } = require("../utils/handlePagination.js");
+const {
   handleResponseError,
   handleResponseNotFound,
   handleResponseSuccess,
-} from "../utils/handleResponse.js";
+} = require("../utils/handleResponse.js");
 
-export const CreateMethodTransaction = async (req, res) => {
+exports.CreateMethodTransaction = async (req, res) => {
   const { type_transaction, bank, name_bank, no_rek } = req.body;
 
   try {
@@ -24,7 +24,7 @@ export const CreateMethodTransaction = async (req, res) => {
   }
 };
 
-export const getAllMethodTransaction = async (req, res) => {
+exports.getAllMethodTransaction = async (req, res) => {
   try {
     const viewData = [
       "id",
@@ -56,7 +56,7 @@ export const getAllMethodTransaction = async (req, res) => {
   }
 };
 
-export const ActiveMethodTransaction = async (req, res) => {
+exports.ActiveMethodTransaction = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -76,7 +76,7 @@ export const ActiveMethodTransaction = async (req, res) => {
   }
 };
 
-export const getActiveMethodTransaction = async (req, res) => {
+exports.getActiveMethodTransaction = async (req, res) => {
   try {
     const activeMethod = await MethodTransaction.findOne({
       where: { is_Active: "1" },

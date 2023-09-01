@@ -1,13 +1,13 @@
-import express from "express";
+const express = require("express");
 const router = express.Router();
 
-import {
+const {
   createCategory,
   deleteCategory,
   getAllCategory,
   updateCategory,
-} from "../controllers/categoryController.js";
-import { verifyTokenFrontliner } from "../middleware/verifyTokenFrontliner.js";
+} = require("../controllers/categoryController.js");
+const verifyTokenFrontliner = require("../middleware/verifyTokenFrontliner.js");
 
 //POST
 router.post("/categories/client", getAllCategory);
@@ -22,4 +22,4 @@ router.put("/category/:id", updateCategory);
 //DELETE
 router.delete("/category/:id", verifyTokenFrontliner, deleteCategory);
 
-export default router;
+module.exports = router;

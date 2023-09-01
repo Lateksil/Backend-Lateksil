@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
 
 const PeralatanPengujian = db.define(
-  "PeralatanPengujian",
+  'PeralatanPengujian',
   {
     id: {
       type: DataTypes.UUID,
@@ -10,11 +10,11 @@ const PeralatanPengujian = db.define(
       primaryKey: true,
     },
     status_peralatan: {
-      type: DataTypes.STRING,
-      defaultValue: "0", // if 0 = Belum diambil Alatnya, if 1 = Sedang diambil, if 2 = Selesai diambil
+      type: DataTypes.STRING(5),
+      defaultValue: '0', // if 0 = Belum diambil Alatnya, if 1 = Sedang diambil, if 2 = Selesai diambil
     },
     image_pengajuan_alat: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(115),
       defaultValue: null,
     },
     catatan_khusus: {
@@ -28,10 +28,10 @@ const PeralatanPengujian = db.define(
   }
 );
 
-export default PeralatanPengujian;
+module.exports = PeralatanPengujian;
 
 (async () => {
   await PeralatanPengujian.sync({ alter: true }).then(() => {
-    console.log("PeralatanPengujian Database  & tables created!");
+    console.log('PeralatanPengujian Database  & tables created!');
   });
 })();

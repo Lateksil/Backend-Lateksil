@@ -1,8 +1,8 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   updateDonePengujianPemesanan,
   updateStatusToCostumer,
-} from "../controllers/statusController.js";
+} = require("../controllers/statusController.js");
 const router = express.Router();
 
 //POST
@@ -15,4 +15,4 @@ router.put("/status/to_done_pemesanan", updateDonePengujianPemesanan);
 
 //DELETE
 
-export default router;
+module.exports = router;

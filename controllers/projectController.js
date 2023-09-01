@@ -1,12 +1,12 @@
-import Project from "../models/project.js";
-import Status from "../models/status.js";
-import {
+const Project = require("../models/project.js");
+const Status = require("../models/status.js");
+const {
   handleResponseError,
   handleResponseNotFound,
   handleResponseUpdateSuccess,
-} from "../utils/handleResponse.js";
+} = require("../utils/handleResponse.js");
 
-export const SendManagerOrder = async (req, res) => {
+exports.SendManagerOrder = async (req, res) => {
   const {
     id,
     no_refrensi,
@@ -56,7 +56,7 @@ export const SendManagerOrder = async (req, res) => {
   }
 };
 
-export const SendToFronlinerOrder = async (req, res) => {
+exports.SendToFronlinerOrder = async (req, res) => {
   const {
     id,
     status_persetujuan,

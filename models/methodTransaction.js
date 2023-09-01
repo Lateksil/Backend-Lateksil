@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
 
 const MethodTransaction = db.define(
-  "MethodTransaction",
+  'MethodTransaction',
   {
     id: {
       type: DataTypes.UUID,
@@ -10,24 +10,24 @@ const MethodTransaction = db.define(
       primaryKey: true,
     },
     type_transaction: {
-      type: DataTypes.STRING,
-      defaultValue: "Transfer",
+      type: DataTypes.STRING(45),
+      defaultValue: 'Transfer',
     },
     bank: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       allowNull: true,
     },
     name_bank: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(115),
       allowNull: true,
     },
     no_rek: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(35),
       allowNull: true,
     },
     is_Active: {
-      type: DataTypes.STRING,
-      defaultValue: "0",
+      type: DataTypes.STRING(5),
+      defaultValue: '0',
     },
   },
   {
@@ -35,10 +35,10 @@ const MethodTransaction = db.define(
   }
 );
 
-export default MethodTransaction;
+module.exports = MethodTransaction;
 
 (async () => {
   await MethodTransaction.sync({ alter: true }).then(() => {
-    console.log("Method Transaction Database  & tables created!");
+    console.log('Method Transaction Database  & tables created!');
   });
 })();

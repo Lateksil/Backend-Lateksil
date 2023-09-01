@@ -1,17 +1,16 @@
-import Cart from "../models/cart.js";
-import Pengujian from "../models/pengujian.js";
-import {
+const Cart = require('../models/cart.js');
+const Pengujian = require('../models/pengujian.js');
+const {
   createCartServices,
   deleteCartServices,
-} from "../services/cartServices.js";
-import {
+} = require('../services/cartServices.js');
+const {
   handleResponseDeleteSuccess,
   handleResponseError,
-  handleResponseNotFound,
   handleResponseSuccess,
-} from "../utils/handleResponse.js";
+} = require('../utils/handleResponse.js');
 
-export const createCart = async (req, res) => {
+exports.createCart = async (req, res) => {
   const { user_id } = req.body;
   const { pengujian_id, quantity } = req.body;
 
@@ -24,7 +23,7 @@ export const createCart = async (req, res) => {
   }
 };
 
-export const deleteCart = async (req, res) => {
+exports.deleteCart = async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -38,18 +37,18 @@ export const deleteCart = async (req, res) => {
   }
 };
 
-export const getCartByUserId = async (req, res) => {
+exports.getCartByUserId = async (req, res) => {
   const { user_id } = req.body;
   try {
     const cart = await Cart.findAll({
       where: {
         UserId: user_id,
       },
-      attributes: ["id", "quantity", "PengujianId",],
+      attributes: ['id', 'quantity', 'PengujianId'],
       include: [
         {
           model: Pengujian,
-          attributes: { exclude: ["createdAt", "updatedAt"] },
+          attributes: { exclude: ['createdAt', 'updatedAt'] },
         },
       ],
     });

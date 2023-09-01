@@ -1,8 +1,8 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
+const { DataTypes } = require('sequelize');
+const db = require('../config/database.js');
 
 const Payment = db.define(
-  "payment",
+  'payment',
   {
     id: {
       type: DataTypes.UUID,
@@ -10,23 +10,23 @@ const Payment = db.define(
       primaryKey: true,
     },
     full_name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       allowNull: false,
     },
     company_name: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       allowNull: false,
     },
     total_price: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(45),
       allowNull: true,
     },
     image_payment: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(115),
       allowNull: true,
     },
     image_kwitansi: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(115),
       allowNull: true,
     },
   },
@@ -35,10 +35,10 @@ const Payment = db.define(
   }
 );
 
-export default Payment;
+module.exports = Payment;
 
 (async () => {
   await Payment.sync({ alter: true }).then(() => {
-    console.log("Payment Database  & tables created!");
+    console.log('Payment Database  & tables created!');
   });
 })();

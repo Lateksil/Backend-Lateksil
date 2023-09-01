@@ -1,10 +1,10 @@
-import express from "express";
-import {
+const express = require("express");
+const {
   ActiveMethodTransaction,
   CreateMethodTransaction,
   getActiveMethodTransaction,
   getAllMethodTransaction,
-} from "../controllers/methodTransactionController.js";
+} = require("../controllers/methodTransactionController.js");
 
 const router = express.Router();
 
@@ -19,4 +19,4 @@ router.put("/method_transaction/:id", ActiveMethodTransaction);
 router.get("/method_transaction", getActiveMethodTransaction);
 //DELETE
 
-export default router;
+module.exports = router;

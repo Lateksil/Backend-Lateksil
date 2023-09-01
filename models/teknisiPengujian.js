@@ -1,7 +1,7 @@
-import { DataTypes } from "sequelize";
-import db from "../config/database.js";
-import Order from "./order.js";
-import Users from "./user.js";
+const { DataTypes } = require("sequelize");
+const db = require("../config/database.js");
+const Order = require("./order.js");
+const Users = require("./user.js");
 
 const TeknisiPengujian = db.define(
   "TeknisiPengujian",
@@ -26,21 +26,17 @@ const TeknisiPengujian = db.define(
       },
     },
     status_task: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(5),
       defaultValue: "0", // if 0 = Belum Dikerjakan, if 1 = Sedang Dikerjakan, if 2 = Selesai Dikerjakan
     },
     status_pengerjaan: {
-      type: DataTypes.STRING,
+      type: DataTypes.STRING(5),
       defaultValue: "0", // if 0 = Belum Dikerjakan TEKNISI, if 1 = Sedang Dikerjakan, if 2 = Uploaded file PDF, if = 3 = Selesai Kirim ke Manager
     },
     file_task_pengujian: {
       type: DataTypes.STRING,
       defaultValue: null,
     },
-    // status_peralatan: {
-    //   type: DataTypes.STRING,
-    //   defaultValue: "0", // if 0 = Belum diambil Alatnya, if 1 = Sedang diambil, if 2 = Selesai diambil
-    // },
   },
   {
     freezeTableName: true,
@@ -54,7 +50,7 @@ TeknisiPengujian.belongsTo(Users, { as: "teknisi", foreignKey: "UserId" });
 Order.hasMany(TeknisiPengujian);
 TeknisiPengujian.belongsTo(Order);
 
-export default TeknisiPengujian;
+module.exports = TeknisiPengujian;
 
 (async () => {
   await TeknisiPengujian.sync({ alter: true }).then(() => {

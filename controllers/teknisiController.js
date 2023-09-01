@@ -1,22 +1,22 @@
-import fs from "fs";
+const fs = require("fs");
 
-import Users from "../models/user.js";
-import Order from "../models/order.js";
-import TeknisiPengujian from "../models/teknisiPengujian.js";
-import {
+const Users = require("../models/user.js");
+const Order = require("../models/order.js");
+const TeknisiPengujian = require("../models/teknisiPengujian.js");
+const {
   handleResponseAuthorization,
   handleResponseDeleteSuccess,
   handleResponseError,
   handleResponseNotFound,
   handleResponseSuccess,
-} from "../utils/handleResponse.js";
-import Status from "../models/status.js";
-import Project from "../models/project.js";
-import Item from "../models/itemOrder.js";
-import Pengujian from "../models/pengujian.js";
-import { Op } from "sequelize";
+} = require("../utils/handleResponse.js");
+const Status = require("../models/status.js");
+const Project = require("../models/project.js");
+const Item = require("../models/itemOrder.js");
+const Pengujian = require("../models/pengujian.js");
+const { Op } = require("sequelize");
 
-export const GetAllTeknisi = async (req, res) => {
+exports.GetAllTeknisi = async (req, res) => {
   const { page = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;
@@ -66,7 +66,7 @@ export const GetAllTeknisi = async (req, res) => {
   }
 };
 
-export const CreateTeknisiPengujian = async (req, res) => {
+exports.CreateTeknisiPengujian = async (req, res) => {
   const { teknisi_id, order_id } = req.body;
   try {
     const findUser = await Users.findByPk(teknisi_id);
@@ -89,7 +89,7 @@ export const CreateTeknisiPengujian = async (req, res) => {
   }
 };
 
-export const GetAllTeknisiPengujian = async (req, res) => {
+exports.GetAllTeknisiPengujian = async (req, res) => {
   try {
     const getAllTeknisiPengujian = await TeknisiPengujian.findAll({
       attributes: { exclude: ["UserId", "orderId"] },
@@ -157,7 +157,7 @@ export const GetAllTeknisiPengujian = async (req, res) => {
   }
 };
 
-export const GetTeknisiByOrder = async (req, res) => {
+exports.GetTeknisiByOrder = async (req, res) => {
   const { id } = req.params;
   try {
     const getAllTeknisiPengujian = await TeknisiPengujian.findAll({
@@ -179,7 +179,7 @@ export const GetTeknisiByOrder = async (req, res) => {
   }
 };
 
-export const deleteTeknisiPengujian = async (req, res) => {
+exports.deleteTeknisiPengujian = async (req, res) => {
   const { id } = req.params;
   try {
     const teknisiPengujian = await TeknisiPengujian.findByPk(id);
@@ -198,7 +198,7 @@ export const deleteTeknisiPengujian = async (req, res) => {
   }
 };
 
-export const GetTeknisiByUserId = async (req, res) => {
+exports.GetTeknisiByUserId = async (req, res) => {
   const { teknisi_id, status_task = "", page = 1, limit = 10 } = req.body;
 
   const offset = (page - 1) * limit;
@@ -256,7 +256,7 @@ export const GetTeknisiByUserId = async (req, res) => {
   }
 };
 
-export const uploadLaporanTeknisi = async (req, res) => {
+exports.uploadLaporanTeknisi = async (req, res) => {
   const { id, status_task, status_pengerjaan } = req.body;
 
   try {
@@ -289,7 +289,7 @@ export const uploadLaporanTeknisi = async (req, res) => {
   }
 };
 
-export const viewTaskPengujianPDF = async (req, res) => {
+exports.viewTaskPengujianPDF = async (req, res) => {
   const { name } = req.params;
 
   try {
@@ -311,7 +311,7 @@ export const viewTaskPengujianPDF = async (req, res) => {
   }
 };
 
-export const downloadTaskPengujianPDF = async (req, res) => {
+exports.downloadTaskPengujianPDF = async (req, res) => {
   const { name } = req.params;
 
   try {

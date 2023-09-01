@@ -1,14 +1,14 @@
-import nodemailer from "nodemailer";
-import crypto from "crypto";
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
-export const SendVerificationEmail = async (user) => {
+exports.SendVerificationEmail = async (user) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      service: 'gmail',
       secure: false,
       auth: {
-        user: "balapmotor70@gmail.com",
-        pass: "xktmutuxxxqdtydx",
+        user: 'balapmotor70@gmail.com',
+        pass: 'xktmutuxxxqdtydx',
       },
     });
 
@@ -16,18 +16,18 @@ export const SendVerificationEmail = async (user) => {
 
     user.verificationCode = verificationCode;
     await user.save();
-    
+
     const mailOptions = {
-      from: "balapmotor70@gmail.com",
+      from: 'balapmotor70@gmail.com',
       to: user.email,
-      subject: "Verifikasi Email",
+      subject: 'Verifikasi Email',
       text:
         `Halo ${user.full_name} \n\n` +
-        "Terima kasih telah mendaftar. Berikut adalah kode verifikasi Anda:\n\n" +
+        'Terima kasih telah mendaftar. Berikut adalah kode verifikasi Anda:\n\n' +
         `Code : ${verificationCode}\n\n` +
-        "Silakan masukkan kode tersebut pada halaman verifikasi akun Anda.\n\n" +
-        "Salam,\n" +
-        "Tim Support",
+        'Silakan masukkan kode tersebut pada halaman verifikasi akun Anda.\n\n' +
+        'Salam,\n' +
+        'Tim Support',
     };
 
     await transporter.sendMail(mailOptions);

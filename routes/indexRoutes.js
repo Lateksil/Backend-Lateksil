@@ -1,15 +1,15 @@
-import authRoute from "./authRoutes.js";
-import userRoute from "./userRoutes.js";
-import category from "./categoryRoute.js";
-import pengujian from "./pengujianRoute.js";
-import cart from "./cartRoute.js";
-import Order from "./orderRoute.js";
-import Project from "./projectRoute.js";
-import Status from "./statusRoute.js";
-import MethodTransaction from "./methodTransactionRoute.js";
-import Payment from "./paymentRoute.js";
-import Peralatan from "./peralatanRoute.js";
-import Teknisi from "./teknisiRoute.js";
+const authRoute = require('./authRoutes.js');
+const userRoute = require('./userRoutes.js');
+const category = require('./categoryRoute.js');
+const pengujian = require('./pengujianRoute.js');
+const cart = require('./cartRoute.js');
+const Order = require('./orderRoute.js');
+const Project = require('./projectRoute.js');
+const Status = require('./statusRoute.js');
+const MethodTransaction = require('./methodTransactionRoute.js');
+const Payment = require('./paymentRoute.js');
+const Peralatan = require('./peralatanRoute.js');
+const Teknisi = require('./teknisiRoute.js');
 
 const TerminalRoutes = (app) => {
   app.use(authRoute);
@@ -24,7 +24,6 @@ const TerminalRoutes = (app) => {
   app.use(Payment);
   app.use(Peralatan);
   app.use(Teknisi);
-  app.use(Teknisi);
 };
 
-export default TerminalRoutes;
+module.exports = TerminalRoutes;
