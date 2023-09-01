@@ -48,6 +48,10 @@ const Users = db.define('User', {
     type: DataTypes.STRING,
     defaultValue: 'passive',
   },
+  reset_password_token: {
+    type: DataTypes.STRING(115),
+    defaultValue: null,
+  }
 });
 
 module.exports = Users;
