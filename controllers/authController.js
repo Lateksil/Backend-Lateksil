@@ -41,9 +41,9 @@ exports.Register = async (req, res) => {
 };
 
 exports.Login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
+  try {
     const user = await Users.findOne({
       where: {
         email,
@@ -73,7 +73,7 @@ exports.Login = async (req, res) => {
 
 exports.ForgotPassword = async (req, res) => {
   try {
-    const { email } = req.params;
+    const { email } = req.body;
 
     const user = await Users.findOne({ where: { email } });
 
@@ -95,6 +95,32 @@ exports.ForgotPassword = async (req, res) => {
     });
     return handleResponseSuccess(res, "Reset Password Terkirim");
   } catch (error) {
+    return handleResponseError(res);
+  }
+};
+
+exports.ResetPassword = async (req, res) => {
+  const { token } = req.params;
+  const { password } = req.body;
+  try {
+    const user = await Users.findOne({
+      where: { reset_password_token: token },
+    });
+
+    if(!user) {
+      return handleResponse(res, 404, "Gagal, Silahkan ajukan permintaan");
+    }
+
+    const salt = await bcrypt.genSalt();
+    const hashPassword = await bcrypt.hash(password, salt);
+
+    user.password = hashPassword;
+    user.reset_password_token = null;
+    await user.save();
+
+    return handleResponseSuccess(res, "Berhasil Ganti Kata sandi");
+  } catch (error) {
+    console.log(error);
     return handleResponseError(res);
   }
 };
