@@ -55,10 +55,11 @@ exports.SendResetPassowordLink = async ({ email, full_name, token }) => {
       <div style="text-align: center;">
         <img w="25px" src="https://lateksil.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FLogo_Lateksil.91319725.png&w=128&q=100" alt="Company Logo" width="100" height="100">
         <h2>Ganti Password Baru</h2>
+        <p>Helo ${full_name},</p>
         <p>Klik tombol di bawah ini untuk mengganti kata sandi Anda:</p>
-        <a href="http://localhost:3000/reset-password/${token}" style="display: inline-block; padding: 10px 20px; background-color: #2c5281; color: #fff; text-decoration: none; border-radius: 5px;">Ganti Password</a>
+        <a href="${process.env.BASE_URL_CLIENT}/reset-password/${token}" style="display: inline-block; padding: 10px 20px; background-color: #2c5281; color: #fff; text-decoration: none; border-radius: 5px;">Ganti Password</a>
         <p>Jika Tombol tidak berfungsi, akses URL berikut:</p>
-        <p>http://localhost:3000/reset-password/${token}</p>
+        <p>${process.env.BASE_URL_CLIENT}/reset-password/${token}</p>
       </div>
     `,
     };
