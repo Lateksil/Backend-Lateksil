@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Users = require("../models/user.js");
 const {
@@ -31,7 +31,7 @@ exports.Register = async (req, res) => {
       no_whatsapp,
       address,
       company_name,
-      password,
+      password: hashPassword,
     });
 
     return handleResponseSuccess(res, "Pendaftaran Akun berhasil.");
