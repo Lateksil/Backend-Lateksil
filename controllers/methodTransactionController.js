@@ -4,6 +4,7 @@ const {
   handleResponseError,
   handleResponseNotFound,
   handleResponseSuccess,
+  handleResponseDeleteSuccess,
 } = require("../utils/handleResponse.js");
 
 exports.CreateMethodTransaction = async (req, res) => {
@@ -84,6 +85,23 @@ exports.getActiveMethodTransaction = async (req, res) => {
     });
 
     return handleResponseSuccess(res, activeMethod);
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+exports.deleteMethodTransaction = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const methodTransaction = await MethodTransaction.findByPk(id);
+
+    if (!methodTransaction) {
+      return handleResponseNotFound(res);
+    }
+
+    await methodTransaction.destroy();
+    return handleResponseDeleteSuccess(res);
   } catch (error) {
     console.log(error);
     return handleResponseError(res);

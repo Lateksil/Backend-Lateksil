@@ -4,6 +4,7 @@ const {
   CreateMethodTransaction,
   getActiveMethodTransaction,
   getAllMethodTransaction,
+  deleteMethodTransaction,
 } = require("../controllers/methodTransactionController.js");
 
 const router = express.Router();
@@ -18,5 +19,6 @@ router.put("/method_transaction/:id", ActiveMethodTransaction);
 //GET
 router.get("/method_transaction", getActiveMethodTransaction);
 //DELETE
+router.delete("/method_transaction/:id", deleteMethodTransaction);
 
 module.exports = router;
