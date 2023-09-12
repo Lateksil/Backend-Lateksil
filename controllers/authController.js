@@ -5,8 +5,12 @@ const {
   handleResponse,
   handleResponseError,
   handleResponseSuccess,
+  handleResponseAuthorization,
 } = require("../utils/handleResponse.js");
-const { SendResetPassowordLink } = require("../services/authServices.js");
+const {
+  SendResetPassowordLink,
+  SendVerificationEmail,
+} = require("../services/authServices.js");
 
 exports.Register = async (req, res) => {
   const { full_name, email, no_whatsapp, address, company_name, password } =
@@ -25,7 +29,7 @@ exports.Register = async (req, res) => {
       return handleResponse(res, 404, "Email Sudah Terdaftar");
     }
 
-    await Users.create({
+    const create = await Users.create({
       full_name,
       email,
       no_whatsapp,
@@ -33,8 +37,45 @@ exports.Register = async (req, res) => {
       company_name,
       password: hashPassword,
     });
+    await SendVerificationEmail(create);
 
     return handleResponseSuccess(res, "Pendaftaran Akun berhasil.");
+  } catch (error) {
+    return handleResponseError(res);
+  }
+};
+
+exports.VerifyCodeRegister = async (req, res) => {
+  try {
+    const { email, code } = req.body;
+
+    const user = await Users.findOne({ where: { email, isVerified: false } });
+
+    if (user) {
+      if (user.verificationCode === code) {
+        user.isVerified = true;
+        user.verificationCode = null;
+        await user.save();
+
+        return handleResponseAuthorization(
+          res,
+          200,
+          "Verifikasi berhasil. Akun Anda telah diaktifkan"
+        );
+      } else {
+        return handleResponseAuthorization(
+          res,
+          400,
+          "Kode verifikasi tidak cocok. Silakan coba lagi."
+        );
+      }
+    } else {
+      return handleResponseAuthorization(
+        res,
+        404,
+        "Pengguna tidak ditemukan atau akun telah terverifikasi."
+      );
+    }
   } catch (error) {
     return handleResponseError(res);
   }
@@ -47,6 +88,7 @@ exports.Login = async (req, res) => {
     const user = await Users.findOne({
       where: {
         email,
+        isVerified: true,
       },
     });
 
@@ -75,7 +117,7 @@ exports.ForgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
 
-    const user = await Users.findOne({ where: { email } });
+    const user = await Users.findOne({ where: { email, isVerified: true } });
 
     if (!user) {
       return handleResponse(res, 404, "Email Belum Terdaftar");
@@ -104,10 +146,10 @@ exports.ResetPassword = async (req, res) => {
   const { password } = req.body;
   try {
     const user = await Users.findOne({
-      where: { reset_password_token: token },
+      where: { reset_password_token: token, isVerified: true },
     });
 
-    if(!user) {
+    if (!user) {
       return handleResponse(res, 404, "Gagal, Silahkan ajukan permintaan");
     }
 

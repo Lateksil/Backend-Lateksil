@@ -6,12 +6,14 @@ const {
   Register,
   ForgotPassword,
   ResetPassword,
+  VerifyCodeRegister,
 } = require("../controllers/authController.js");
 
 // POST
 router.post("/auth/register", Register);
 router.post("/auth/login", Login);
 router.post("/auth/forgot-password", ForgotPassword);
+router.post("/auth/verify", VerifyCodeRegister);
 
 // UPDATE
 router.put("/auth/reset-password/:token", ResetPassword);

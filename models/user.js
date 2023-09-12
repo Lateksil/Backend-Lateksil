@@ -1,7 +1,7 @@
-const { DataTypes } = require('sequelize');
-const db = require('../config/database.js');
+const { DataTypes } = require("sequelize");
+const db = require("../config/database.js");
 
-const Users = db.define('User', {
+const Users = db.define("User", {
   id: {
     type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
@@ -42,22 +42,30 @@ const Users = db.define('User', {
   },
   role: {
     type: DataTypes.STRING(15),
-    defaultValue: 'user',
+    defaultValue: "user",
+  },
+  isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  verificationCode: {
+    type: DataTypes.STRING(5),
+    allowNull: true,
   },
   isActive_payment: {
     type: DataTypes.STRING,
-    defaultValue: 'passive',
+    defaultValue: "passive",
   },
   reset_password_token: {
     type: DataTypes.STRING(115),
     defaultValue: null,
-  }
+  },
 });
 
 module.exports = Users;
 
 (async () => {
   await Users.sync({ alter: true }).then(() => {
-    console.log('User Database & tables created!');
+    console.log("User Database & tables created!");
   });
 })();
