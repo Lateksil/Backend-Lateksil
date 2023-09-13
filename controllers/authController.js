@@ -20,13 +20,38 @@ exports.Register = async (req, res) => {
   const hashPassword = await bcrypt.hash(password, salt);
 
   try {
-    const user = await Users.findOne({
+    const existingEmail = await Users.findOne({
       where: {
         email,
+        isVerified: true,
       },
     });
-    if (user) {
+    if (existingEmail) {
       return handleResponse(res, 404, "Email Sudah Terdaftar");
+    }
+
+    const verifiedEmail = await Users.findOne({
+      where: {
+        email,
+        isVerified: false,
+      },
+    });
+
+    if (verifiedEmail) {
+      verifiedEmail.full_name = full_name;
+      verifiedEmail.email = email;
+      verifiedEmail.no_whatsapp = no_whatsapp;
+      verifiedEmail.address = address;
+      verifiedEmail.company_name = company_name;
+      verifiedEmail.password = hashPassword;
+      await verifiedEmail.save();
+
+      await SendVerificationEmail(verifiedEmail);
+
+      return handleResponseSuccess(
+        res,
+        "Pendaftaran berhasil. Silakan periksa email Anda untuk verifikasi."
+      );
     }
 
     const create = await Users.create({
