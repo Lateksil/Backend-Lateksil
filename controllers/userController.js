@@ -8,6 +8,7 @@ const {
   handleResponseSuccess,
   handleResponseUpdateSuccess,
 } = require("../utils/handleResponse.js");
+const { Op } = require("sequelize");
 
 // UPDATE USER PER ID
 exports.updateUser = async (req, res) => {
@@ -89,6 +90,73 @@ exports.AllUsers = async (req, res) => {
     "isActive_payment",
   ];
   return handlePagination(req, res, viewData, searchFilterData, Users);
+};
+
+exports.AllCostumer = async (req, res) => {
+  const { page = 1, limit = 10, search = "" } = req.body;
+
+  const offset = (page - 1) * limit;
+
+  const viewData = [
+    "id",
+    "full_name",
+    "email",
+    "company_name",
+    "no_whatsapp",
+    "address",
+    "isActive_payment",
+    "image_profile",
+  ];
+
+  const searchFilterData = [
+    "full_name",
+    "email",
+    "company_name",
+    "no_whatsapp",
+    "address",
+    "isActive_payment",
+  ];
+
+  const searchUser = searchFilterData.map((key) => ({
+    [key]: { [Op.like]: `%${search}%` },
+  }));
+
+  console.log(searchUser);
+
+  try {
+    const { count, rows } = await Users.findAndCountAll({
+      where: {
+        [Op.and]: [
+          {
+            [Op.or]: searchUser,
+          },
+          { role: "user" },
+          { isVerified: true },
+        ],
+      },
+      offset,
+      limit: parseInt(limit, 10),
+      order: [["updatedAt", "DESC"]],
+      attributes: viewData,
+    });
+
+    if (rows.length === 0) {
+      return handleResponseSuccess(res, null);
+    }
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    return handleResponseError(res);
+  }
 };
 
 // GET INFO USER
