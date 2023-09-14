@@ -93,7 +93,7 @@ exports.AllUsers = async (req, res) => {
 };
 
 exports.AllCostumer = async (req, res) => {
-  const { page = 1, limit = 10, search = "" } = req.body;
+  const { page = 1, limit = 10, search = "", isActive_payment = "" } = req.body;
 
   const offset = (page - 1) * limit;
 
@@ -118,10 +118,8 @@ exports.AllCostumer = async (req, res) => {
   ];
 
   const searchUser = searchFilterData.map((key) => ({
-    [key]: { [Op.like]: `%${search}%` },
+    [key]: { [Op.iLike]: `%${search}%` },
   }));
-
-  console.log(searchUser);
 
   try {
     const { count, rows } = await Users.findAndCountAll({
@@ -132,6 +130,11 @@ exports.AllCostumer = async (req, res) => {
           },
           { role: "user" },
           { isVerified: true },
+          {
+            isActive_payment: {
+              [Op.like]: `%${isActive_payment}%`,
+            },
+          },
         ],
       },
       offset,
