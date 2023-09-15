@@ -139,7 +139,7 @@ exports.AllCostumer = async (req, res) => {
       },
       offset,
       limit: parseInt(limit, 10),
-      order: [["updatedAt", "DESC"]],
+      order: [["company_name", "ASC"]],
       attributes: viewData,
     });
 
