@@ -249,6 +249,7 @@ exports.getOrderById = async (req, res) => {
             "no_whatsapp",
             "address",
             "company_name",
+            "image_profile"
           ],
         },
         {
