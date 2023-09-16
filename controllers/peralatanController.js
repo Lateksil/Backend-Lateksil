@@ -39,8 +39,7 @@ exports.createPeralatan = async (req, res) => {
 exports.deletePeralatan = async (req, res) => {
   const { id } = req.params;
   try {
-
-    const peralatan = await Peralatan.findByPk(id)
+    const peralatan = await Peralatan.findByPk(id);
 
     if (!peralatan) {
       return handleResponseNotFound(res);
@@ -52,12 +51,11 @@ exports.deletePeralatan = async (req, res) => {
     } else {
       return handleResponseNotFound(res);
     }
-    
   } catch (error) {
     console.log(error);
     return handleResponseError(res);
   }
-}
+};
 
 exports.getAllPeralatan = async (req, res) => {
   const { page = 1, limit = 10 } = req.body;
@@ -94,7 +92,6 @@ exports.getAllPeralatan = async (req, res) => {
     return handleResponseError(res);
   }
 };
-
 
 exports.GetOrderPeralatan = async (req, res) => {
   const { page = 1, limit = 10 } = req.body;
@@ -263,6 +260,10 @@ exports.createCatatanToPeralatan = async (req, res) => {
     const { order_id, catatan_khusus } = req.body;
 
     const TahapPengujian = await Status.findByPk(order_id);
+
+    if (!TahapPengujian) {
+      return handleResponseNotFound(res);
+    }
 
     await PeralatanPengujian.create({
       id: order_id,
