@@ -7,6 +7,7 @@ const {
   handleResponseNotFound,
   handleResponseSuccess,
   handleResponseUpdateSuccess,
+  handleResponseAuthorization,
 } = require("../utils/handleResponse.js");
 const { Op } = require("sequelize");
 
@@ -21,8 +22,6 @@ exports.updateUser = async (req, res) => {
     if (!user) {
       return handleResponseNotFound(res);
     }
-
-    console.log(user);
 
     if (req.file) {
       if (user.image_profile !== null) {
@@ -70,6 +69,10 @@ exports.deleteUser = async (req, res) => {
 
 // GET ALL USER AND PAGINATION
 exports.AllUsers = async (req, res) => {
+  const { page = 1, limit = 10, search = "", role = "" } = req.body;
+
+  const offset = (page - 1) * limit;
+
   const viewData = [
     "id",
     "full_name",
@@ -79,6 +82,7 @@ exports.AllUsers = async (req, res) => {
     "address",
     "isActive_payment",
     "image_profile",
+    "role",
   ];
 
   const searchFilterData = [
@@ -88,8 +92,51 @@ exports.AllUsers = async (req, res) => {
     "no_whatsapp",
     "address",
     "isActive_payment",
+    "role",
   ];
-  return handlePagination(req, res, viewData, searchFilterData, Users);
+
+  const searchUser = searchFilterData.map((key) => ({
+    [key]: { [Op.iLike]: `%${search}%` },
+  }));
+
+  try {
+    const { count, rows } = await Users.findAndCountAll({
+      where: {
+        [Op.and]: [
+          {
+            [Op.or]: searchUser,
+          },
+          { isVerified: true },
+          {
+            role: {
+              [Op.like]: `%${role}%`,
+            },
+          },
+        ],
+      },
+      offset,
+      limit: parseInt(limit, 10),
+      order: [["company_name", "ASC"]],
+      attributes: viewData,
+    });
+
+    if (rows.length === 0) {
+      return handleResponseSuccess(res, null);
+    }
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    return handleResponseError(res);
+  }
 };
 
 exports.AllCostumer = async (req, res) => {
@@ -175,6 +222,34 @@ exports.infoUser = async (req, res) => {
       return handleResponseNotFound(res);
     }
     return handleResponseSuccess(res, infoUser);
+  } catch (error) {
+    return handleResponseError(res);
+  }
+};
+
+exports.updateRoleUser = async (req, res) => {
+  const { id, role } = req.body;
+  try {
+    const user = await Users.findByPk(id);
+
+    if (!user) {
+      return handleResponseNotFound(res);
+    }
+
+    await Users.update(
+      {
+        role,
+      },
+      {
+        where: { id: id },
+      }
+    );
+
+    return handleResponseAuthorization(
+      res,
+      200,
+      "Perubahan Izin Role Akses Berhasil"
+    );
   } catch (error) {
     return handleResponseError(res);
   }

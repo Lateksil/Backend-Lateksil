@@ -7,6 +7,7 @@ const {
   infoUser,
   updateUser,
   AllCostumer,
+  updateRoleUser,
 } = require("../controllers/userController.js");
 const verifyTokenAllRole = require("../middleware/verifyTokenAllRole.js");
 const uploadProfleUser = require("../middleware/uploadProfileUser.js");
@@ -14,6 +15,7 @@ const uploadProfleUser = require("../middleware/uploadProfileUser.js");
 // POST
 router.post("/users", AllUsers);
 router.post("/costumers", AllCostumer);
+router.post("/users/role", updateRoleUser);
 
 // UPDATE
 router.put("/users/:id", uploadProfleUser, updateUser);
