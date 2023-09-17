@@ -9,8 +9,11 @@ const {
   GetTeknisiByUserId,
   uploadLaporanTeknisi,
   viewTaskPengujianPDF,
+  GetRiwayatTeknisiStandById,
+  GetRiwayatTeknisiOnGoingById,
 } = require("../controllers/teknisiController.js");
 const uploadTaskPengujianTeknisi = require("../middleware/uploadTaskPengujianTeknisi.js");
+const verifyTokenManager = require("../middleware/verifyTokenManager.js");
 
 const router = express.Router();
 
@@ -32,6 +35,17 @@ router.post("/pengujian_teknisi", GetAllTeknisiPengujian);
 router.get("/teknisi_in_order/:id", GetTeknisiByOrder);
 router.get("/view-task/:name", viewTaskPengujianPDF);
 router.get("/view-task/download/:name", downloadTaskPengujianPDF);
+
+router.get(
+  "/teknisi/riwayat/standby/:id",
+  verifyTokenManager,
+  GetRiwayatTeknisiStandById
+);
+router.get(
+  "/teknisi/riwayat/on_going/:id",
+  verifyTokenManager,
+  GetRiwayatTeknisiOnGoingById
+);
 
 //UPDATE
 

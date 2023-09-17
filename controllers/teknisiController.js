@@ -40,11 +40,7 @@ exports.GetAllTeknisi = async (req, res) => {
       include: [
         {
           model: TeknisiPengujian,
-
-          where: {
-            status_task: "2",
-          },
-          attributes: ["id", "UserId", "orderId", "status_task"],
+          attributes: ["status_penugasan"],
           required: false,
         },
       ],
@@ -59,6 +55,126 @@ exports.GetAllTeknisi = async (req, res) => {
       totalData: count,
       page: page,
       totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+exports.GetRiwayatTeknisiStandById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const dataOrderRiwayat = await Users.findOne({
+      where: {
+        id,
+        role: "teknisi",
+      },
+      attributes: [
+        "id",
+        "full_name",
+        "email",
+        "no_whatsapp",
+        "address",
+        "company_name",
+        "image_profile",
+      ],
+      include: [
+        {
+          model: TeknisiPengujian,
+          where: {
+            status_penugasan: "1",
+          },
+          attributes: ["id", "file_task_pengujian", "status_penugasan"],
+          required: false,
+          include: [
+            {
+              model: Order,
+              attributes: ["id", "file_result_pengujian"],
+              include: [
+                {
+                  model: Users,
+                  attributes: ["id", "company_name", "full_name"],
+                },
+                {
+                  model: Project,
+                  as: "proyek",
+                  attributes: [
+                    "id",
+                    "nama_proyek",
+                    "tanggal_mulai",
+                    "tanggal_selesai",
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: dataOrderRiwayat,
+    });
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
+exports.GetRiwayatTeknisiOnGoingById = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const dataOrderRiwayat = await Users.findOne({
+      where: {
+        id,
+        role: "teknisi",
+      },
+      attributes: ["id"],
+      include: [
+        {
+          model: TeknisiPengujian,
+          where: {
+            status_penugasan: "0",
+          },
+          attributes: ["id", "status_penugasan"],
+          required: false,
+          include: [
+            {
+              model: Order,
+              attributes: ["id", "file_result_pengujian"],
+              include: [
+                {
+                  model: Users,
+                  attributes: ["id", "company_name", "full_name"],
+                },
+                {
+                  model: Project,
+                  as: "proyek",
+                  attributes: [
+                    "id",
+                    "nama_proyek",
+                    "tanggal_mulai",
+                    "tanggal_selesai",
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: dataOrderRiwayat,
     });
   } catch (error) {
     console.log(error);
@@ -271,6 +387,7 @@ exports.uploadLaporanTeknisi = async (req, res) => {
         {
           status_task: status_task,
           status_pengerjaan: status_pengerjaan,
+          status_penugasan: "1", // SELESAI
           file_task_pengujian: req.file
             ? req.file.filename
             : statusPengerjaan.file_task_pengujian,

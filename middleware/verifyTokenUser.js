@@ -22,8 +22,7 @@ const verifyTokenUser = (req, res, next) => {
       );
     }
     const role = (req.role = decoded.role);
-    const email = (req.email = decoded.email);
-    if (role === "user" && email) {
+    if (role === "user") {
       next();
     } else {
       return handleResponseAuthorization(

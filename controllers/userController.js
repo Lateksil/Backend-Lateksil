@@ -10,6 +10,8 @@ const {
   handleResponseAuthorization,
 } = require("../utils/handleResponse.js");
 const { Op } = require("sequelize");
+const Order = require("../models/order.js");
+const Status = require("../models/status.js");
 
 // UPDATE USER PER ID
 exports.updateUser = async (req, res) => {
@@ -188,6 +190,12 @@ exports.AllCostumer = async (req, res) => {
       limit: parseInt(limit, 10),
       order: [["company_name", "ASC"]],
       attributes: viewData,
+      include: [
+        {
+          model: Order,
+          attributes: ["id", "total_price"],
+        },
+      ],
     });
 
     if (rows.length === 0) {

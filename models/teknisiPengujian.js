@@ -33,6 +33,10 @@ const TeknisiPengujian = db.define(
       type: DataTypes.STRING(5),
       defaultValue: "0", // if 0 = Belum Dikerjakan TEKNISI, if 1 = Sedang Dikerjakan, if 2 = Uploaded file PDF, if = 3 = Selesai Kirim ke Manager
     },
+    status_penugasan: {
+      type: DataTypes.STRING(5),
+      defaultValue: "0", // 0 = On-going, 1 = StandBy
+    },
     file_task_pengujian: {
       type: DataTypes.STRING,
       defaultValue: null,

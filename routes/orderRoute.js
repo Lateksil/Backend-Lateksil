@@ -13,6 +13,7 @@ const {
   uploadResultFileByIdOrder,
 } = require("../controllers/orderController.js");
 const uploadResultPengujian = require("../middleware/uploadResultPengujian.js");
+const verifyTokenUser = require("../middleware/verifyTokenUser.js");
 
 const router = express.Router();
 
@@ -36,7 +37,7 @@ router.post(
 //UPDATE
 
 //GET
-router.get("/order/:id", getOrderById);
+router.get("/order/:id", verifyTokenUser, getOrderById);
 router.get("/view-result/download/:name", downloadResultFilePDF);
 
 router.get("/order/peralatan/:id", getAlatPengujianByOrderId);
