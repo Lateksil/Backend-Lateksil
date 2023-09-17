@@ -55,7 +55,7 @@ exports.riwayatTransactionNotif = async (req, res) => {
           as: "status",
           attributes: ["id", "status_transaction"],
           where: {
-            status_transaction: "3",
+            status_transaction: "4",
           },
         },
       ],
@@ -69,7 +69,7 @@ exports.riwayatTransactionNotif = async (req, res) => {
           as: "status",
           attributes: ["id", "status_transaction"],
           where: {
-            status_transaction: "3",
+            status_transaction: "0",
           },
         },
       ],
