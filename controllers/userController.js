@@ -1,6 +1,5 @@
 const fs = require("fs");
 const Users = require("../models/user.js");
-const { handlePagination } = require("../utils/handlePagination.js");
 const {
   handleResponseDeleteSuccess,
   handleResponseError,

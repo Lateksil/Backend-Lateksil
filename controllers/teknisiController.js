@@ -238,6 +238,7 @@ exports.GetDetailRiwayatByIdTeknisiPengujian = async (req, res) => {
                   attributes: [
                     "id",
                     "jenis_pengujian",
+                    "tempat_pengujian",
                     "code",
                     "category",
                     "sampler",
