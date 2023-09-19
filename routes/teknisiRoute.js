@@ -11,6 +11,7 @@ const {
   viewTaskPengujianPDF,
   GetRiwayatTeknisiStandById,
   GetRiwayatTeknisiOnGoingById,
+  GetDetailRiwayatByIdTeknisiPengujian,
 } = require("../controllers/teknisiController.js");
 const uploadTaskPengujianTeknisi = require("../middleware/uploadTaskPengujianTeknisi.js");
 const verifyTokenManager = require("../middleware/verifyTokenManager.js");
@@ -35,6 +36,12 @@ router.post("/pengujian_teknisi", GetAllTeknisiPengujian);
 router.get("/teknisi_in_order/:id", GetTeknisiByOrder);
 router.get("/view-task/:name", viewTaskPengujianPDF);
 router.get("/view-task/download/:name", downloadTaskPengujianPDF);
+
+router.get(
+  "/teknisi/riwayat/:id",
+  // verifyTokenManager,
+  GetDetailRiwayatByIdTeknisiPengujian
+);
 
 router.get(
   "/teknisi/riwayat/standby/:id",

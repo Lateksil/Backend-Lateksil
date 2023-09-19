@@ -182,6 +182,83 @@ exports.GetRiwayatTeknisiOnGoingById = async (req, res) => {
   }
 };
 
+exports.GetDetailRiwayatByIdTeknisiPengujian = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const findDataRiwayat = await TeknisiPengujian.findByPk(id);
+
+    if (!findDataRiwayat) {
+      return handleResponseNotFound(res);
+    }
+
+    const dataRiwayatOrder = await TeknisiPengujian.findOne({
+      where: {
+        id,
+      },
+      attributes: ["id", "file_task_pengujian", "status_penugasan"],
+      include: [
+        {
+          model: Order,
+          attributes: ["id", "total_price"],
+          include: [
+            {
+              model: Users,
+              attributes: [
+                "id",
+                "full_name",
+                "email",
+                "no_whatsapp",
+                "address",
+                "company_name",
+                "image_profile",
+              ],
+            },
+            {
+              model: Status,
+              as: "status",
+              attributes: [
+                "id",
+                "status_persetujuan", // PERSETUJUAN
+                "status_transaction", // STATUS TRANSACTION
+                "status_payment", // PAY OR NOT PAY
+                "accept_payment", // LUNAS
+              ],
+            },
+            {
+              model: Project,
+              as: "proyek",
+              attributes: { exclude: ["keterangan_to_client"] },
+            },
+            {
+              model: Item,
+              attributes: ["id"],
+              include: [
+                {
+                  model: Pengujian,
+                  attributes: [
+                    "id",
+                    "jenis_pengujian",
+                    "code",
+                    "category",
+                    "sampler",
+                    "price",
+                  ],
+                },
+              ],
+              through: { attributes: ["quantity"] },
+            },
+          ],
+        },
+      ],
+    });
+
+    return handleResponseSuccess(res, dataRiwayatOrder);
+  } catch (error) {
+    console.log(error);
+    return handleResponseError(res);
+  }
+};
+
 exports.CreateTeknisiPengujian = async (req, res) => {
   const { teknisi_id, order_id } = req.body;
   try {
