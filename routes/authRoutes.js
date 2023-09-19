@@ -7,12 +7,15 @@ const {
   ForgotPassword,
   ResetPassword,
   VerifyCodeRegister,
+  ChangePassword,
 } = require("../controllers/authController.js");
+const verifyTokenAllRole = require("../middleware/verifyTokenAllRole.js");
 
 // POST
 router.post("/auth/register", Register);
 router.post("/auth/login", Login);
 router.post("/auth/forgot-password", ForgotPassword);
+router.post("/auth/change-password", verifyTokenAllRole, ChangePassword);
 router.post("/auth/verify", VerifyCodeRegister);
 
 // UPDATE

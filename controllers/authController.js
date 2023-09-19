@@ -191,3 +191,25 @@ exports.ResetPassword = async (req, res) => {
     return handleResponseError(res);
   }
 };
+
+exports.ChangePassword = async (req, res) => {
+  const { id, old_password, new_password } = req.body;
+  try {
+    const user = await Users.findByPk(id);
+
+    const salt = await bcrypt.genSalt();
+    const isValidPassword = await bcrypt.compare(old_password, user.password);
+
+    if (!isValidPassword) {
+      return handleResponse(res, 404, "Wrong old password");
+    }
+    const newHashPassword = await bcrypt.hash(new_password, salt);
+
+    user.password = newHashPassword;
+    await user.save();
+
+    return handleResponseSuccess(res, "Berhasil Ganti Password");
+  } catch (error) {
+    return handleResponseError(res);
+  }
+};
