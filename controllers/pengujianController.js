@@ -187,3 +187,20 @@ exports.getAllPengujian = async (req, res) => {
     return handleResponseError(res);
   }
 };
+
+exports.getPengujianById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const pengujian = await Pengujian.findByPk(id, {
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+
+    if (!pengujian) {
+      return handleResponseNotFound(res);
+    }
+
+    return handleResponseSuccess(res, pengujian);
+  } catch (error) {
+    return handleResponseError(res);
+  }
+};

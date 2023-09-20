@@ -4,6 +4,7 @@ const {
   deletePengujian,
   getAllPengujian,
   updatePengujian,
+  getPengujianById,
 } = require("../controllers/pengujianController.js");
 const uploadPengujian = require("../middleware/uploadPengujian.js");
 const verifyTokenAllRole = require("../middleware/verifyTokenAllRole.js");
@@ -28,7 +29,7 @@ router.put(
   updatePengujian
 );
 //GET
-
+router.get("/pengujian/:id", getPengujianById);
 //DELETE
 router.delete("/pengujian/:id", verifyTokenFrontliner, deletePengujian);
 
