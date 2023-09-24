@@ -30,7 +30,13 @@ exports.SendVerificationEmail = async (user) => {
         "Tim Support",
     };
 
-    await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Gagal mengirim email:", error);
+      } else {
+        console.log("Email berhasil dikirim:", info.response);
+      }
+    });
   } catch (error) {
     console.log(error);
   }
