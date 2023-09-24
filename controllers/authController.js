@@ -64,42 +64,7 @@ exports.Register = async (req, res) => {
       company_name,
       password: hashPassword,
     });
-    // await SendVerificationEmail(create);
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      secure: false,
-      auth: {
-        user: "balapmotor70@gmail.com",
-        pass: "xktmutuxxxqdtydx",
-      },
-    });
-
-    const verificationCode = crypto.randomInt(1000, 10000).toString();
-
-    user.verificationCode = verificationCode;
-    await user.save();
-
-    const mailOptions = {
-      from: "balapmotor70@gmail.com",
-      to: user.email,
-      subject: "Verifikasi Email",
-      text:
-        `Halo ${user.full_name} \n\n` +
-        "Terima kasih telah mendaftar. Berikut adalah kode verifikasi Anda:\n\n" +
-        `Code : ${verificationCode}\n\n` +
-        "Silakan masukkan kode tersebut pada halaman verifikasi akun Anda.\n\n" +
-        "Salam,\n" +
-        "Tim Support",
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Gagal mengirim email:", error);
-      } else {
-        console.log("Email berhasil dikirim:", info.response);
-      }
-    });
+    await SendVerificationEmail(user);
 
     return handleResponseSuccess(res, "Pendaftaran Akun berhasil");
   } catch (error) {

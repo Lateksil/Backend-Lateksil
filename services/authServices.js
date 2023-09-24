@@ -5,6 +5,8 @@ exports.SendVerificationEmail = async (user) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
       secure: false,
       auth: {
         user: "balapmotor70@gmail.com",
@@ -18,7 +20,7 @@ exports.SendVerificationEmail = async (user) => {
     await user.save();
 
     const mailOptions = {
-      from: "balapmotor70@gmail.com",
+      from: "'Services | Laboratorium Teknik Sipil UBL' <no-reply@gmail.com>",
       to: user.email,
       subject: "Verifikasi Email",
       text:
@@ -46,6 +48,8 @@ exports.SendResetPassowordLink = async ({ email, full_name, token }) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
       secure: false,
       auth: {
         user: "balapmotor70@gmail.com",
