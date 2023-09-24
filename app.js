@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.send("Welcome API Lateksil, Version up 1.4");
+  res.send("Welcome API Lateksil, Version up 1.5");
 });
 
 app.use(cors());

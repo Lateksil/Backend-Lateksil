@@ -18,10 +18,13 @@ exports.SendVerificationEmail = async (req, res) => {
       },
     });
     if (!user) {
-      return handleResponse(res, 404, "Email Tidak Ada");
+      res.status(404).json({
+        status: 404,
+        message: "Email Tidak Terdaftar",
+      });
     }
 
-    const transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport("SMTP", {
       service: "gmail",
       secure: false,
       auth: {
@@ -50,9 +53,16 @@ exports.SendVerificationEmail = async (req, res) => {
 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        return handleResponseAuthorization(res, "Gagal mengirim email");
+        res.status(500).json({
+          status: 500,
+          message: "Gagal mengirim email",
+        });
+        console.log(error)
       } else {
-        return handleResponseSuccess(res, "Berhasil Mengirim email");
+        res.status(200).json({
+          status: 200,
+          message: "Berhasil mengirim email",
+        });
       }
     });
   } catch (error) {
