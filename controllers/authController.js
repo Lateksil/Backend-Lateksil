@@ -1,7 +1,5 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
-const crypto = require("crypto");
 const Users = require("../models/user.js");
 const {
   handleResponse,
@@ -9,10 +7,7 @@ const {
   handleResponseSuccess,
   handleResponseAuthorization,
 } = require("../utils/handleResponse.js");
-const {
-  SendResetPassowordLink,
-  SendVerificationEmail,
-} = require("../services/authServices.js");
+const { SendResetPassowordLink } = require("../services/authServices.js");
 
 exports.Register = async (req, res) => {
   const { full_name, email, no_whatsapp, address, company_name, password } =
@@ -48,15 +43,10 @@ exports.Register = async (req, res) => {
       verifiedEmail.password = hashPassword;
       await verifiedEmail.save();
 
-      await SendVerificationEmail(verifiedEmail);
-
-      return handleResponseSuccess(
-        res,
-        "Pendaftaran berhasil. Silakan periksa email Anda untuk verifikasi."
-      );
+      return handleResponseSuccess(res, "Pendaftaran Akun berhasil");
     }
 
-    const user = await Users.create({
+    await Users.create({
       full_name,
       email,
       no_whatsapp,
@@ -64,7 +54,6 @@ exports.Register = async (req, res) => {
       company_name,
       password: hashPassword,
     });
-    await SendVerificationEmail(user);
 
     return handleResponseSuccess(res, "Pendaftaran Akun berhasil");
   } catch (error) {

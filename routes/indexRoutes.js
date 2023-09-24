@@ -11,9 +11,11 @@ const Payment = require("./paymentRoute.js");
 const Peralatan = require("./peralatanRoute.js");
 const Teknisi = require("./teknisiRoute.js");
 const Notification = require("./notificationRoute.js");
+const Mailer = require("./mailRoute.js");
 
 const TerminalRoutes = (app) => {
   app.use(authRoute);
+  app.use(Mailer);
   app.use(Notification);
   app.use(userRoute);
   app.use(category);
