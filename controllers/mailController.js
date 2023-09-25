@@ -1,11 +1,5 @@
 const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-const {
-  handleResponseSuccess,
-  handleResponseError,
-  handleResponseAuthorization,
-  handleResponse,
-} = require("../utils/handleResponse");
 const Users = require("../models/user");
 
 exports.SendVerificationEmail = async (req, res) => {
@@ -70,6 +64,9 @@ exports.SendVerificationEmail = async (req, res) => {
       });
     });
   } catch (error) {
-    return handleResponseError(res);
+    res.status(500).json({
+      status: 500,
+      message: "Server Internet error",
+    });
   }
 };
