@@ -6,20 +6,21 @@ const {
   deleteCategory,
   getAllCategory,
   updateCategory,
+  getAllCategoryClient,
 } = require("../controllers/categoryController.js");
-const verifyTokenFrontliner = require("../middleware/verifyTokenFrontliner.js");
+const verifyTokenManagerFrontliner = require("../middleware/verifyTokenManagerFrontliner.js");
 
 //POST
-router.post("/categories/client", getAllCategory);
-router.post("/categories", verifyTokenFrontliner, getAllCategory);
-router.post("/category/create", createCategory);
+router.post("/categories/client", getAllCategoryClient);
+router.post("/categories", verifyTokenManagerFrontliner, getAllCategory);
+router.post("/category/create", verifyTokenManagerFrontliner, createCategory);
 
 //UPDATE
-router.put("/category/:id", updateCategory);
+router.put("/category/:id", verifyTokenManagerFrontliner, updateCategory);
 
 //GET
 
 //DELETE
-router.delete("/category/:id", verifyTokenFrontliner, deleteCategory);
+router.delete("/category/:id", verifyTokenManagerFrontliner, deleteCategory);
 
 module.exports = router;
