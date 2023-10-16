@@ -72,8 +72,28 @@ exports.SendResetPassowordLink = async ({ email, full_name, token }) => {
     `,
     };
 
-    await transporter.sendMail(mailOptions);
+    await new Promise((resolve, reject) => {
+      transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          res.status(500).json({
+            status: 500,
+            message: "Gagal mengirim email",
+            statusError: err,
+          });
+          reject(err);
+        } else {
+          res.status(200).json({
+            status: 200,
+            message: "Berhasil mengirim email",
+          });
+          resolve(info);
+        }
+      });
+    });
   } catch (error) {
-    console.log(error);
+    res.status(500).json({
+      status: 500,
+      message: "Server Internal error",
+    });
   }
 };
