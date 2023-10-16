@@ -5,19 +5,20 @@ const {
   getAllPengujian,
   updatePengujian,
   getPengujianById,
+  getAllPengujianClient,
 } = require("../controllers/pengujianController.js");
 const uploadPengujian = require("../middleware/uploadPengujian.js");
 const verifyTokenAllRole = require("../middleware/verifyTokenAllRole.js");
-const verifyTokenFrontliner = require("../middleware/verifyTokenFrontliner.js");
+const verifyTokenManagerFrontliner = require("../middleware/verifyTokenManagerFrontliner.js");
 const router = express.Router();
 
 //POST
-router.post("/pengujian/client", getAllPengujian);
+router.post("/pengujian/client", getAllPengujianClient);
 router.post("/pengujian", verifyTokenAllRole, getAllPengujian);
 router.post(
   "/pengujian/create",
   uploadPengujian,
-  verifyTokenFrontliner,
+  verifyTokenManagerFrontliner,
   createPengujian
 );
 
@@ -25,12 +26,13 @@ router.post(
 router.put(
   "/pengujian/:id",
   uploadPengujian,
-  verifyTokenFrontliner,
+  verifyTokenManagerFrontliner,
   updatePengujian
 );
 //GET
 router.get("/pengujian/:id", getPengujianById);
+
 //DELETE
-router.delete("/pengujian/:id", verifyTokenFrontliner, deletePengujian);
+router.delete("/pengujian/:id", verifyTokenManagerFrontliner, deletePengujian);
 
 module.exports = router;

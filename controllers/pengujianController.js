@@ -204,3 +204,93 @@ exports.getPengujianById = async (req, res) => {
     return handleResponseError(res);
   }
 };
+
+exports.getAllPengujianClient = async (req, res) => {
+  const { page = 1, limit = 10, search = "", filter = {} } = req.body;
+
+  const offset = (page - 1) * limit;
+
+  const viewData = [
+    "id",
+    "image",
+    "jenis_pengujian",
+    "code",
+    "category",
+    "tempat_pengujian",
+    "min_quantity",
+    "sampler",
+    "price",
+  ];
+
+  const searchFilterData = [
+    "jenis_pengujian",
+    "code",
+    "category",
+    "tempat_pengujian",
+    "min_quantity",
+    "sampler",
+    "price",
+  ];
+
+  let whereClause = {};
+
+  if (search !== "") {
+    const searchCriteria = searchFilterData.map((key) => ({
+      [key]: { [Op.like]: `%${search}%` },
+    }));
+
+    whereClause = {
+      [Op.or]: searchCriteria,
+    };
+  }
+
+  for (let key in filter) {
+    if (filter.hasOwnProperty(key) && filter[key] !== "") {
+      whereClause[key] = { [Op.like]: `%${filter[key]}%` };
+    }
+  }
+
+  try {
+    const { count, rows } = await Pengujian.findAndCountAll({
+      where: whereClause,
+      offset,
+      limit: parseInt(limit, 10),
+      order: [["updatedAt", "DESC"]],
+      attributes: viewData,
+    });
+
+    if (rows.length === 0) {
+      return handleResponseSuccess(res, null);
+    }
+
+    return res.status(200).json({
+      status: 200,
+      error: false,
+      message: "success",
+      data: rows,
+      limit,
+      totalData: count,
+      page: page,
+      totalPages: Math.ceil(count / limit),
+    });
+  } catch (error) {
+    return handleResponseError(res);
+  }
+};
+
+exports.getPengujianById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const pengujian = await Pengujian.findByPk(id, {
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+    });
+
+    if (!pengujian) {
+      return handleResponseNotFound(res);
+    }
+
+    return handleResponseSuccess(res, pengujian);
+  } catch (error) {
+    return handleResponseError(res);
+  }
+};
