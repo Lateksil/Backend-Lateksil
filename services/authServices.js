@@ -61,7 +61,6 @@ exports.SendResetPassowordLink = async ({ email, full_name, token }) => {
       subject: "Permintaan Perubahaan Password Akun Laboratorium Teknik Sipil",
       html: `
       <div style="text-align: center;">
-        <img w="25px" src="https://lateksil.vercel.app/_next/image?url=%2F_next%2Fstatic%2Fmedia%2FLogo_Lateksil.91319725.png&w=128&q=100" alt="Company Logo" width="100" height="100">
         <h2>Ganti Password Baru</h2>
         <p>Helo ${full_name},</p>
         <p>Klik tombol di bawah ini untuk mengganti kata sandi Anda:</p>
@@ -72,24 +71,32 @@ exports.SendResetPassowordLink = async ({ email, full_name, token }) => {
     `,
     };
 
-    await new Promise((resolve, reject) => {
-      transporter.sendMail(mailOptions, (err, info) => {
-        if (err) {
-          res.status(500).json({
-            status: 500,
-            message: "Gagal mengirim email",
-            statusError: err,
-          });
-          reject(err);
-        } else {
-          res.status(200).json({
-            status: 200,
-            message: "Berhasil mengirim email",
-          });
-          resolve(info);
-        }
-      });
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Gagal mengirim email:", error);
+      } else {
+        console.log("Email berhasil dikirim:", info.response);
+      }
     });
+
+    // await new Promise((resolve, reject) => {
+    //   transporter.sendMail(mailOptions, (err, info) => {
+    //     if (err) {
+    //       res.status(500).json({
+    //         status: 500,
+    //         message: "Gagal mengirim email",
+    //         statusError: err,
+    //       });
+    //       reject(err);
+    //     } else {
+    //       res.status(200).json({
+    //         status: 200,
+    //         message: "Berhasil mengirim email",
+    //       });
+    //       resolve(info);
+    //     }
+    //   });
+    // });
   } catch (error) {
     res.status(500).json({
       status: 500,
