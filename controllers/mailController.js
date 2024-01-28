@@ -18,12 +18,13 @@ exports.SendVerificationEmail = async (req, res) => {
       });
     }
 
-    const transporter = nodemailer.createTransport("SMTP", {
-      service: "gmail",
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
       secure: false,
       auth: {
-        user: "balapmotor70@gmail.com",
-        pass: "xktmutuxxxqdtydx",
+        user: 'balapmotor70@gmail.com',
+        pass: 'kkjpksqfbtgaalnx',
       },
     });
 
@@ -73,12 +74,13 @@ exports.SendVerificationEmail = async (req, res) => {
 
 exports.sendEmailTahapPermintaan = async (req, res) => {
   try {
-    const transporter = nodemailer.createTransport("SMTP", {
-      service: "gmail",
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
       secure: false,
       auth: {
-        user: "balapmotor70@gmail.com",
-        pass: "xktmutuxxxqdtydx",
+        user: 'balapmotor70@gmail.com',
+        pass: 'kkjpksqfbtgaalnx',
       },
     });
 

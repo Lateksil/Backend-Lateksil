@@ -4,13 +4,12 @@ const crypto = require("crypto");
 exports.SendVerificationEmail = async (user) => {
   try {
     const transporter = nodemailer.createTransport({
-      service: "gmail",
-      host: "smtp.gmail.com",
+      host: 'smtp.gmail.com',
       port: 587,
       secure: false,
       auth: {
-        user: "balapmotor70@gmail.com",
-        pass: "xktmutuxxxqdtydx",
+        user: 'balapmotor70@gmail.com',
+        pass: 'kkjpksqfbtgaalnx',
       },
     });
 
@@ -46,12 +45,13 @@ exports.SendVerificationEmail = async (user) => {
 
 exports.SendResetPassowordLink = async ({ email, full_name, token }) => {
   try {
-    const transporter = nodemailer.createTransport("SMTP", {
-      service: "gmail",
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
       secure: false,
       auth: {
-        user: "balapmotor70@gmail.com",
-        pass: "xktmutuxxxqdtydx",
+        user: 'balapmotor70@gmail.com',
+        pass: 'kkjpksqfbtgaalnx',
       },
     });
 

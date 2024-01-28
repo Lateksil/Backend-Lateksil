@@ -4,3 +4,4 @@ uploads
 yarn-error.log
 yarn.lock
 Archive.zip
+.DS_Store
